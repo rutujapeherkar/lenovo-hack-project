@@ -11,7 +11,7 @@
  * 4. Localized citizen safety warnings across Marathi, Hindi, and English.
  */
 
-import type { Language, LocalizedText } from "../shared/types";
+import type { Language } from "../shared/types";
 
 export const SENSITIVE_WARNING_MESSAGES: Record<Language, string> = {
   en: "Please do not share your OTP, PIN, password, or banking credentials with Sahayak.",

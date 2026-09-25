@@ -53,13 +53,13 @@ export const PAYMENT_SAFETY_NOTICES: Record<Language, PaymentSafetyNotice> = {
   },
 };
 
+// Simple substring keywords (no false-positive risk)
 const PAYMENT_KEYWORDS = [
   "fee",
   "payment",
   "charges",
   "statutory fee",
   "₹",
-  "rs.",
   "gras",
   "challan",
   "शुल्क",
@@ -68,6 +68,13 @@ const PAYMENT_KEYWORDS = [
   "पेमेंट",
   "चलन",
   "भुगतान",
+];
+
+// Regex patterns for keywords that need word-boundary checks to avoid false positives
+// e.g. "rs." must not match inside "years." or "hours."
+const PAYMENT_KEYWORD_PATTERNS = [
+  /\brs\.\s*\d/i,           // "Rs. 33" or "rs.33" — currency amount
+  /rupee/i,                  // "rupees"
 ];
 
 /**
@@ -87,7 +94,9 @@ export function isPaymentStep(stepOrText: TaskStep | string | null | undefined):
   }
 
   const lower = textToAnalyze.toLowerCase();
-  return PAYMENT_KEYWORDS.some((kw) => lower.includes(kw));
+  if (PAYMENT_KEYWORDS.some((kw) => lower.includes(kw))) return true;
+  if (PAYMENT_KEYWORD_PATTERNS.some((pattern) => pattern.test(textToAnalyze))) return true;
+  return false;
 }
 
 /**

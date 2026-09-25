@@ -10,14 +10,16 @@
  */
 
 const PROMPT_INJECTION_PATTERNS = [
-  /ignore\s+(all\s+|previous\s+|prior\s+)?instructions/i,
-  /disregard\s+(all\s+|previous\s+)?instructions/i,
+  /ignore\s+(\w+\s+){0,3}instructions/i,
+  /disregard\s+(\w+\s+){0,3}(instructions|rules|guidelines|constraints)/i,
   /forget\s+(your\s+)?(instructions|persona|rules)/i,
   /reveal\s+(your\s+)?(system\s+prompt|instructions|api\s*key)/i,
+  /give\s+(me\s+)?(your\s+)?(api\s*key|system\s+prompt|credentials)/i,
   /what\s+are\s+your\s+(initial\s+)?instructions/i,
   /you\s+are\s+now\s+(in\s+developer\s+mode|dan|unfiltered)/i,
   /bypass\s+(all\s+)?(safety|security|rules)/i,
   /repeat\s+(everything|the\s+words)\s+above/i,
+  /override\s+(all\s+)?(instructions|rules|guidelines)/i,
 ];
 
 /**

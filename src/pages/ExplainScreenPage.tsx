@@ -9,7 +9,7 @@
  */
 
 import React, { useState } from "react";
-import { Badge, Alert, Button } from "../components/ui";
+import { Badge, Button } from "../components/ui";
 import { useLanguage } from "../core/language";
 import { ScreenService, type ExplainScreenResult } from "../core/explain-screen";
 import type { ScreenExplanation } from "../core/shared/types";

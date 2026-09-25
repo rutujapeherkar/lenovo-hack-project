@@ -10,7 +10,7 @@
  * 3. Provides "Try Again" state reset and "Return Home" navigation controls.
  */
 
-import React, { Component, ErrorInfo, ReactNode } from "react";
+import { Component, ErrorInfo, ReactNode } from "react";
 import { Button, Card, CardHeader, CardTitle, CardBody } from "../ui";
 
 export interface ErrorBoundaryProps {
@@ -38,7 +38,7 @@ export class ErrorBoundary extends Component<
     return { hasError: true, error };
   }
 
-  public componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
+  public componentDidCatch(error: Error, _errorInfo: ErrorInfo): void {
     if (typeof console !== "undefined") {
       console.warn(
         `[Sahayak ErrorBoundary] Captured error in section ${
@@ -66,8 +66,8 @@ export class ErrorBoundary extends Component<
         return this.props.fallback(this.state.error, this.handleReset);
       }
 
-      if (this.props.fallback) {
-        return this.props.fallback;
+      if (this.props.fallback && typeof this.props.fallback !== "function") {
+        return this.props.fallback as ReactNode;
       }
 
       const sectionTitle = this.props.sectionName
