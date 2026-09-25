@@ -237,6 +237,7 @@ export type FormField = {
     | "checkbox"
     | "file"
     | "unknown";
+  explanation?: LocalizedText;
 };
 
 /** Guidance output for the current field/page in a form */
@@ -363,6 +364,7 @@ export type ExtensionMessage =
   | {
       type: "HIGHLIGHT_FIELD";
       fieldId: string;
+      selector?: string;
     }
   | {
       type: "CLEAR_HIGHLIGHT";
