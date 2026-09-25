@@ -522,8 +522,8 @@ export const HomePage: React.FC = () => {
       </div>
       <div className="grid grid-cols-1 grid-cols-2-md grid-cols-4-lg" style={{ marginBottom: 'var(--space-12)' }}>
         {/* Services */}
-        <Card variant="interactive">
-          <CardHeader>
+        <Card variant="interactive" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+          <CardHeader style={{ flexDirection: 'column', alignItems: 'flex-start', gap: 'var(--space-2)' }}>
             <Badge variant="info" size="sm">शासकीय सेवा</Badge>
             <CardTitle>{lang === 'mr' ? 'सेवा व प्रमाणपत्रे' : lang === 'hi' ? 'सेवाएं और प्रमाण पत्र' : 'Services & Certificates'}</CardTitle>
             <CardDescription>
@@ -534,8 +534,8 @@ export const HomePage: React.FC = () => {
                 : 'Income, Caste, Domicile, Ration Card — step-by-step guidance.'}
             </CardDescription>
           </CardHeader>
-          <CardBody>
-            <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
+          <CardBody style={{ flex: 1 }}>
+            <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', margin: 0 }}>
               Aaple Sarkar • Revenue Dept • Food & Civil Supplies
             </p>
           </CardBody>
@@ -549,8 +549,8 @@ export const HomePage: React.FC = () => {
         </Card>
 
         {/* Schemes */}
-        <Card variant="interactive">
-          <CardHeader>
+        <Card variant="interactive" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+          <CardHeader style={{ flexDirection: 'column', alignItems: 'flex-start', gap: 'var(--space-2)' }}>
             <Badge variant="success" size="sm">कल्याणकारी योजना</Badge>
             <CardTitle>{lang === 'mr' ? 'शासकीय योजना' : lang === 'hi' ? 'सरकारी योजनाएं' : 'Welfare Schemes'}</CardTitle>
             <CardDescription>
@@ -561,8 +561,8 @@ export const HomePage: React.FC = () => {
                 : 'Central & Maharashtra welfare schemes, eligibility, benefits.'}
             </CardDescription>
           </CardHeader>
-          <CardBody>
-            <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
+          <CardBody style={{ flex: 1 }}>
+            <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', margin: 0 }}>
               MahaDBT • Ladki Bahin • PM-KISAN • Sanjay Gandhi Niradhar
             </p>
           </CardBody>
@@ -576,8 +576,8 @@ export const HomePage: React.FC = () => {
         </Card>
 
         {/* Explain Screen */}
-        <Card variant="interactive">
-          <CardHeader>
+        <Card variant="interactive" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+          <CardHeader style={{ flexDirection: 'column', alignItems: 'flex-start', gap: 'var(--space-2)' }}>
             <Badge variant="warning" size="sm">दृष्टी सहाय्य</Badge>
             <CardTitle>{lang === 'mr' ? 'स्क्रीन समजावा' : lang === 'hi' ? 'स्क्रीन समझाएं' : 'Explain Screen'}</CardTitle>
             <CardDescription>
@@ -588,8 +588,8 @@ export const HomePage: React.FC = () => {
                 : 'Upload a portal screenshot to understand complex form fields.'}
             </CardDescription>
           </CardHeader>
-          <CardBody>
-            <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
+          <CardBody style={{ flex: 1 }}>
+            <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', margin: 0 }}>
               Visual Form Explanation • मराठी & हिंदी • Privacy Striping
             </p>
           </CardBody>
@@ -603,8 +603,8 @@ export const HomePage: React.FC = () => {
         </Card>
 
         {/* Browser Extension */}
-        <Card variant="interactive">
-          <CardHeader>
+        <Card variant="interactive" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+          <CardHeader style={{ flexDirection: 'column', alignItems: 'flex-start', gap: 'var(--space-2)' }}>
             <Badge variant="neutral" size="sm">ब्राउझर विस्तार</Badge>
             <CardTitle>{lang === 'mr' ? 'ब्राउझर साथी' : lang === 'hi' ? 'ब्राउज़र साथी' : 'Browser Companion'}</CardTitle>
             <CardDescription>
@@ -615,8 +615,8 @@ export const HomePage: React.FC = () => {
                 : 'Side-panel co-pilot for Aaple Sarkar and MahaDBT portals.'}
             </CardDescription>
           </CardHeader>
-          <CardBody>
-            <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
+          <CardBody style={{ flex: 1 }}>
+            <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', margin: 0 }}>
               Aaple Sarkar Overlay • Step Roadmap • Zero Credential Logging
             </p>
           </CardBody>
