@@ -15,33 +15,33 @@ import { useLanguage } from '../core/language';
 const INSTALL_STEPS = [
   {
     step: 1,
-    icon: '⚙️',
-    titleEn: 'Build the Extension',
-    titleMr: 'विस्तार तयार करा',
-    titleHi: 'एक्सटेंशन बनाएं',
-    descEn: 'In your terminal, run: npm run build:extension — this compiles the Manifest V3 bundle into extension/dist/',
-    descMr: 'टर्मिनलमध्ये चालवा: npm run build:extension — हे Manifest V3 बंडल extension/dist/ मध्ये संकलित करेल.',
-    descHi: 'टर्मिनल में चलाएं: npm run build:extension — यह Manifest V3 बंडल को extension/dist/ में संकलित करेगा.',
+    icon: '⬇️',
+    titleEn: 'Download & Unzip Extension',
+    titleMr: 'विस्तार (.zip) डाउनलोड व अनझिप करा',
+    titleHi: 'एक्सटेंशन (.zip) डाउनलोड और अनज़िप करें',
+    descEn: 'Click the "Download Extension (.zip)" button above and unzip the folder on your computer or mobile device. (Developers can also run: npm run build:extension).',
+    descMr: 'वरील "विस्तार डाउनलोड करा (.zip)" बटणावर क्लिक करा आणि तुमच्या संगणकावर किंवा फोनवर झिप फोल्डर अनझिप करा. (डेव्हलपर टर्मिनलमध्ये npm run build:extension चालवू शकतात).',
+    descHi: 'ऊपर "एक्सटेंशन डाउनलोड करें (.zip)" बटन पर क्लिक करें और अपने कंप्यूटर या फोन पर ज़िप फ़ोल्डर को अनज़िप करें. (डेवलपर्स टर्मिनल में npm run build:extension चला सकते हैं).',
   },
   {
     step: 2,
     icon: '🔧',
-    titleEn: 'Open Chrome Extensions',
-    titleMr: 'Chrome Extensions उघडा',
-    titleHi: 'Chrome Extensions खोलें',
-    descEn: 'In Chrome, navigate to chrome://extensions — enable "Developer Mode" toggle in the top right.',
-    descMr: 'Chrome मध्ये chrome://extensions वर जा — उजव्या वरच्या कोपऱ्यात "Developer Mode" चालू करा.',
-    descHi: 'Chrome में chrome://extensions पर जाएं — ऊपर दाईं ओर "Developer Mode" चालू करें.',
+    titleEn: 'Open Extensions & Enable Developer Mode',
+    titleMr: 'ब्राउझर Extensions उघडा व Developer Mode चालू करा',
+    titleHi: 'ब्राउज़र Extensions खोलें और Developer Mode चालू करें',
+    descEn: 'In Chrome, navigate to chrome://extensions (or brave://extensions, edge://extensions). On Android Kiwi Browser, tap Menu (⋮) → Extensions. Turn ON the "Developer mode" toggle switch in the top right.',
+    descMr: 'Chrome मध्ये chrome://extensions वर जा (Brave/Edge मध्ये brave://extensions / edge://extensions; मोबाईल Kiwi Browser मध्ये Menu → Extensions). उजव्या वरच्या कोपऱ्यातील "Developer mode" टॉगल चालू करा.',
+    descHi: 'Chrome में chrome://extensions पर जाएं (Brave/Edge में brave://extensions / edge://extensions; मोबाइल Kiwi Browser में Menu → Extensions). ऊपर दाईं ओर "Developer mode" टॉगल चालू करें.',
   },
   {
     step: 3,
     icon: '📂',
     titleEn: 'Load the Extension Folder',
-    titleMr: 'विस्तार फोल्डर लोड करा',
-    titleHi: 'एक्सटेंशन फ़ोल्डर लोड करें',
-    descEn: 'Click "Load unpacked" and select the extension/dist/ folder from the project repository.',
-    descMr: '"Load unpacked" वर क्लिक करा आणि प्रकल्प रिपॉझिटरीमधून extension/dist/ फोल्डर निवडा.',
-    descHi: '"Load unpacked" पर क्लिक करें और प्रोजेक्ट रिपॉजिटरी से extension/dist/ फोल्डर चुनें.',
+    titleMr: 'विस्तार फोल्डर लोड करा (Load Unpacked)',
+    titleHi: 'एक्सटेंशन फ़ोल्डर लोड करें (Load Unpacked)',
+    descEn: 'Click "Load unpacked" (or "+ (from .zip/crx)" on mobile) and select the unzipped extension folder. The Sahayak AI emblem will immediately appear in your browser toolbar!',
+    descMr: '"Load unpacked" वर क्लिक करा (किंवा मोबाईलवर "+ (from .zip)") आणि अनझिप केलेले extension फोल्डर निवडा. साहायक AI चे चिन्ह तुमच्या ब्राउझर टूलबारमध्ये लगेच दिसेल!',
+    descHi: '"Load unpacked" पर क्लिक करें (या मोबाइल पर "+ (from .zip)") और अनज़िप किया हुआ extension फ़ोल्डर चुनें. साहायक AI का आइकन आपके ब्राउज़र टूलबार में तुरंत दिखाई देगा!',
   },
   {
     step: 4,
@@ -49,9 +49,9 @@ const INSTALL_STEPS = [
     titleEn: 'Open a Supported Portal',
     titleMr: 'समर्थित पोर्टल उघडा',
     titleHi: 'समर्थित पोर्टल खोलें',
-    descEn: 'Visit aaplesarkar.mahaonline.gov.in or mahadbt.maharashtra.gov.in in Chrome.',
-    descMr: 'Chrome मध्ये aaplesarkar.mahaonline.gov.in किंवा mahadbt.maharashtra.gov.in ला भेट द्या.',
-    descHi: 'Chrome में aaplesarkar.mahaonline.gov.in या mahadbt.maharashtra.gov.in पर जाएं.',
+    descEn: 'Visit aaplesarkar.mahaonline.gov.in or mahadbt.maharashtra.gov.in in your browser.',
+    descMr: 'तुमच्या ब्राउझरमध्ये aaplesarkar.mahaonline.gov.in किंवा mahadbt.maharashtra.gov.in ला भेट द्या.',
+    descHi: 'अपने ब्राउज़र में aaplesarkar.mahaonline.gov.in या mahadbt.maharashtra.gov.in पर जाएं.',
   },
   {
     step: 5,
@@ -59,9 +59,9 @@ const INSTALL_STEPS = [
     titleEn: 'Open Sahayak Side Panel',
     titleMr: 'साहायक साइड पॅनेल उघडा',
     titleHi: 'साहायक साइड पैनल खोलें',
-    descEn: 'Click the Sahayak extension icon in the Chrome toolbar, then open the Side Panel from the extension popup.',
-    descMr: 'Chrome टूलबारमध्ये साहायक विस्तार चिन्हावर क्लिक करा, नंतर पॉपअपमधून Side Panel उघडा.',
-    descHi: 'Chrome टूलबार में साहायक एक्सटेंशन आइकन पर क्लिक करें, फिर पॉपअप से Side Panel खोलें.',
+    descEn: 'Click the Sahayak extension icon in the toolbar, then open the Side Panel to start real-time assisted form navigation and step-by-step guidance!',
+    descMr: 'टूलबारमधील साहायक विस्तार चिन्हावर क्लिक करा आणि थेट फॉर्म मार्गदर्शन व पायरी-पायरी रोडमॅप सुरू करण्यासाठी साइड पॅनेल उघडा!',
+    descHi: 'टूलबार में साहायक एक्सटेंशन आइकन पर क्लिक करें और सीधा फॉर्म मार्गदर्शन व चरण-दर-चरण रोडमैप शुरू करने के लिए साइड पैनल खोलें!',
   },
 ];
 
@@ -130,6 +130,71 @@ export const ExtensionPage: React.FC = () => {
             ? 'Chrome ब्राउज़र में आपले सरकार और MahaDBT पोर्टल के साथ खुलने वाला इन-ब्राउज़र सहायक, जो संदर्भात्मक चरण रोडमैप और फ़ील्ड-स्तरीय मार्गदर्शन प्रदान करता है.'
             : 'An in-browser assistant that opens alongside Aaple Sarkar and MahaDBT portals, providing contextual step roadmaps and field-level guidance.'}
         </p>
+      </div>
+
+      {/* ── Direct 1-Click Extension Download Card ─────────────────── */}
+      <div
+        style={{
+          background: 'linear-gradient(135deg, var(--surface-soft, #f8fafc) 0%, var(--sahayak-blue-pale, #e0f2fe) 100%)',
+          border: '1.5px solid var(--sahayak-blue)',
+          borderRadius: 'var(--radius-card, 12px)',
+          padding: 'var(--space-6)',
+          marginBottom: 'var(--space-6)',
+          boxShadow: '0 4px 16px rgba(0, 89, 159, 0.08)',
+        }}
+      >
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 'var(--space-4)' }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', marginBottom: 'var(--space-2)' }}>
+              <span aria-hidden="true" style={{ fontSize: '1.5rem' }}>📦</span>
+              <strong style={{ fontSize: '1.25rem', color: 'var(--sahayak-blue-dark)' }}>
+                {lang === 'mr' ? 'थेट विस्तार डाउनलोड करा' : lang === 'hi' ? 'सीधा एक्सटेंशन डाउनलोड करें' : 'Download Pre-Packaged Extension'}
+              </strong>
+              <Badge variant="success" size="sm">Ready to Install</Badge>
+            </div>
+            <p style={{ margin: '0 0 var(--space-2) 0', fontSize: '0.9375rem', color: 'var(--text-secondary)', maxWidth: '640px', lineHeight: 1.5 }}>
+              {lang === 'mr'
+                ? 'कोणत्याही टर्मिनल किंवा कोडिंगची गरज नाही. ही झिप फाइल डाउनलोड करा, अनझिप करा आणि तुमच्या संगणकावर Chrome, Edge, Brave किंवा मोबाईलवरील Kiwi Browser मध्ये थेट जोडा.'
+                : lang === 'hi'
+                ? 'किसी टर्मिनल या कोडिंग की आवश्यकता नहीं है। इस ज़िप फ़ाइल को डाउनलोड करें, अनज़िप करें और अपने पीसी पर Chrome, Edge, Brave या मोबाइल Kiwi Browser में सीधे जोड़ें।'
+                : 'No terminal or coding needed. Simply download the pre-built zip package, extract it, and add it to Google Chrome, Microsoft Edge, Brave, Opera, or Kiwi Browser (Mobile).'}
+            </p>
+            <div style={{ display: 'flex', gap: 'var(--space-3)', flexWrap: 'wrap', fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
+              <span>✓ Manifest V3 Standalone</span>
+              <span>•</span>
+              <span>⚡ Lightweight (.zip)</span>
+              <span>•</span>
+              <span>💻 PC, Mac, Laptop & 📱 Android (Kiwi Browser)</span>
+            </div>
+          </div>
+
+          <div>
+            <a
+              href="/sahayak-extension.zip"
+              download="sahayak-extension.zip"
+              className="btn btn-primary"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                padding: '0.75rem 1.5rem',
+                fontSize: '1rem',
+                fontWeight: 600,
+                textDecoration: 'none',
+                borderRadius: 'var(--radius-button)',
+                boxShadow: '0 2px 8px rgba(0, 89, 159, 0.25)',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              <span aria-hidden="true">⬇️</span>
+              {lang === 'mr'
+                ? 'साहायक विस्तार (.zip) डाउनलोड करा'
+                : lang === 'hi'
+                ? 'साहायक एक्सटेंशन (.zip) डाउनलोड करें'
+                : 'Download Sahayak Extension (.zip)'}
+            </a>
+          </div>
+        </div>
       </div>
 
       {/* Implementation Status — P08 Complete */}

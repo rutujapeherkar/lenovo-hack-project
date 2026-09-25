@@ -92,6 +92,20 @@ try {
   fs.copyFileSync(path.join(extDir, "manifest.json"), path.join(outDir, "manifest.json"));
   fs.copyFileSync(path.join(extDir, "sidepanel.html"), path.join(outDir, "sidepanel.html"));
 
+  // 5. Package into public/sahayak-extension.zip for 1-click browser download
+  const publicDir = path.join(rootDir, "public");
+  if (!fs.existsSync(publicDir)) {
+    fs.mkdirSync(publicDir, { recursive: true });
+  }
+  const zipTarget = path.join(publicDir, "sahayak-extension.zip");
+  try {
+    const { execSync } = await import("node:child_process");
+    execSync(`cd "${outDir}" && zip -r "${zipTarget}" .`, { stdio: "pipe" });
+    console.log("  -> Generated 1-click download package: public/sahayak-extension.zip");
+  } catch (_zipErr) {
+    // Graceful fallback if zip CLI is unavailable
+  }
+
   console.log("[Extension Build] SUCCESS: Extension built cleanly in extension/dist/\n");
 } catch (err) {
   console.error("[Extension Build] ERROR:", err);
