@@ -18,6 +18,7 @@ import type { Service, CurrentTask } from "../../core/shared/types";
 import { useLanguage } from "../../core/language";
 import { TaskService } from "../../core/services/task-service";
 import { Button, Badge } from "../ui";
+import { ReadAloud } from "../accessibility";
 
 export interface TaskJourneyProps {
   service: Service;
@@ -245,11 +246,17 @@ export const TaskJourney: React.FC<TaskJourneyProps> = ({
               {t("currentStatus")} • {t("stepOf")} {currentIndex + 1} {t("of")} {steps.length}
             </Badge>
 
-            {task.completedStepIds.includes(currentStep.id) && (
-              <Badge variant="success" size="sm">
-                ✓ {t("completedStatus")}
-              </Badge>
-            )}
+            <div style={{ display: "flex", gap: "var(--space-2)", alignItems: "center" }}>
+              <ReadAloud
+                text={`${currentStep.title[language] || currentStep.title.en}. ${currentStep.description[language] || currentStep.description.en}`}
+                language={language}
+              />
+              {task.completedStepIds.includes(currentStep.id) && (
+                <Badge variant="success" size="sm">
+                  ✓ {t("completedStatus")}
+                </Badge>
+              )}
+            </div>
           </div>
 
           <h4

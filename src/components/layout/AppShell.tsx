@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { SkipLink } from './SkipLink';
 import { Header } from './Header';
 import { PageContainer } from './PageContainer';
 import { Footer } from './Footer';
 import { useLanguage } from '../../core/language';
+import { useAccessibility } from '../../core/accessibility';
+import { AccessibilityPanel } from '../accessibility';
+import type { Language } from '../../core/shared/types';
 
 export interface AppShellProps {
   children: React.ReactNode;
@@ -11,37 +14,20 @@ export interface AppShellProps {
 
 export const AppShell: React.FC<AppShellProps> = ({ children }) => {
   const { language, setLanguage } = useLanguage();
-  const [isHighContrast, setIsHighContrast] = useState<boolean>(false);
-  const [textScale, setTextScale] = useState<'default' | 'large' | 'extra-large'>('default');
+  const {
+    highContrast,
+    toggleHighContrast,
+    textScale,
+    cycleTextScale,
+    setLanguage: setA11yLanguage,
+    isPanelOpen,
+    openPanel,
+    closePanel,
+  } = useAccessibility();
 
-  // Synchronize document root attributes with accessibility & language preferences
-  useEffect(() => {
-    const root = document.documentElement;
-    root.setAttribute('lang', language);
-
-    if (isHighContrast) {
-      root.setAttribute('data-contrast', 'high');
-    } else {
-      root.removeAttribute('data-contrast');
-    }
-
-    if (textScale !== 'default') {
-      root.setAttribute('data-text-scale', textScale);
-    } else {
-      root.removeAttribute('data-text-scale');
-    }
-  }, [language, isHighContrast, textScale]);
-
-  const handleToggleHighContrast = () => {
-    setIsHighContrast((prev) => !prev);
-  };
-
-  const handleCycleTextScale = () => {
-    setTextScale((prev) => {
-      if (prev === 'default') return 'large';
-      if (prev === 'large') return 'extra-large';
-      return 'default';
-    });
+  const handleLanguageChange = (newLang: Language) => {
+    setLanguage(newLang);
+    setA11yLanguage(newLang);
   };
 
   return (
@@ -49,16 +35,18 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
       <SkipLink targetId="main-content" />
       <Header
         currentLanguage={language}
-        onLanguageChange={setLanguage}
-        isHighContrast={isHighContrast}
-        onToggleHighContrast={handleToggleHighContrast}
+        onLanguageChange={handleLanguageChange}
+        isHighContrast={highContrast}
+        onToggleHighContrast={toggleHighContrast}
         textScale={textScale}
-        onCycleTextScale={handleCycleTextScale}
+        onCycleTextScale={cycleTextScale}
+        onOpenA11yPanel={openPanel}
       />
       <PageContainer>
         {children}
       </PageContainer>
       <Footer currentLanguage={language} />
+      <AccessibilityPanel isOpen={isPanelOpen} onClose={closePanel} />
     </div>
   );
 };

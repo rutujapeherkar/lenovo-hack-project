@@ -8,7 +8,7 @@
     "build": "tsc && vite build",
     "build:extension": "node scripts/build-extension.mjs",
     "lint": "tsc --noEmit",
-    "test": "node scripts/test-p02.mjs && node scripts/test-p03.mjs && npx tsx scripts/test-p04.mjs && npx tsx scripts/test-p05.mjs && npx tsx scripts/test-p06.mjs && npx tsx scripts/test-p07.mjs && npx tsx scripts/test-p08.mjs",
+    "test": "node scripts/test-p02.mjs && node scripts/test-p03.mjs && npx tsx scripts/test-p04.mjs && npx tsx scripts/test-p05.mjs && npx tsx scripts/test-p06.mjs && npx tsx scripts/test-p07.mjs && npx tsx scripts/test-p08.mjs && npx tsx scripts/test-p09.mjs",
     "preview": "vite preview"
   },
   "dependencies": {

@@ -22,6 +22,7 @@ import { EligibilityList } from "./EligibilityList";
 import { OfficialSourceBox } from "./OfficialSourceBox";
 import { Button, Badge, Alert } from "../ui";
 import { Link } from "../../router";
+import { ReadAloud } from "../accessibility";
 
 export interface SchemeDetailsProps {
   scheme: Scheme;
@@ -102,7 +103,7 @@ export const SchemeDetails: React.FC<SchemeDetailsProps> = ({ scheme, onBack }) 
           {schemeName}
         </h1>
 
-        <div style={{ display: "flex", gap: "var(--space-3)", flexWrap: "wrap", marginTop: "var(--space-4)" }}>
+        <div style={{ display: "flex", gap: "var(--space-3)", flexWrap: "wrap", marginTop: "var(--space-4)", alignItems: "center" }}>
           <Button
             variant="outline"
             onClick={handleExplain}
@@ -111,6 +112,11 @@ export const SchemeDetails: React.FC<SchemeDetailsProps> = ({ scheme, onBack }) 
           >
             {loadingExplanation ? `✨ ${t("explainingScheme")}` : `✨ ${t("explainSchemeSimply")}`}
           </Button>
+
+          <ReadAloud
+            text={`${schemeName}. ${scheme.category}. ${scheme.benefits.slice(0, 2).join('. ')}`}
+            language={language}
+          />
 
           {scheme.officialSource?.url && (
             <a

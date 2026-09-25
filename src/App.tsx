@@ -1,6 +1,7 @@
 import React from 'react';
 import { RouterProvider, useRouter } from './router';
 import { LanguageProvider } from './core/language';
+import { AccessibilityProvider } from './core/accessibility';
 import { AppShell } from './components/layout';
 import {
   HomePage,
@@ -65,7 +66,9 @@ export const App: React.FC = () => {
   return (
     <RouterProvider>
       <LanguageProvider>
-        <AppContent />
+        <AccessibilityProvider>
+          <AppContent />
+        </AccessibilityProvider>
       </LanguageProvider>
     </RouterProvider>
   );

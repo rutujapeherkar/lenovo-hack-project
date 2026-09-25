@@ -1,19 +1,19 @@
 import React from 'react';
 import { Card, CardHeader, CardTitle, CardDescription, CardBody, CardFooter, Button, Badge, Alert } from '../components/ui';
 import { Link } from '../router';
+import { useAccessibility, VoiceService } from '../core/accessibility';
+import { MicButton } from '../components/assistant';
+import { ReadAloud } from '../components/accessibility';
 
 export const HomePage: React.FC = () => {
+  const { language, readAloud } = useAccessibility();
   const [query, setQuery] = React.useState('');
   const [loading, setLoading] = React.useState(false);
   const [response, setResponse] = React.useState<any>(null);
   const [error, setError] = React.useState<string | null>(null);
 
   const getCurrentLang = (): 'en' | 'mr' | 'hi' => {
-    if (typeof document !== 'undefined') {
-      const l = document.documentElement.lang;
-      if (l === 'en' || l === 'mr' || l === 'hi') return l;
-    }
-    return 'mr';
+    return language || 'mr';
   };
 
   const handleSearch = async (queryText?: string) => {
@@ -36,6 +36,9 @@ export const HomePage: React.FC = () => {
         if (json.success && json.data) {
           setResponse(json.data);
           setLoading(false);
+          if (readAloud && json.data.message) {
+            VoiceService.speakText(json.data.message, lang);
+          }
           return;
         }
         setError(json.error?.message || 'Assistant error');
@@ -95,12 +98,12 @@ export const HomePage: React.FC = () => {
             >
               {loading ? 'शोधत आहे... / Searching...' : 'शोध घ्या / Search'}
             </Button>
-            <Button
-              variant="mic"
-              micState={loading ? 'processing' : 'idle'}
-              aria-label="Voice input placeholder"
-              onClick={() => handleSearch()}
-              type="button"
+            <MicButton
+              language={language}
+              onTranscript={(text) => {
+                setQuery(text);
+              }}
+              disabled={loading}
             />
           </div>
 
@@ -135,13 +138,19 @@ export const HomePage: React.FC = () => {
           <div style={{ marginTop: 'var(--space-6)', textAlign: 'left' }}>
             <Card variant="interactive">
               <CardHeader>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', flexWrap: 'wrap', gap: 'var(--space-2)' }}>
                   <Badge variant="info">
                     {response.intent ? `हेतू / Intent: ${response.intent}` : 'सहायक मार्गदर्शन'}
                   </Badge>
-                  <Button variant="text" size="sm" onClick={() => setResponse(null)}>
-                    Clear ✕
-                  </Button>
+                  <div style={{ display: 'flex', gap: 'var(--space-2)', alignItems: 'center' }}>
+                    <ReadAloud text={response.message} language={getCurrentLang()} />
+                    <Button variant="text" size="sm" onClick={() => {
+                      VoiceService.stopSpeaking();
+                      setResponse(null);
+                    }}>
+                      Clear ✕
+                    </Button>
+                  </div>
                 </div>
                 <CardTitle style={{ marginTop: 'var(--space-2)', fontSize: '1.25rem' }}>
                   {response.service?.name || (response.schemes?.[0]?.name ? response.schemes[0].name[getCurrentLang()] : 'नागरिक मार्गदर्शन / Guidance')}

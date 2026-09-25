@@ -6,8 +6,9 @@ export interface HeaderProps {
   onLanguageChange?: (lang: 'en' | 'mr' | 'hi') => void;
   isHighContrast?: boolean;
   onToggleHighContrast?: () => void;
-  textScale?: 'default' | 'large' | 'extra-large';
+  textScale?: 'default' | 'normal' | 'large' | 'extra-large';
   onCycleTextScale?: () => void;
+  onOpenA11yPanel?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -17,6 +18,7 @@ export const Header: React.FC<HeaderProps> = ({
   onToggleHighContrast,
   textScale = 'default',
   onCycleTextScale,
+  onOpenA11yPanel,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { path } = useRouter();
@@ -104,6 +106,18 @@ export const Header: React.FC<HeaderProps> = ({
               हिंदी
             </button>
           </div>
+
+          {/* Accessibility Settings Panel Button (AC-P09-01) */}
+          <button
+            type="button"
+            className="a11y-quick-btn"
+            onClick={onOpenA11yPanel}
+            aria-label="Open accessibility settings / सुलभता पर्याय"
+            title="Accessibility Settings / सुलभता पर्याय (♿)"
+            style={{ fontSize: '1rem' }}
+          >
+            ♿
+          </button>
 
           {/* Quick High-Contrast Shortcut */}
           <button

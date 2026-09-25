@@ -1,50 +1,31 @@
-import React, { useState, useEffect } from 'react';
+/**
+ * Sahayak AI — Citizen Settings & Accessibility Preferences Page
+ * 
+ * Source of Truth: docs/source-of-truth/UI.md Section 32 & ARCHITECTURE.md Section 28
+ * Phase: P09 — Accessibility & Voice
+ */
+
+import React from 'react';
 import { Card, CardHeader, CardTitle, CardDescription, CardBody, Badge, Button, Alert } from '../components/ui';
+import { useAccessibility, VoiceService } from '../core/accessibility';
 
 export const SettingsPage: React.FC = () => {
-  const [highContrast, setHighContrast] = useState(false);
-  const [textScale, setTextScale] = useState<'default' | 'large' | 'extra-large'>('default');
-  const [motionReduced, setMotionReduced] = useState(false);
+  const {
+    textScale,
+    highContrast,
+    reducedMotion,
+    readAloud,
+    language,
+    setTextScale,
+    setHighContrast,
+    setReducedMotion,
+    setReadAloud,
+    setLanguage,
+    resetPreferences,
+  } = useAccessibility();
 
-  useEffect(() => {
-    const root = document.documentElement;
-    setHighContrast(root.getAttribute('data-contrast') === 'high');
-    const scale = root.getAttribute('data-text-scale') as 'large' | 'extra-large' | null;
-    setTextScale(scale || 'default');
-    setMotionReduced(root.getAttribute('data-motion') === 'reduced');
-  }, []);
-
-  const handleContrastToggle = () => {
-    const root = document.documentElement;
-    if (highContrast) {
-      root.removeAttribute('data-contrast');
-      setHighContrast(false);
-    } else {
-      root.setAttribute('data-contrast', 'high');
-      setHighContrast(true);
-    }
-  };
-
-  const handleTextScaleChange = (scale: 'default' | 'large' | 'extra-large') => {
-    const root = document.documentElement;
-    if (scale === 'default') {
-      root.removeAttribute('data-text-scale');
-    } else {
-      root.setAttribute('data-text-scale', scale);
-    }
-    setTextScale(scale);
-  };
-
-  const handleMotionToggle = () => {
-    const root = document.documentElement;
-    if (motionReduced) {
-      root.removeAttribute('data-motion');
-      setMotionReduced(false);
-    } else {
-      root.setAttribute('data-motion', 'reduced');
-      setMotionReduced(true);
-    }
-  };
+  const isVoiceSupported = VoiceService.isSpeechRecognitionSupported();
+  const isTtsSupported = VoiceService.isSpeechSynthesisSupported();
 
   return (
     <div className="settings-page">
@@ -56,26 +37,67 @@ export const SettingsPage: React.FC = () => {
           Accessibility & Interface Preferences (सुलभता आणि प्राधान्ये)
         </h1>
         <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', maxWidth: '800px' }}>
-          Customize visual contrast, text readability scale, and animation behavior for optimal comfort under WCAG 2.1 AA guidelines.
+          Customize visual contrast, text readability scale, animation behavior, and voice features for optimal comfort under WCAG 2.1 AA / AAA guidelines.
         </p>
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)', maxWidth: '720px' }}>
+        
+        {/* Preferred Language */}
+        <Card variant="default">
+          <CardHeader>
+            <CardTitle>Preferred Language (पसंतीची भाषा)</CardTitle>
+            <CardDescription>
+              Select your primary language for civic guidance, voice input, and spoken read-aloud.
+            </CardDescription>
+          </CardHeader>
+          <CardBody>
+            <div style={{ display: 'flex', gap: 'var(--space-2)', flexWrap: 'wrap' }}>
+              <Button
+                variant={language === 'mr' ? 'primary' : 'outline'}
+                onClick={() => setLanguage('mr')}
+              >
+                मराठी (Marathi)
+              </Button>
+              <Button
+                variant={language === 'en' ? 'primary' : 'outline'}
+                onClick={() => setLanguage('en')}
+              >
+                English
+              </Button>
+              <Button
+                variant={language === 'hi' ? 'primary' : 'outline'}
+                onClick={() => setLanguage('hi')}
+              >
+                हिंदी (Hindi)
+              </Button>
+            </div>
+          </CardBody>
+        </Card>
+
         {/* Contrast Mode */}
         <Card variant="default">
           <CardHeader>
             <CardTitle>High-Contrast Theme (उच्च कॉन्ट्रास्ट मोड)</CardTitle>
             <CardDescription>
-              Enforces deep pure black text and high-contrast solid borders with contrast ratio $\ge 7:1$.
+              Enforces deep pure black text and high-contrast solid borders with contrast ratio $\ge 7:1$ (WCAG AAA).
             </CardDescription>
           </CardHeader>
           <CardBody>
-            <Button
-              variant={highContrast ? 'primary' : 'outline'}
-              onClick={handleContrastToggle}
-            >
-              {highContrast ? 'High Contrast Mode: ACTIVE' : 'Enable High Contrast Mode'}
-            </Button>
+            <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
+              <Button
+                variant={!highContrast ? 'primary' : 'outline'}
+                onClick={() => setHighContrast(false)}
+              >
+                Standard Contrast
+              </Button>
+              <Button
+                variant={highContrast ? 'primary' : 'outline'}
+                onClick={() => setHighContrast(true)}
+              >
+                {highContrast ? 'High Contrast Mode: ACTIVE' : 'Enable High Contrast'}
+              </Button>
+            </div>
           </CardBody>
         </Card>
 
@@ -88,25 +110,25 @@ export const SettingsPage: React.FC = () => {
             </CardDescription>
           </CardHeader>
           <CardBody>
-            <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
+            <div style={{ display: 'flex', gap: 'var(--space-2)', flexWrap: 'wrap' }}>
               <Button
-                variant={textScale === 'default' ? 'primary' : 'outline'}
+                variant={textScale === 'normal' ? 'primary' : 'outline'}
                 size="sm"
-                onClick={() => handleTextScaleChange('default')}
+                onClick={() => setTextScale('normal')}
               >
-                Default (100%)
+                Normal (100%)
               </Button>
               <Button
                 variant={textScale === 'large' ? 'primary' : 'outline'}
                 size="sm"
-                onClick={() => handleTextScaleChange('large')}
+                onClick={() => setTextScale('large')}
               >
                 Large (115%)
               </Button>
               <Button
                 variant={textScale === 'extra-large' ? 'primary' : 'outline'}
                 size="sm"
-                onClick={() => handleTextScaleChange('extra-large')}
+                onClick={() => setTextScale('extra-large')}
               >
                 Extra Large (130%)
               </Button>
@@ -123,19 +145,68 @@ export const SettingsPage: React.FC = () => {
             </CardDescription>
           </CardHeader>
           <CardBody>
-            <Button
-              variant={motionReduced ? 'primary' : 'outline'}
-              size="sm"
-              onClick={handleMotionToggle}
-            >
-              {motionReduced ? 'Reduced Motion: ACTIVE' : 'Enable Reduced Motion'}
-            </Button>
+            <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
+              <Button
+                variant={!reducedMotion ? 'primary' : 'outline'}
+                size="sm"
+                onClick={() => setReducedMotion(false)}
+              >
+                Standard Motion
+              </Button>
+              <Button
+                variant={reducedMotion ? 'primary' : 'outline'}
+                size="sm"
+                onClick={() => setReducedMotion(true)}
+              >
+                {reducedMotion ? 'Reduced Motion: ACTIVE' : 'Enable Reduced Motion'}
+              </Button>
+            </div>
           </CardBody>
         </Card>
 
+        {/* Voice & Speech Synthesis */}
+        <Card variant="default">
+          <CardHeader>
+            <CardTitle>Voice & Audio Interaction (आवाज आणि ऑडिओ संवाद)</CardTitle>
+            <CardDescription>
+              Configure spoken voice responses and speech-to-text input.
+            </CardDescription>
+          </CardHeader>
+          <CardBody>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+              <div>
+                <Button
+                  variant={readAloud ? 'primary' : 'outline'}
+                  size="sm"
+                  onClick={() => setReadAloud(!readAloud)}
+                >
+                  {readAloud ? '🔊 Read Responses Aloud: ENABLED' : '🔇 Read Responses Aloud: OFF'}
+                </Button>
+              </div>
+              <div style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+                <span>Browser Capabilities: </span>
+                <span style={{ fontWeight: 600 }}>
+                  Speech Recognition: {isVoiceSupported ? '🟢 Available' : '🔴 Not Supported by this browser'}
+                </span>
+                {' • '}
+                <span style={{ fontWeight: 600 }}>
+                  Speech Synthesis (TTS): {isTtsSupported ? '🟢 Available' : '🔴 Not Supported'}
+                </span>
+              </div>
+            </div>
+          </CardBody>
+        </Card>
+
+        {/* Reset Preferences */}
+        <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+          <Button variant="outline" size="sm" onClick={resetPreferences}>
+            ↺ Reset All Preferences to Defaults
+          </Button>
+        </div>
+
         {/* Zero-Credential Storage Safety Card */}
         <Alert variant="info" title="Privacy and Data Storage Guarantee">
-          Sahayak AI stores your theme preferences exclusively in your local browser. No telemetry or personal information is transmitted to any cloud servers.
+          Sahayak AI stores your accessibility preferences exclusively in your local browser storage. Voice audio is processed ephemerally using browser-native APIs and is NEVER recorded, saved to disk, or sent to external trackers.
         </Alert>
       </div>
     </div>

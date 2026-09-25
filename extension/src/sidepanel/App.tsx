@@ -24,6 +24,7 @@ import type {
 import { sendTabMessage } from "../shared/messaging";
 import { PortalDetector } from "../../../src/core/portals/portal-detector";
 import { FormGuideRepository } from "../../../src/core/form-guides/form-guide-repository";
+import { VoiceService } from "../../../src/core/accessibility/voice-service";
 
 // Trilingual side panel dictionary
 export const SIDEPANEL_STRINGS = {
@@ -133,11 +134,32 @@ export const App: React.FC = () => {
   const [activeView, setActiveView] = useState<ActiveView>("menu");
   const [isLoading, setIsLoading] = useState(false);
   const [aiExplanation, setAiExplanation] = useState<string | null>(null);
+  const [isSpeaking, setIsSpeaking] = useState(false);
 
   // Form guidance state
   const [currentGuide, setCurrentGuide] = useState<FormGuide | null>(null);
   const [currentFieldIndex, setCurrentFieldIndex] = useState(0);
   const [fieldHighlightError, setFieldHighlightError] = useState<string | null>(null);
+
+  // Cleanup speech on unmount
+  useEffect(() => {
+    return () => {
+      VoiceService.stopSpeaking();
+    };
+  }, []);
+
+  const handleToggleSpeech = (textToSpeak: string) => {
+    if (isSpeaking) {
+      VoiceService.stopSpeaking();
+      setIsSpeaking(false);
+    } else {
+      VoiceService.speakText(textToSpeak, language, {
+        onStart: () => setIsSpeaking(true),
+        onEnd: () => setIsSpeaking(false),
+        onError: () => setIsSpeaking(false),
+      });
+    }
+  };
 
   const t = (key: keyof typeof SIDEPANEL_STRINGS): string => {
     return SIDEPANEL_STRINGS[key][language] || SIDEPANEL_STRINGS[key].en;
@@ -611,13 +633,37 @@ export const App: React.FC = () => {
             <span style={{ fontWeight: 700, fontSize: "0.9375rem", color: "#003366" }}>
               📖 {t("explainPage")}
             </span>
-            <button
-              type="button"
-              onClick={() => setActiveView("menu")}
-              style={{ background: "none", border: "none", color: "#64748b", fontSize: "0.8125rem", cursor: "pointer" }}
-            >
-              ✕ {t("backToActions")}
-            </button>
+            <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+              {aiExplanation && (
+                <button
+                  type="button"
+                  onClick={() => handleToggleSpeech(aiExplanation)}
+                  style={{
+                    backgroundColor: isSpeaking ? "#fee2e2" : "#f1f5f9",
+                    border: "1px solid #cbd5e1",
+                    borderRadius: "6px",
+                    padding: "4px 8px",
+                    fontSize: "0.8125rem",
+                    cursor: "pointer",
+                    fontWeight: 600,
+                  }}
+                  title={isSpeaking ? "Stop read aloud" : "Read aloud"}
+                >
+                  {isSpeaking ? "⏹ Stop" : "🔊 Read"}
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={() => {
+                  VoiceService.stopSpeaking();
+                  setIsSpeaking(false);
+                  setActiveView("menu");
+                }}
+                style={{ background: "none", border: "none", color: "#64748b", fontSize: "0.8125rem", cursor: "pointer" }}
+              >
+                ✕ {t("backToActions")}
+              </button>
+            </div>
           </div>
 
           <div
@@ -643,13 +689,42 @@ export const App: React.FC = () => {
             <span style={{ fontWeight: 700, fontSize: "0.9375rem", color: "#003366" }}>
               👉 {t("whatNext")}
             </span>
-            <button
-              type="button"
-              onClick={() => setActiveView("menu")}
-              style={{ background: "none", border: "none", color: "#64748b", fontSize: "0.8125rem", cursor: "pointer" }}
-            >
-              ✕ {t("backToActions")}
-            </button>
+            <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+              <button
+                type="button"
+                onClick={() => {
+                  const whatNextText = language === "mr"
+                    ? "१. आपला नोंदणीकृत मोबाइल नंबर व पासवर्ड भरा. २. चित्रातील सुरक्षा कॅप्चा कोड अचूक टाईप करा. ३. लॉगिन बटणावर क्लिक करा. ४. लॉगिन झाल्यावर उत्पन्न दाखला किंवा आवश्यक सेवा निवडा."
+                    : language === "hi"
+                    ? "1. अपना पंजीकृत मोबाइल नंबर और पासवर्ड भरें। 2. चित्र में दिखाया गया सुरक्षा कैप्चा कोड टाइप करें। 3. लॉगिन बटन पर क्लिक करें। 4. लॉगिन के बाद आय प्रमाण पत्र या आवश्यक सेवा चुनें।"
+                    : "1. Enter your registered mobile number and password. 2. Type the security captcha code shown in the image. 3. Click Login to access your citizen dashboard. 4. Select your required certificate or service.";
+                  handleToggleSpeech(whatNextText);
+                }}
+                style={{
+                  backgroundColor: isSpeaking ? "#fee2e2" : "#f1f5f9",
+                  border: "1px solid #cbd5e1",
+                  borderRadius: "6px",
+                  padding: "4px 8px",
+                  fontSize: "0.8125rem",
+                  cursor: "pointer",
+                  fontWeight: 600,
+                }}
+                title={isSpeaking ? "Stop read aloud" : "Read aloud"}
+              >
+                {isSpeaking ? "⏹ Stop" : "🔊 Read"}
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  VoiceService.stopSpeaking();
+                  setIsSpeaking(false);
+                  setActiveView("menu");
+                }}
+                style={{ background: "none", border: "none", color: "#64748b", fontSize: "0.8125rem", cursor: "pointer" }}
+              >
+                ✕ {t("backToActions")}
+              </button>
+            </div>
           </div>
 
           <div
