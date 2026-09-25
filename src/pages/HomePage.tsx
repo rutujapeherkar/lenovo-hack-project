@@ -168,6 +168,17 @@ export const HomePage: React.FC = () => {
                   </div>
                 )}
 
+                {/* Service Task Journey CTA */}
+                {response.service?.id && (
+                  <div style={{ marginTop: 'var(--space-3)', marginBottom: 'var(--space-3)' }}>
+                    <Link href={`/services/${response.service.id}`}>
+                      <Button variant="primary" size="sm">
+                        🧭 Start Guided Task / कार्य मार्गदर्शन सुरू करा →
+                      </Button>
+                    </Link>
+                  </div>
+                )}
+
                 {/* Official Source Link */}
                 {response.officialSource && (
                   <div style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>

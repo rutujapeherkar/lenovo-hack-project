@@ -3,20 +3,21 @@ import { SkipLink } from './SkipLink';
 import { Header } from './Header';
 import { PageContainer } from './PageContainer';
 import { Footer } from './Footer';
+import { useLanguage } from '../../core/language';
 
 export interface AppShellProps {
   children: React.ReactNode;
 }
 
 export const AppShell: React.FC<AppShellProps> = ({ children }) => {
-  const [currentLanguage, setCurrentLanguage] = useState<'en' | 'mr' | 'hi'>('mr');
+  const { language, setLanguage } = useLanguage();
   const [isHighContrast, setIsHighContrast] = useState<boolean>(false);
   const [textScale, setTextScale] = useState<'default' | 'large' | 'extra-large'>('default');
 
   // Synchronize document root attributes with accessibility & language preferences
   useEffect(() => {
     const root = document.documentElement;
-    root.setAttribute('lang', currentLanguage);
+    root.setAttribute('lang', language);
 
     if (isHighContrast) {
       root.setAttribute('data-contrast', 'high');
@@ -29,7 +30,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
     } else {
       root.removeAttribute('data-text-scale');
     }
-  }, [currentLanguage, isHighContrast, textScale]);
+  }, [language, isHighContrast, textScale]);
 
   const handleToggleHighContrast = () => {
     setIsHighContrast((prev) => !prev);
@@ -47,8 +48,8 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
     <div className="app-shell">
       <SkipLink targetId="main-content" />
       <Header
-        currentLanguage={currentLanguage}
-        onLanguageChange={setCurrentLanguage}
+        currentLanguage={language}
+        onLanguageChange={setLanguage}
         isHighContrast={isHighContrast}
         onToggleHighContrast={handleToggleHighContrast}
         textScale={textScale}
@@ -57,7 +58,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
       <PageContainer>
         {children}
       </PageContainer>
-      <Footer currentLanguage={currentLanguage} />
+      <Footer currentLanguage={language} />
     </div>
   );
 };

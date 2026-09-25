@@ -1,5 +1,6 @@
 import React from 'react';
 import { RouterProvider, useRouter } from './router';
+import { LanguageProvider } from './core/language';
 import { AppShell } from './components/layout';
 import {
   HomePage,
@@ -17,11 +18,15 @@ const AppContent: React.FC = () => {
   const { path, navigate } = useRouter();
 
   const renderRoute = () => {
+    if (path === '/' || path === '') {
+      return <HomePage />;
+    }
+
+    if (path === '/services' || path.startsWith('/services/')) {
+      return <ServicesPage />;
+    }
+
     switch (path) {
-      case '/':
-        return <HomePage />;
-      case '/services':
-        return <ServicesPage />;
       case '/schemes':
         return <SchemesPage />;
       case '/explain-screen':
@@ -57,7 +62,9 @@ const AppContent: React.FC = () => {
 export const App: React.FC = () => {
   return (
     <RouterProvider>
-      <AppContent />
+      <LanguageProvider>
+        <AppContent />
+      </LanguageProvider>
     </RouterProvider>
   );
 };
