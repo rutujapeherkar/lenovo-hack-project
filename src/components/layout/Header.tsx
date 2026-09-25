@@ -68,13 +68,6 @@ export const Header: React.FC<HeaderProps> = ({
               {getLabel(item)}
             </Link>
           ))}
-          <Link
-            href="/design-system"
-            className={`nav-link ${path === '/design-system' ? 'active' : ''}`}
-            style={{ fontSize: '0.8125rem', opacity: 0.85 }}
-          >
-            🎨 P01
-          </Link>
         </nav>
 
         {/* Header Right Actions */}
@@ -178,13 +171,6 @@ export const Header: React.FC<HeaderProps> = ({
                 {getLabel(item)}
               </Link>
             ))}
-            <Link
-              href="/design-system"
-              className={`mobile-nav-link ${path === '/design-system' ? 'active' : ''}`}
-              onClick={closeMobileMenu}
-            >
-              🎨 P01 Design System Showcase
-            </Link>
           </nav>
         </div>
       )}
