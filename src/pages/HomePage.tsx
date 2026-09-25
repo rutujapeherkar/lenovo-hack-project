@@ -3,6 +3,58 @@ import { Card, CardHeader, CardTitle, CardDescription, CardBody, CardFooter, But
 import { Link } from '../router';
 
 export const HomePage: React.FC = () => {
+  const [query, setQuery] = React.useState('');
+  const [loading, setLoading] = React.useState(false);
+  const [response, setResponse] = React.useState<any>(null);
+  const [error, setError] = React.useState<string | null>(null);
+
+  const getCurrentLang = (): 'en' | 'mr' | 'hi' => {
+    if (typeof document !== 'undefined') {
+      const l = document.documentElement.lang;
+      if (l === 'en' || l === 'mr' || l === 'hi') return l;
+    }
+    return 'mr';
+  };
+
+  const handleSearch = async (queryText?: string) => {
+    const textToSearch = (queryText !== undefined ? queryText : query).trim();
+    if (!textToSearch) return;
+
+    setLoading(true);
+    setError(null);
+    const lang = getCurrentLang();
+
+    try {
+      const res = await fetch('/api/assistant', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: textToSearch, language: lang }),
+      });
+
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success && json.data) {
+          setResponse(json.data);
+          setLoading(false);
+          return;
+        }
+        setError(json.error?.message || 'Assistant error');
+      } else {
+        setError(`Server returned HTTP ${res.status}`);
+      }
+    } catch (err: any) {
+      setError(err?.message || 'Unable to connect to Sahayak Assistant service.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const sampleQueries = [
+    { label: 'उत्पन्न प्रमाणपत्र', text: 'मला उत्पन्न प्रमाणपत्र काढायचे आहे' },
+    { label: 'Income Certificate', text: 'What services can I use for an income certificate?' },
+    { label: 'लाडकी बहीण योजना', text: 'माझी लाडकी बहीण योजनेची माहिती हवी आहे' },
+  ];
+
   return (
     <div className="home-page">
       {/* Civic Hero */}
@@ -17,21 +69,130 @@ export const HomePage: React.FC = () => {
           साहाय्यकला सांगा तुम्हाला काय हवे आहे. मिळवा जात प्रमाणपत्र, उत्पन्नाचा दाखला, रेशन कार्ड आणि विविध शासकीय योजनांचे अचूक मार्गदर्शन.
         </p>
 
-        {/* Input Placeholder Preview (P01 primitive integration) */}
-        <div style={{ marginTop: 'var(--space-6)', display: 'flex', gap: 'var(--space-2)', maxWidth: '640px', margin: 'var(--space-6) auto 0 auto' }}>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="उदा. मला उत्पन्न प्रमाणपत्र काढायचे आहे किंवा लाडकी बहीण योजनेची माहिती हवी आहे..."
-            aria-label="Ask Sahayak AI"
-            style={{ flex: 1 }}
-            readOnly
-          />
-          <Button variant="primary">
-            शोध घ्या / Search
-          </Button>
-          <Button variant="mic" micState="idle" aria-label="Voice input placeholder" />
-        </div>
+        {/* Input & Search Interface */}
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSearch();
+          }}
+          style={{ marginTop: 'var(--space-6)', maxWidth: '640px', margin: 'var(--space-6) auto 0 auto' }}
+        >
+          <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
+            <input
+              type="text"
+              className="form-control"
+              placeholder="उदा. मला उत्पन्न प्रमाणपत्र काढायचे आहे किंवा लाडकी बहीण योजनेची माहिती हवी आहे..."
+              aria-label="Ask Sahayak AI"
+              style={{ flex: 1 }}
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              disabled={loading}
+            />
+            <Button
+              variant="primary"
+              type="submit"
+              disabled={loading}
+            >
+              {loading ? 'शोधत आहे... / Searching...' : 'शोध घ्या / Search'}
+            </Button>
+            <Button
+              variant="mic"
+              micState={loading ? 'processing' : 'idle'}
+              aria-label="Voice input placeholder"
+              onClick={() => handleSearch()}
+              type="button"
+            />
+          </div>
+
+          {/* Quick Sample Queries */}
+          <div style={{ marginTop: 'var(--space-3)', display: 'flex', gap: 'var(--space-2)', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <span style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', alignSelf: 'center' }}>उदाहरणे:</span>
+            {sampleQueries.map((sample, i) => (
+              <button
+                key={i}
+                type="button"
+                className="badge badge-neutral"
+                style={{ cursor: 'pointer', border: '1px solid var(--border)' }}
+                onClick={() => {
+                  setQuery(sample.text);
+                  handleSearch(sample.text);
+                }}
+              >
+                {sample.label}
+              </button>
+            ))}
+          </div>
+        </form>
+
+        {/* Assistant Response Display */}
+        {error && (
+          <div style={{ marginTop: 'var(--space-4)', textAlign: 'left' }}>
+            <Alert variant="error" title="Assistant Error">{error}</Alert>
+          </div>
+        )}
+
+        {response && (
+          <div style={{ marginTop: 'var(--space-6)', textAlign: 'left' }}>
+            <Card variant="interactive">
+              <CardHeader>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                  <Badge variant="info">
+                    {response.intent ? `हेतू / Intent: ${response.intent}` : 'सहायक मार्गदर्शन'}
+                  </Badge>
+                  <Button variant="text" size="sm" onClick={() => setResponse(null)}>
+                    Clear ✕
+                  </Button>
+                </div>
+                <CardTitle style={{ marginTop: 'var(--space-2)', fontSize: '1.25rem' }}>
+                  {response.service?.name || (response.schemes?.[0]?.name ? response.schemes[0].name[getCurrentLang()] : 'नागरिक मार्गदर्शन / Guidance')}
+                </CardTitle>
+              </CardHeader>
+              <CardBody>
+                <p style={{ fontSize: '1rem', lineHeight: '1.65', color: 'var(--text)', marginBottom: 'var(--space-4)' }}>
+                  {response.message}
+                </p>
+
+                {/* Steps Preview if service guidance */}
+                {response.steps && response.steps.length > 0 && (
+                  <div style={{ marginTop: 'var(--space-3)', marginBottom: 'var(--space-4)', background: 'var(--sahayak-blue-pale)', padding: 'var(--space-4)', borderRadius: 'var(--radius-md)' }}>
+                    <strong style={{ fontSize: '0.9375rem', color: 'var(--sahayak-blue-dark)' }}>
+                      मार्गदर्शन पायऱ्या / Guidance Steps ({response.steps.length}):
+                    </strong>
+                    <ol style={{ marginTop: 'var(--space-2)', paddingLeft: 'var(--space-5)', margin: 'var(--space-2) 0 0 0' }}>
+                      {response.steps.slice(0, 3).map((st: any, idx: number) => (
+                        <li key={idx} style={{ fontSize: '0.875rem', marginBottom: 'var(--space-1)' }}>
+                          <strong>{st.title[getCurrentLang()] || st.title.en}:</strong> {st.description[getCurrentLang()] || st.description.en}
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
+                )}
+
+                {/* Official Source Link */}
+                {response.officialSource && (
+                  <div style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+                    <span>अधिकृत स्त्रोत / Official Source: </span>
+                    <a
+                      href={response.officialSource.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: 'var(--sahayak-blue)', textDecoration: 'underline', fontWeight: 600 }}
+                    >
+                      {response.officialSource.name} ↗
+                    </a>
+                  </div>
+                )}
+              </CardBody>
+              {response.safetyNote && (
+                <CardFooter>
+                  <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', margin: 0 }}>
+                    ℹ️ {response.safetyNote}
+                  </p>
+                </CardFooter>
+              )}
+            </Card>
+          </div>
+        )}
       </section>
 
       {/* Mandatory Civic Disclaimer Alert */}
