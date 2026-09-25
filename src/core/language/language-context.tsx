@@ -48,7 +48,26 @@ export type TranslationKey =
   | "currentStatus"
   | "upcomingStatus"
   | "browseAllServices"
-  | "filterByCategory";
+  | "filterByCategory"
+  | "schemesTitle"
+  | "schemesSubtitle"
+  | "searchSchemesPlaceholder"
+  | "whoCanApply"
+  | "benefitsProvided"
+  | "mandatoryDocuments"
+  | "viewSchemeDetails"
+  | "noSchemesFound"
+  | "noSchemesFoundDesc"
+  | "officialAuthority"
+  | "applyOnOfficialPortal"
+  | "viewOfficialSchemeInfo"
+  | "officialRouteNotVerified"
+  | "explainSchemeSimply"
+  | "explainingScheme"
+  | "backToSchemes"
+  | "browseAllSchemes"
+  | "beneficiaryGroup"
+  | "allBeneficiaries";
 
 export const UI_TRANSLATIONS: Record<TranslationKey, Record<Language, string>> = {
   servicesTitle: {
@@ -205,6 +224,101 @@ export const UI_TRANSLATIONS: Record<TranslationKey, Record<Language, string>> =
     en: "Filter by Category",
     mr: "वर्गवारीनुसार निवडा",
     hi: "श्रेणी के अनुसार चुनें",
+  },
+  schemesTitle: {
+    en: "Maharashtra & Central Welfare Schemes",
+    mr: "महाराष्ट्र व केंद्र शासकीय कल्याणकारी योजना",
+    hi: "महाराष्ट्र और केंद्र सरकारी कल्याणकारी योजनाएं",
+  },
+  schemesSubtitle: {
+    en: "Verified welfare schemes for students, farmers, women, senior citizens, and persons with disabilities in Maharashtra",
+    mr: "महाराष्ट्रातील विद्यार्थी, शेतकरी, महिला, ज्येष्ठ नागरिक आणि दिव्यांग व्यक्तींसाठी अधिकृत शासकीय योजना",
+    hi: "महाराष्ट्र में छात्रों, किसानों, महिलाओं, वरिष्ठ नागरिकों और दिव्यांग व्यक्तियों के लिए आधिकारिक सरकारी योजनाएं",
+  },
+  searchSchemesPlaceholder: {
+    en: "Search by keyword or ask naturally (e.g., scholarships for students, farmer subsidies, pension)...",
+    mr: "कीवर्डने शोधा किंवा नैसर्गिक भाषेत विचारा (उदा. शिष्यवृत्ती, शेतकरी अनुदान, पेन्शन)...",
+    hi: "कीवर्ड से खोजें या सामान्य भाषा में पूछें (उदा. छात्रवृत्ति, किसान अनुदान, पेंशन)...",
+  },
+  whoCanApply: {
+    en: "Who Can Apply? (Eligibility Criteria)",
+    mr: "कोण अर्ज करू शकते? (पात्रता निकष)",
+    hi: "कौन आवेदन कर सकता है? (पात्रता मानदंड)",
+  },
+  benefitsProvided: {
+    en: "Benefits & Financial Assistance",
+    mr: "मिळणारे लाभ व आर्थिक सहाय्य",
+    hi: "मिलने वाले लाभ और वित्तीय सहायता",
+  },
+  mandatoryDocuments: {
+    en: "Mandatory Document Checklist",
+    mr: "आवश्यक कागदपत्रांची यादी",
+    hi: "आवश्यक दस्तावेजों की चेकलिस्ट",
+  },
+  viewSchemeDetails: {
+    en: "View Details",
+    mr: "तपशील पहा",
+    hi: "विवरण देखें",
+  },
+  noSchemesFound: {
+    en: "No verified scheme matched your request.",
+    mr: "आपल्या शोधाशी जुळणारी पडताळलेली शासकीय योजना आढळली नाही.",
+    hi: "आपके अनुरोध से मेल खाती कोई सत्यापित सरकारी योजना नहीं मिली।",
+  },
+  noSchemesFoundDesc: {
+    en: "No verified Maharashtra welfare scheme matched your specific criteria. Try broadening your search or consult official government discovery portals.",
+    mr: "आपण प्रविष्ट केलेल्या निकषांशी जुळणारी कोणतीही योजना आढळली नाही. कृपया शोध विस्तारून पहा किंवा अधिकृत सरकारी पोर्टल तपासा.",
+    hi: "आपके मानदंडों से मेल खाती कोई योजना नहीं मिली। कृपया अपनी खोज का दायरा बढ़ाएं या आधिकारिक सरकारी पोर्टल देखें।",
+  },
+  officialAuthority: {
+    en: "Official Government Authority",
+    mr: "अधिकृत शासकीय प्राधिकरण",
+    hi: "आधिकारिक सरकारी प्राधिकरण",
+  },
+  applyOnOfficialPortal: {
+    en: "Apply on Official Portal",
+    mr: "अधिकृत पोर्टलवर अर्ज करा",
+    hi: "आधिकारिक पोर्टल पर आवेदन करें",
+  },
+  viewOfficialSchemeInfo: {
+    en: "View Official Scheme Information",
+    mr: "अधिकृत योजनेची माहिती पहा",
+    hi: "आधिकारिक योजना जानकारी देखें",
+  },
+  officialRouteNotVerified: {
+    en: "Official online application route is not currently verified online.",
+    mr: "अधिकृत थेट ऑनलाइन अर्ज मार्ग सध्या पडताळलेला नाही.",
+    hi: "आधिकारिक प्रत्यक्ष ऑनलाइन आवेदन मार्ग वर्तमान में सत्यापित नहीं है।",
+  },
+  explainSchemeSimply: {
+    en: "Explain this scheme in simple terms",
+    mr: "ही योजना सोप्या भाषेत समजून सांगा",
+    hi: "इस योजना को सरल भाषा में समझाएं",
+  },
+  explainingScheme: {
+    en: "Generating simple explanation...",
+    mr: "सोप्या भाषेत स्पष्टीकरण तयार करत आहे...",
+    hi: "सरल भाषा में व्याख्या तैयार हो रही है...",
+  },
+  backToSchemes: {
+    en: "Back to All Schemes",
+    mr: "सर्व योजनांकडे परत",
+    hi: "सभी योजनाओं पर वापस",
+  },
+  browseAllSchemes: {
+    en: "Browse All Verified Schemes",
+    mr: "सर्व पडताळलेल्या योजना पहा",
+    hi: "सभी सत्यापित योजनाएं देखें",
+  },
+  beneficiaryGroup: {
+    en: "Beneficiary Group",
+    mr: "लाभार्थी वर्ग",
+    hi: "लाभार्थी वर्ग",
+  },
+  allBeneficiaries: {
+    en: "All Beneficiaries",
+    mr: "सर्व लाभार्थी",
+    hi: "सभी लाभार्थी",
   },
 };
 

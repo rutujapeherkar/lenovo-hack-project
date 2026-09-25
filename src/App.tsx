@@ -26,9 +26,11 @@ const AppContent: React.FC = () => {
       return <ServicesPage />;
     }
 
+    if (path === '/schemes' || path.startsWith('/schemes/')) {
+      return <SchemesPage />;
+    }
+
     switch (path) {
-      case '/schemes':
-        return <SchemesPage />;
       case '/explain-screen':
         return <ExplainScreenPage />;
       case '/extension':
