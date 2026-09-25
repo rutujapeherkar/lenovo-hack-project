@@ -1,0 +1,104 @@
+/**
+ * Sahayak AI — Accessibility & High-Contrast Overrides
+ * Source of Truth: docs/source-of-truth/UI.md (Sections 32, 44) & SECURITY.md (Section 35)
+ */
+
+/* ==========================================================================
+   1. Universal Focus States (Keyboard Accessibility)
+   ========================================================================== */
+:focus-visible {
+  outline: 3px solid var(--focus) !important;
+  outline-offset: var(--focus-ring-offset) !important;
+  box-shadow: var(--focus-ring) !important;
+}
+
+/* ==========================================================================
+   2. Text Scaling Foundations (UI.md Section 32)
+   ========================================================================== */
+html[data-text-scale="large"] {
+  font-size: 18px; /* 112.5% scale */
+}
+
+html[data-text-scale="extra-large"] {
+  font-size: 20px; /* 125% scale */
+}
+
+/* ==========================================================================
+   3. High-Contrast Mode Overrides (UI.md Section 6, 32, 44)
+   Targeting >= 7:1 Contrast Ratio (WCAG AAA)
+   ========================================================================== */
+html[data-contrast="high"] {
+  --text-primary: #000000;
+  --text-secondary: #1A202C;
+  --text-muted: #2D3748;
+
+  --surface: #FFFFFF;
+  --surface-soft: #F0F4F8;
+  --surface-muted: #E2E8F0;
+
+  --border: #4A5568;
+  --border-strong: #000000;
+
+  --sahayak-blue: #003C6D;       /* Darker, higher contrast blue */
+  --sahayak-blue-dark: #002048;
+  --sahayak-blue-light: #CFE2FE;
+  --sahayak-blue-pale: #BAD9F8;
+
+  --success: #0E5E2A;
+  --success-bg: #D4EDDA;
+  --warning: #85530E;
+  --warning-bg: #FFF3CD;
+  --error: #9B1C1C;
+  --error-bg: #F8D7DA;
+
+  --focus: #002048;
+  --focus-ring: 0 0 0 4px #000000;
+  --shadow-card: none;
+}
+
+html[data-contrast="high"] .card,
+html[data-contrast="high"] .btn,
+html[data-contrast="high"] .form-control,
+html[data-contrast="high"] .badge,
+html[data-contrast="high"] .alert {
+  border-width: 2px !important;
+  border-color: var(--border) !important;
+}
+
+/* ==========================================================================
+   4. Reduced Motion (UI.md Section 51)
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+html[data-motion="reduced"] *,
+html[data-motion="reduced"] *::before,
+html[data-motion="reduced"] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* ==========================================================================
+   5. Screen Reader Utilities
+   ========================================================================== */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

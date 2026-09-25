@@ -1,0 +1,367 @@
+/**
+ * Sahayak AI — Base Component Styling
+ * Source of Truth: docs/source-of-truth/UI.md (Sections 34–40)
+ */
+
+/* ==========================================================================
+   1. Buttons (UI.md Section 34, 35)
+   ========================================================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: 10px 20px;
+  font-family: inherit;
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  line-height: 1.25;
+  text-align: center;
+  text-decoration: none;
+  border-radius: var(--radius-button);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  user-select: none;
+  min-height: 44px; /* Accessible touch target */
+}
+
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Primary Button (Sahayak Blue) */
+.btn-primary {
+  background-color: var(--sahayak-blue);
+  color: var(--text-inverse);
+  border-color: var(--sahayak-blue);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: var(--sahayak-blue-dark);
+  border-color: var(--sahayak-blue-dark);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-primary:active:not(:disabled) {
+  background-color: var(--sahayak-blue-deep);
+  border-color: var(--sahayak-blue-deep);
+  transform: translateY(1px);
+}
+
+/* Secondary Button (Clean White Surface) */
+.btn-secondary {
+  background-color: var(--surface);
+  color: var(--text-primary);
+  border-color: var(--border);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background-color: var(--surface-soft);
+  border-color: var(--border-strong);
+  color: var(--sahayak-blue-dark);
+}
+
+.btn-secondary:active:not(:disabled) {
+  background-color: var(--surface-muted);
+  transform: translateY(1px);
+}
+
+/* Outline / Accent Button */
+.btn-outline {
+  background-color: transparent;
+  color: var(--sahayak-blue);
+  border-color: var(--sahayak-blue);
+}
+
+.btn-outline:hover:not(:disabled) {
+  background-color: var(--sahayak-blue-light);
+  border-color: var(--sahayak-blue-dark);
+  color: var(--sahayak-blue-dark);
+}
+
+/* Text / Link Button */
+.btn-text {
+  background-color: transparent;
+  color: var(--sahayak-blue);
+  border-color: transparent;
+  padding: 8px 12px;
+  min-height: auto;
+}
+
+.btn-text:hover:not(:disabled) {
+  background-color: var(--sahayak-blue-light);
+  color: var(--sahayak-blue-dark);
+}
+
+/* Microphone Button (UI.md Section 35) */
+.btn-mic {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-pill);
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--sahayak-blue);
+  color: var(--text-inverse);
+  border: 2px solid transparent;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
+}
+
+.btn-mic:hover {
+  background-color: var(--sahayak-blue-dark);
+  transform: scale(1.05);
+}
+
+.btn-mic.listening {
+  background-color: var(--error);
+  animation: pulse-ring 1.5s infinite;
+}
+
+@keyframes pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 rgba(197, 48, 48, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(197, 48, 48, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(197, 48, 48, 0);
+  }
+}
+
+/* ==========================================================================
+   2. Cards (UI.md Section 14, 23)
+   ========================================================================== */
+.card {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: var(--space-6);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.card:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-hover);
+}
+
+.card-header {
+  margin-bottom: var(--space-4);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.card-title {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.card-body {
+  flex: 1;
+  color: var(--text-secondary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-relaxed);
+}
+
+.card-footer {
+  margin-top: var(--space-6);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+/* Official Source Card Component (UI.md Section 39) */
+.official-source-card {
+  background-color: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--sahayak-blue);
+  border-radius: var(--radius-card);
+  padding: var(--space-4) var(--space-5);
+  margin-top: var(--space-4);
+}
+
+.official-source-card .authority-title {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  color: var(--sahayak-blue-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-1);
+}
+
+.official-source-card .source-meta {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   3. Form Inputs (UI.md Section 14)
+   ========================================================================== */
+.form-group {
+  margin-bottom: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.form-label {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.form-label .required-star {
+  color: var(--error);
+}
+
+.form-control {
+  width: 100%;
+  padding: 12px 16px;
+  font-family: inherit;
+  font-size: var(--font-size-base);
+  color: var(--text-primary);
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-button);
+  box-sizing: border-box;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.form-control::placeholder {
+  color: var(--text-muted);
+}
+
+.form-control:focus {
+  border-color: var(--sahayak-blue);
+  box-shadow: var(--focus-ring);
+  outline: none;
+}
+
+.form-control.has-error {
+  border-color: var(--error);
+}
+
+.form-control.has-error:focus {
+  box-shadow: 0 0 0 3px rgba(197, 48, 48, 0.25);
+}
+
+.form-help {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.form-error {
+  font-size: var(--font-size-xs);
+  color: var(--error);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+/* ==========================================================================
+   4. Badges & Chips (UI.md Section 40)
+   ========================================================================== */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 4px 10px;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  line-height: 1;
+  border-radius: var(--radius-pill);
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.badge-success {
+  background-color: var(--success-bg);
+  color: var(--success);
+  border-color: rgba(22, 128, 60, 0.2);
+}
+
+.badge-warning {
+  background-color: var(--warning-bg);
+  color: var(--warning);
+  border-color: rgba(183, 121, 31, 0.2);
+}
+
+.badge-error {
+  background-color: var(--error-bg);
+  color: var(--error);
+  border-color: rgba(197, 48, 48, 0.2);
+}
+
+.badge-info {
+  background-color: var(--sahayak-blue-pale);
+  color: var(--sahayak-blue-dark);
+  border-color: rgba(0, 89, 159, 0.2);
+}
+
+.badge-neutral {
+  background-color: var(--surface-soft);
+  color: var(--text-secondary);
+  border-color: var(--border);
+}
+
+/* ==========================================================================
+   5. Alerts & Civic Notices (UI.md Section 52 & SECURITY.md Section 42)
+   ========================================================================== */
+.alert {
+  padding: var(--space-4) var(--space-5);
+  border-radius: var(--radius-button);
+  border: 1px solid transparent;
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+  margin-bottom: var(--space-4);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+.alert-info {
+  background-color: var(--info-bg);
+  border-color: rgba(0, 89, 159, 0.25);
+  color: var(--sahayak-blue-deep);
+}
+
+.alert-warning {
+  background-color: var(--warning-bg);
+  border-color: rgba(183, 121, 31, 0.3);
+  color: #744210;
+}
+
+.alert-error {
+  background-color: var(--error-bg);
+  border-color: rgba(197, 48, 48, 0.3);
+  color: #742A2A;
+}
+
+.alert-disclaimer {
+  background-color: var(--surface-soft);
+  border: 1px dashed var(--border-strong);
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+}

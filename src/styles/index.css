@@ -1,0 +1,11 @@
+/**
+ * Sahayak AI — Master Design System Stylesheet
+ * Source of Truth: docs/source-of-truth/UI.md
+ * Phase: P01 Design System
+ */
+
+@import './tokens.css';
+@import './typography.css';
+@import './accessibility.css';
+@import './components.css';
+@import './layout.css';

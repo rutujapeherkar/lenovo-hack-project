@@ -1,0 +1,92 @@
+/**
+ * Sahayak AI — Typography System
+ * Source of Truth: docs/source-of-truth/UI.md (Sections 9, 10, 45)
+ */
+
+/* Import Google Fonts: Inter for Latin, Noto Sans Devanagari for Marathi/Hindi */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap');
+
+html {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: var(--line-height-normal);
+  color: var(--text-primary);
+  background-color: var(--surface);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Heading Hierarchy (UI.md Section 10) */
+h1, .h1 {
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  line-height: var(--line-height-tight);
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  margin: 0 0 var(--space-4) 0;
+}
+
+h2, .h2 {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  line-height: var(--line-height-tight);
+  color: var(--sahayak-blue-dark);
+  letter-spacing: -0.015em;
+  margin: 0 0 var(--space-3) 0;
+}
+
+h3, .h3 {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  line-height: var(--line-height-tight);
+  color: var(--text-primary);
+  margin: 0 0 var(--space-2) 0;
+}
+
+h4, .h4 {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  line-height: var(--line-height-normal);
+  color: var(--text-primary);
+  margin: 0 0 var(--space-2) 0;
+}
+
+p, .body {
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-relaxed);
+  color: var(--text-primary);
+  margin: 0 0 var(--space-3) 0;
+}
+
+.body-secondary {
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+  color: var(--text-secondary);
+}
+
+.caption, .text-muted {
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-normal);
+  color: var(--text-muted);
+}
+
+/* Devanagari specific typographic adjustments (UI.md Section 45) */
+:lang(mr), :lang(hi), [lang="mr"], [lang="hi"] {
+  font-family: "Noto Sans Devanagari", var(--font-sans);
+  line-height: var(--line-height-relaxed);
+  letter-spacing: 0;
+}
+
+/* Civic-tech text link */
+a.link {
+  color: var(--sahayak-blue);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-weight: 500;
+  transition: color var(--transition-fast);
+}
+
+a.link:hover {
+  color: var(--sahayak-blue-dark);
+}

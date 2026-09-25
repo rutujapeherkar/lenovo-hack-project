@@ -1,0 +1,204 @@
+[
+  {
+    "id": "rcsms-shikshan-shulkh-shishyavrutti",
+    "name": {
+      "en": "Rajarshi Chhatrapati Shahu Maharaj Shikshan Shulkh Shishyavrutti Yojna (EBC)",
+      "mr": "राजर्षी छत्रपती शाहू महाराज शिक्षण शुल्क शिष्यवृत्ती योजना (ईबीसी)",
+      "hi": "राजर्षि छत्रपति शाहू महाराज शिक्षण शुल्क छात्रवृत्ति योजना (ईबीसी)"
+    },
+    "state": "Maharashtra",
+    "category": "Higher Education & Scholarships",
+    "eligibility": [
+      "Applicant must be an Indian citizen and permanent domicile of Maharashtra state",
+      "Annual family income must not exceed ₹8,00,000 (Rupees Eight Lakhs)",
+      "Admitted to government-approved higher, technical, or professional degree/diploma courses through CAP (Centralized Admission Process)",
+      "Maximum of two children from the same family can avail the benefit of this scheme",
+      "Minimum 50% attendance maintained during the ongoing academic semester or term"
+    ],
+    "benefits": [
+      "50% reimbursement of tuition fees for eligible professional and non-professional courses in government-aided and unaided colleges",
+      "50% reimbursement of university examination fees",
+      "Direct Benefit Transfer (DBT) deposited directly into student's Aadhaar-seeded bank account via MahaDBT portal"
+    ],
+    "documents": [
+      "Domicile Certificate of Maharashtra State",
+      "Valid Income Certificate issued by competent Tehsildar (annual income under ₹8 Lakhs)",
+      "HSC / SSC / Previous Semester Marksheet",
+      "CAP (Centralized Admission Process) Allotment Letter",
+      "Aadhaar Card linked with active bank account",
+      "Fee Receipt of current academic year",
+      "College Bona Fide Certificate"
+    ],
+    "officialSource": {
+      "name": "MahaDBT — Higher & Technical Education Department, Government of Maharashtra",
+      "url": "https://mahadbt.maharashtra.gov.in/",
+      "lastVerified": "2026-09-25"
+    },
+    "lastVerified": "2026-09-25"
+  },
+  {
+    "id": "sanjay-gandhi-niradhar-yojna",
+    "name": {
+      "en": "Sanjay Gandhi Niradhar Anudan Yojna",
+      "mr": "संजय गांधी निराधार अनुदान योजना",
+      "hi": "संजय गांधी निराधार अनुदान योजना"
+    },
+    "state": "Maharashtra",
+    "category": "Social Welfare & Pension Support",
+    "eligibility": [
+      "Resident of Maharashtra for at least 15 continuous years",
+      "Destitute persons below 65 years of age, or persons with disability (40% or above), orphan children, or destitute women (widows, divorcees, deserted wives)",
+      "Annual family income must not exceed ₹21,000 (for single beneficiary) or ₹50,000 (if family members exist)",
+      "No adult earning member capable of supporting the applicant"
+    ],
+    "benefits": [
+      "Monthly financial pension assistance of ₹1,500 per month for a single destitute beneficiary",
+      "Increased assistance of up to ₹1,500 per month for households with multiple eligible family dependents",
+      "Direct DBT credit into the beneficiary's post office or nationalized bank account every month"
+    ],
+    "documents": [
+      "Age Proof (School Leaving Certificate / Civil Surgeon Certificate)",
+      "Proof of 15 years Residence in Maharashtra (Domicile or Ration Card)",
+      "Income Certificate issued by Tehsildar (annual income within ₹21,000/₹50,000 limit)",
+      "Disability Certificate with minimum 40% disability (if applying under disability category)",
+      "Death Certificate of husband (for widows) or court decree (for deserted/divorced women)",
+      "Aadhaar Card and Bank Passbook copy"
+    ],
+    "officialSource": {
+      "name": "Social Justice and Special Assistance Department, Government of Maharashtra",
+      "url": "https://sjsa.maharashtra.gov.in/",
+      "lastVerified": "2026-09-25"
+    },
+    "lastVerified": "2026-09-25"
+  },
+  {
+    "id": "majhi-ladki-bahin-yojna",
+    "name": {
+      "en": "Mukhyamantri Majhi Ladki Bahin Yojna",
+      "mr": "मुख्यमंत्री माझी लाडकी बहीण योजना",
+      "hi": "मुख्यमंत्री माझी लाड़की बहिन योजना"
+    },
+    "state": "Maharashtra",
+    "category": "Women & Child Empowerment",
+    "eligibility": [
+      "Resident woman of Maharashtra state aged between 21 and 65 years",
+      "Annual family income from all sources must not exceed ₹2,50,000 (Rupees Two Lakh Fifty Thousand)",
+      "Beneficiary or family members must not be regular government employees or income tax payers",
+      "Beneficiary family must hold yellow or orange ration card (or income certificate below ₹2.5 Lakhs)",
+      "Bank account must be Aadhaar-linked and enabled for DBT (Direct Benefit Transfer)"
+    ],
+    "benefits": [
+      "Monthly direct financial assistance of ₹1,500 deposited directly into the woman's bank account",
+      "Financial self-reliance support and nutrition empowerment for women and their families"
+    ],
+    "documents": [
+      "Aadhaar Card of the applicant woman",
+      "Domicile Certificate or 15-year Maharashtra Residence Certificate (or Ration Card/Voter ID)",
+      "Yellow or Orange Ration Card (or Tehsildar Income Certificate below ₹2.5 Lakhs)",
+      "Aadhaar-linked Bank Passbook copy",
+      "Self-Declaration Affidavit of compliance with scheme rules"
+    ],
+    "officialSource": {
+      "name": "Women and Child Development Department, Government of Maharashtra",
+      "url": "https://www.maharashtra.gov.in/",
+      "lastVerified": "2026-09-25"
+    },
+    "lastVerified": "2026-09-25"
+  },
+  {
+    "id": "pm-kisan-maharashtra",
+    "name": {
+      "en": "PM-KISAN Samman Nidhi (Maharashtra State Implementation)",
+      "mr": "प्रधानमंत्री किसान सन्मान निधी (महाराष्ट्र राज्य अंमलबजावणी)",
+      "hi": "प्रधानमंत्री किसान सम्मान निधि (महाराष्ट्र राज्य कार्यान्वयन)"
+    },
+    "state": "Maharashtra",
+    "category": "Agriculture & Farmer Welfare",
+    "eligibility": [
+      "Small and marginal landholder farmer families with cultivable land in their names in Maharashtra 7/12 land records",
+      "Must not belong to institutional landholder or high-income exclusion categories (constitutional posts, income tax payers, retired pensioners receiving ₹10,000+ monthly)",
+      "Aadhaar e-KYC must be completed and bank account must be seeded with Aadhaar"
+    ],
+    "benefits": [
+      "Direct income support of ₹6,000 per year transferred in three equal installments of ₹2,000 every four months",
+      "Complementary Maharashtra State 'Namo Shetkari Mahasanman Nidhi Yojna' providing an additional ₹6,000 annually (total ₹12,000 per year for Maharashtra farmers)"
+    ],
+    "documents": [
+      "Updated 7/12 Land Record (Satbara Utara) and 8A Extract from Maharashtra Mahabhulekh",
+      "Aadhaar Card with mobile number linked for e-KYC OTP",
+      "Active Bank Account details (Aadhaar NPCI-mapped)",
+      "Self-Declaration of land ownership"
+    ],
+    "officialSource": {
+      "name": "Department of Agriculture & Farmers Welfare / PM-KISAN Portal",
+      "url": "https://pmkisan.gov.in/",
+      "lastVerified": "2026-09-25"
+    },
+    "lastVerified": "2026-09-25"
+  },
+  {
+    "id": "divyang-self-employment-assistance",
+    "name": {
+      "en": "Financial Assistance to Persons with Disabilities for Self-Employment",
+      "mr": "दिव्यांग व्यक्तींना स्वयंरोजगारासाठी आर्थिक सहाय्य योजना",
+      "hi": "दिव्यांग व्यक्तियों को स्वरोजगार के लिए वित्तीय सहायता योजना"
+    },
+    "state": "Maharashtra",
+    "category": "Disability Empowerment",
+    "eligibility": [
+      "Resident of Maharashtra with UDID or certified benchmark disability of 40% or higher",
+      "Age between 18 and 50 years",
+      "Annual family income within statutory ceiling (under ₹1,00,000)",
+      "Completed certified vocational skill training or possess viable micro-enterprise project proposal"
+    ],
+    "benefits": [
+      "Seed capital financial grant and subsidized bank credit up to ₹1,50,000 for setting up small shops, kiosks, or micro-businesses",
+      "Margin money subsidy provided by Maharashtra Divyang Finance and Development Corporation"
+    ],
+    "documents": [
+      "UDID Card or Civil Surgeon Disability Certificate (40%+ disability)",
+      "Proof of Age and Domicile in Maharashtra",
+      "Income Certificate issued by Tehsildar",
+      "Project proposal / quotation for tools, machinery, or business setup",
+      "Bank Account details and Aadhaar Card"
+    ],
+    "officialSource": {
+      "name": "Department of Empowerment of Persons with Disabilities, Maharashtra (Divyang Sahayak)",
+      "url": "https://divyangsahayak.maharashtra.gov.in/",
+      "lastVerified": "2026-09-25"
+    },
+    "lastVerified": "2026-09-25"
+  },
+  {
+    "id": "shravanbal-sewa-nivruttivetan",
+    "name": {
+      "en": "Shravanbal Seva Rajya Nivruttivetan Yojna",
+      "mr": "श्रावणबाळ सेवा राज्य निवृत्तीवेतन योजना",
+      "hi": "श्रवणबाळ सेवा राज्य पेंशन योजना"
+    },
+    "state": "Maharashtra",
+    "category": "Social Welfare & Pension Support",
+    "eligibility": [
+      "Senior citizen aged 65 years or older residing in Maharashtra for at least 15 continuous years",
+      "Category A: Senior citizens whose names appear in the Central Government BPL list (annual income up to ₹21,000)",
+      "Category B: Senior citizens not in BPL list but having annual household income under ₹50,000"
+    ],
+    "benefits": [
+      "Monthly pension of ₹1,500 per month deposited directly into beneficiary's bank account",
+      "Social security support for elderly citizens without independent financial means"
+    ],
+    "documents": [
+      "Age Proof verifying 65+ years (School Leaving Certificate / Civil Surgeon Certificate / Voter ID)",
+      "Domicile Certificate or 15-year Maharashtra residence proof",
+      "Income Certificate issued by competent Revenue Authority (Tehsildar)",
+      "BPL Card copy (for Category A applicants)",
+      "Aadhaar Card and Bank Passbook"
+    ],
+    "officialSource": {
+      "name": "Social Justice and Special Assistance Department, Government of Maharashtra",
+      "url": "https://sjsa.maharashtra.gov.in/",
+      "lastVerified": "2026-09-25"
+    },
+    "lastVerified": "2026-09-25"
+  }
+]

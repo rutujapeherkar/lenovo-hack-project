@@ -1,0 +1,110 @@
+/**
+ * Sahayak AI — Design System Tokens
+ * Source of Truth: docs/source-of-truth/UI.md
+ * Status: P01 Design System Core
+ */
+
+:root {
+  /* ==========================================================================
+     1. Brand & Surface Palette (UI.md Section 6)
+     ========================================================================== */
+  --sahayak-blue: #00599F;       /* Primary brand/action colour */
+  --sahayak-blue-dark: #003C6D;  /* Dark sections/footer/strong emphasis */
+  --sahayak-blue-deep: #002048;  /* Deep navy/high-contrast areas */
+  --sahayak-blue-light: #E7EEF5; /* Light blue surfaces */
+  --sahayak-blue-pale: #DBEFFD;  /* Information/accessibility backgrounds */
+
+  --surface: #FFFFFF;            /* Main background surface */
+  --surface-soft: #F8FAFC;       /* Secondary neutral background */
+  --surface-muted: #EEF2F6;      /* Subtle muted container surface */
+
+  --border: #D9E2EC;             /* Borders & dividers */
+  --border-strong: #BAC7D5;      /* High emphasis borders */
+
+  /* ==========================================================================
+     2. Text & Typography Palette (UI.md Section 6)
+     ========================================================================== */
+  --text-primary: #1F2937;       /* Main readable text (slate 800) */
+  --text-secondary: #5B6573;     /* Supporting / body-secondary text */
+  --text-muted: #6B7280;         /* Metadata / helper text */
+  --text-inverse: #FFFFFF;       /* Pure white text on dark surfaces */
+
+  /* ==========================================================================
+     3. Status Palette (UI.md Section 6, 40)
+     ========================================================================== */
+  --success: #16803C;            /* Verified / success state */
+  --success-bg: #EAF7EE;         /* Light success background */
+  --warning: #B7791F;            /* Warning / alert state */
+  --warning-bg: #FEF7EC;         /* Light warning background */
+  --error: #C53030;              /* Error / danger state */
+  --error-bg: #FDF2F2;           /* Light error background */
+  --info: #00599F;               /* Informational state */
+  --info-bg: #DBEFFD;            /* Light informational background */
+
+  /* ==========================================================================
+     4. Interactive & Focus (UI.md Section 6, 34)
+     ========================================================================== */
+  --focus: #00599F;              /* Keyboard focus ring colour */
+  --focus-ring: 0 0 0 3px rgba(0, 89, 159, 0.35);
+  --focus-ring-offset: 2px;
+
+  /* ==========================================================================
+     5. Spacing System (UI.md Section 11) - Base 4 Scale
+     ========================================================================== */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* ==========================================================================
+     6. Border Radii (UI.md Section 12)
+     ========================================================================== */
+  --radius-sm: 4px;
+  --radius-button: 8px;          /* Buttons & inputs standard */
+  --radius-card: 12px;           /* Cards standard */
+  --radius-container: 16px;      /* Large containers */
+  --radius-pill: 9999px;         /* Badges & indicator pills */
+
+  /* ==========================================================================
+     7. Shadows (UI.md Section 13) - Subtle & Civic
+     ========================================================================== */
+  --shadow-sm: 0 1px 3px rgba(0, 60, 109, 0.05);
+  --shadow-card: 0 2px 10px rgba(0, 60, 109, 0.08);
+  --shadow-hover: 0 4px 14px rgba(0, 60, 109, 0.12);
+  --shadow-dropdown: 0 8px 24px rgba(0, 32, 72, 0.12);
+
+  /* ==========================================================================
+     8. Layout & Breakpoints (UI.md Section 15, 43)
+     ========================================================================== */
+  --container-max-width: 1280px;
+  --header-height: 72px;
+
+  /* ==========================================================================
+     9. Typography Specs (UI.md Section 9, 10)
+     ========================================================================== */
+  --font-sans: "Inter", "Noto Sans Devanagari", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  --font-size-xs: 0.75rem;       /* 12px */
+  --font-size-sm: 0.875rem;      /* 14px */
+  --font-size-base: 1rem;        /* 16px */
+  --font-size-md: 1.125rem;      /* 18px */
+  --font-size-lg: 1.25rem;       /* 20px */
+  --font-size-xl: 1.5rem;        /* 24px */
+  --font-size-2xl: 1.875rem;     /* 30px */
+  --font-size-3xl: 2.25rem;      /* 36px */
+
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.65;   /* Crucial for Devanagari matras */
+
+  /* Transitions */
+  --transition-fast: 150ms ease-out;
+  --transition-normal: 250ms ease-out;
+}

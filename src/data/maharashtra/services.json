@@ -1,0 +1,483 @@
+[
+  {
+    "id": "income-certificate",
+    "name": {
+      "en": "Income Certificate",
+      "mr": "उत्पन्न प्रमाणपत्र",
+      "hi": "आय प्रमाण पत्र"
+    },
+    "description": {
+      "en": "Official state certificate verifying annual household income issued by the Revenue Department, required for fee concessions, scholarships, and social welfare schemes.",
+      "mr": "महसूल विभागामार्फत जारी केलेले अधिकृत वार्षिक कौटुंबिक उत्पन्न प्रमाणपत्र, जे शैक्षणिक शुल्क सवलत, शिष्यवृत्ती आणि शासकीय योजनांसाठी आवश्यक असते.",
+      "hi": "राजस्व विभाग द्वारा जारी आधिकारिक वार्षिक पारिवारिक आय प्रमाण पत्र, जो शुल्क छूट, छात्रवृत्ति और सामाजिक कल्याण योजनाओं के लिए आवश्यक है।"
+    },
+    "category": "Revenue & Citizen Certificates",
+    "state": "Maharashtra",
+    "documents": [
+      "Proof of Identity (Aadhaar Card / Voter ID / Passport)",
+      "Proof of Address (Ration Card / Electricity Bill / Telephone Bill)",
+      "Income Proof (Salary Slip / Form 16 / Income Tax Return / Talathi Verification Report)",
+      "Recent passport-sized photograph (3.5cm x 4.5cm)",
+      "Self-Declaration Affidavit in standard prescribed format"
+    ],
+    "steps": [
+      {
+        "id": "step-1-gather-docs",
+        "title": {
+          "en": "Assemble Required Documents",
+          "mr": "आवश्यक कागदपत्रे गोळा करा",
+          "hi": "आवश्यक दस्तावेज एकत्र करें"
+        },
+        "description": {
+          "en": "Keep scanned copies of your Aadhaar card, ration card, income proof (salary slip or Talathi report), and self-declaration ready in PDF/JPEG format under 256 KB.",
+          "mr": "आपले आधार कार्ड, रेशन कार्ड, उत्पन्न पुरावा (वेतन पावती किंवा तलाठी अहवाल) आणि स्वयंघोषणापत्राची स्कॅन केलेली प्रत २५६ केबी पेक्षा कमी आकारात तयार ठेवा.",
+          "hi": "अपना आधार कार्ड, राशन कार्ड, आय प्रमाण (वेतन पर्ची या तलाठी रिपोर्ट) और स्व-घोषणा पत्र की स्कैन कॉपी 256 KB से कम आकार में तैयार रखें।"
+        },
+        "status": "current"
+      },
+      {
+        "id": "step-2-portal-register",
+        "title": {
+          "en": "Log In to Aaple Sarkar Portal",
+          "mr": "आपले सरकार पोर्टलवर लॉगिन करा",
+          "hi": "आपले सरकार पोर्टल पर लॉगिन करें"
+        },
+        "description": {
+          "en": "Visit the official Aaple Sarkar portal and log in using your registered mobile number and password, or register as a new user with Aadhaar OTP.",
+          "mr": "अधिकृत आपले सरकार पोर्टलवर जा आणि आपल्या नोंदणीकृत मोबाइल नंबर आणि पासवर्डने लॉगिन करा किंवा आधार ओटीपीद्वारे नवीन वापरकर्ता म्हणून नोंदणी करा.",
+          "hi": "आधिकारिक आपले सरकार पोर्टल पर जाएं और अपने पंजीकृत मोबाइल नंबर और पासवर्ड का उपयोग करके लॉगिन करें, या आधार ओटीपी के साथ नए उपयोगकर्ता के रूप में पंजीकरण करें।"
+        },
+        "status": "upcoming"
+      },
+      {
+        "id": "step-3-select-service",
+        "title": {
+          "en": "Select Revenue Department Services",
+          "mr": "महसूल विभाग सेवा निवडा",
+          "hi": "राजस्व विभाग सेवा चुनें"
+        },
+        "description": {
+          "en": "Navigate to Revenue Department services, select 'Income Certificate', and click 'Apply'.",
+          "mr": "महसूल विभाग सेवांवर जा, 'उत्पन्न प्रमाणपत्र' निवडा आणि 'अर्ज करा' वर क्लिक करा.",
+          "hi": "राजस्व विभाग की सेवाओं पर जाएं, 'आय प्रमाण पत्र' चुनें और 'आवेदन करें' पर क्लिक करें।"
+        },
+        "status": "upcoming"
+      },
+      {
+        "id": "step-4-fill-details",
+        "title": {
+          "en": "Fill Applicant & Household Income Details",
+          "mr": "अर्जदार आणि कौटुंबिक उत्पन्नाचा तपशील भरा",
+          "hi": "आवेदक और पारिवारिक आय का विवरण भरें"
+        },
+        "description": {
+          "en": "Enter applicant personal details, district, taluka, village, and accurate income breakdown for the past 3 financial years.",
+          "mr": "अर्जदाराचा वैयक्तिक तपशील, जिल्हा, तालुका, गाव आणि मागील ३ आर्थिक वर्षांचे अचूक उत्पन्नाचे विवरण भरा.",
+          "hi": "आवेदक का व्यक्तिगत विवरण, जिला, तहसील, गांव और पिछले 3 वित्तीय वर्षों की सटीक आय का विवरण दर्ज करें।"
+        },
+        "status": "upcoming"
+      },
+      {
+        "id": "step-5-upload-pay",
+        "title": {
+          "en": "Upload Documents & Pay Statutory Fee",
+          "mr": "कागदपत्रे अपलोड करा आणि सरकारी शुल्क भरा",
+          "hi": "दस्तावेज अपलोड करें और सरकारी शुल्क का भुगतान करें"
+        },
+        "description": {
+          "en": "Upload verified document proofs and complete the nominal statutory service fee (approx. ₹33.60) via official payment gateway.",
+          "mr": "सत्यापित कागदपत्रे अपलोड करा आणि अधिकृत पेमेंट गेटवेद्वारे नाममात्र सरकारी शुल्क (अंदाजे ₹३३.६०) भरा.",
+          "hi": "सत्यापित दस्तावेज अपलोड करें और आधिकारिक भुगतान गेटवे के माध्यम से मामूली सरकारी शुल्क (लगभग ₹33.60) का भुगतान करें।"
+        },
+        "status": "upcoming"
+      },
+      {
+        "id": "step-6-track-download",
+        "title": {
+          "en": "Track Application & Download Certificate",
+          "mr": "अर्जाचा मागोवा घ्या आणि प्रमाणपत्र डाउनलोड करा",
+          "hi": "आवेदन ट्रैक करें और प्रमाण पत्र डाउनलोड करें"
+        },
+        "description": {
+          "en": "Track progress using the generated Application ID. Once approved by the Tehsildar (RTS timeline: 15 days), download the digitally signed certificate.",
+          "mr": "प्राप्त अर्ज क्रमांकाद्वारे अर्जाचा मागोवा घ्या. तहसीलदारांकडून मंजुरी मिळाल्यानंतर (आरटीएस कालमर्यादा: १५ दिवस), डिजिटल स्वाक्षरी केलेले प्रमाणपत्र डाउनलोड करा.",
+          "hi": "प्राप्त आवेदन संख्या के माध्यम से आवेदन को ट्रैक करें। तहसीलदार द्वारा स्वीकृति मिलने के बाद (आरटीएस समयसीमा: 15 दिन), डिजिटल रूप से हस्ताक्षरित प्रमाण पत्र डाउनलोड करें।"
+        },
+        "status": "upcoming"
+      }
+    ],
+    "officialSource": {
+      "name": "Aaple Sarkar — Revenue Department, Government of Maharashtra",
+      "url": "https://aaplesarkar.mahaonline.gov.in/en/",
+      "lastVerified": "2026-09-25"
+    }
+  },
+  {
+    "id": "domicile-certificate",
+    "name": {
+      "en": "Age, Nationality and Domicile Certificate",
+      "mr": "वय, अधिवास आणि राष्ट्रीयत्व प्रमाणपत्र",
+      "hi": "आयु, अधिवास और राष्ट्रीयता प्रमाण पत्र"
+    },
+    "description": {
+      "en": "Authoritative certificate proving legal residence in Maharashtra for at least 15 continuous years, essential for state quota college admissions, scholarships, and Maharashtra state recruitment.",
+      "mr": "महाराष्ट्रामध्ये सलग किमान १५ वर्षे वास्तव्याचा अधिकृत पुरावा देणारे प्रमाणपत्र, जे राज्य कोट्यातील प्रवेश, शिष्यवृत्ती आणि शासकीय नोकऱ्यांसाठी अनिवार्य असते.",
+      "hi": "महाराष्ट्र में कम से कम 15 निरंतर वर्षों के निवास का आधिकारिक प्रमाण पत्र, जो राज्य कोटे के तहत प्रवेश, छात्रवृत्ति और सरकारी भर्ती के लिए अनिवार्य है।"
+    },
+    "category": "Revenue & Citizen Certificates",
+    "state": "Maharashtra",
+    "documents": [
+      "Proof of Identity (Aadhaar Card / Voter ID / Passport)",
+      "Proof of Address (Ration Card / Electricity Bill / Telephone Bill)",
+      "Proof of Continuous 15-Year Residence in Maharashtra (School Leaving Certificate / Ration Cards / Property Tax receipts / Electricity bills)",
+      "Birth Certificate of Applicant (or School Leaving Certificate showing birthplace in Maharashtra)",
+      "Affidavit affirming domicile status in the prescribed format"
+    ],
+    "steps": [
+      {
+        "id": "step-1-gather-domicile-docs",
+        "title": {
+          "en": "Compile 15-Year Continuous Residence Proof",
+          "mr": "१५ वर्षांच्या सलग वास्तव्याचे पुरावे जमा करा",
+          "hi": "15 वर्ष के निरंतर निवास के प्रमाण एकत्र करें"
+        },
+        "description": {
+          "en": "Gather residence proof establishing uninterrupted stay in Maharashtra for at least 15 years alongside identity and birth records.",
+          "mr": "ओळख आणि जन्म पुराव्यासोबतच महाराष्ट्रात किमान १५ वर्षे सलग वास्तव्याचा पुरावा देणारी कागदपत्रे जमा करा.",
+          "hi": "पहचान और जन्म प्रमाण के साथ महाराष्ट्र में कम से कम 15 वर्ष के निरंतर प्रवास को स्थापित करने वाले दस्तावेज एकत्र करें।"
+        },
+        "status": "current"
+      },
+      {
+        "id": "step-2-login-aaple-sarkar",
+        "title": {
+          "en": "Access Aaple Sarkar Portal",
+          "mr": "आपले सरकार पोर्टलवर प्रवेश करा",
+          "hi": "आपले सरकार पोर्टल पर जाएं"
+        },
+        "description": {
+          "en": "Log in with registered citizen credentials on the Aaple Sarkar portal.",
+          "mr": "आपले सरकार पोर्टलवर नोंदणीकृत नागरिक खात्याद्वारे लॉगिन करा.",
+          "hi": "आपले सरकार पोर्टल पर पंजीकृत नागरिक खाते से लॉगिन करें।"
+        },
+        "status": "upcoming"
+      },
+      {
+        "id": "step-3-select-domicile-service",
+        "title": {
+          "en": "Select Age, Nationality & Domicile",
+          "mr": "वय, राष्ट्रीयत्व आणि अधिवास प्रमाणपत्र निवडा",
+          "hi": "आयु, राष्ट्रीयता और अधिवास प्रमाण पत्र चुनें"
+        },
+        "description": {
+          "en": "Select the Revenue Department and click on 'Age Nationality and Domicile Certificate'.",
+          "mr": "महसूल विभाग निवडून 'वय, राष्ट्रीयत्व आणि अधिवास प्रमाणपत्र' सेवेवर क्लिक करा.",
+          "hi": "राजस्व विभाग चुनें और 'आयु, राष्ट्रीयता और अधिवास प्रमाण पत्र' सेवा पर क्लिक करें।"
+        },
+        "status": "upcoming"
+      },
+      {
+        "id": "step-4-complete-form",
+        "title": {
+          "en": "Fill Application Details",
+          "mr": "अर्जातील तपशील पूर्ण करा",
+          "hi": "आवेदन का विवरण पूरा करें"
+        },
+        "description": {
+          "en": "Enter applicant residence history from birth or for the past 15 years, father/guardian details, and reason for application.",
+          "mr": "जन्मापासून किंवा मागील १५ वर्षांच्या वास्तव्याचा इतिहास, वडील/पालकांचा तपशील आणि अर्जाचे कारण भरा.",
+          "hi": "जन्म से या पिछले 15 वर्षों के निवास का इतिहास, पिता/अभिभावक का विवरण और आवेदन का कारण दर्ज करें।"
+        },
+        "status": "upcoming"
+      },
+      {
+        "id": "step-5-upload-pay-domicile",
+        "title": {
+          "en": "Upload Documents & Complete Fee Payment",
+          "mr": "कागदपत्रे अपलोड करा आणि शुल्क भरा",
+          "hi": "दस्तावेज अपलोड करें और शुल्क का भुगतान करें"
+        },
+        "description": {
+          "en": "Upload scanned documents and make online payment of the statutory fee (approx. ₹33.60).",
+          "mr": "स्कॅन केलेली कागदपत्रे अपलोड करा आणि सरकारी शुल्काचा (अंदाजे ₹३३.६०) ऑनलाइन भरणा करा.",
+          "hi": "स्कैन किए गए दस्तावेज अपलोड करें और सरकारी शुल्क (लगभग ₹33.60) का ऑनलाइन भुगतान करें।"
+        },
+        "status": "upcoming"
+      },
+      {
+        "id": "step-6-tehsildar-verification",
+        "title": {
+          "en": "Verification and Certificate Issuance",
+          "mr": "पडताळणी आणि प्रमाणपत्र वितरण",
+          "hi": "सत्यापन और प्रमाण पत्र जारी करना"
+        },
+        "description": {
+          "en": "The application is verified by the Tehsildar or Sub-Divisional Officer. Download the digitally signed certificate within RTS stipulated timeline (15 days).",
+          "mr": "तहसीलदार किंवा उपविभागीय अधिकाऱ्यांकडून अर्जाची छाननी केली जाते. १५ दिवसांच्या आरटीएस मुदतीत डिजिटल स्वाक्षरी असलेले प्रमाणपत्र डाउनलोड करा.",
+          "hi": "तहसीलदार या उप-विभागीय अधिकारी द्वारा आवेदन का सत्यापन किया जाता है। आरटीएस की 15 दिनों की समयसीमा में डिजिटल हस्ताक्षरित प्रमाण पत्र डाउनलोड करें।"
+        },
+        "status": "upcoming"
+      }
+    ],
+    "officialSource": {
+      "name": "Aaple Sarkar — Revenue Department, Government of Maharashtra",
+      "url": "https://aaplesarkar.mahaonline.gov.in/en/",
+      "lastVerified": "2026-09-25"
+    }
+  },
+  {
+    "id": "ration-card-member-addition",
+    "name": {
+      "en": "Ration Card Member Addition",
+      "mr": "रेशन कार्डमध्ये नवीन सदस्याचे नाव समाविष्ट करणे",
+      "hi": "राशन कार्ड में नए सदस्य का नाम जोड़ना"
+    },
+    "description": {
+      "en": "Public service to add a family member (newborn child, newly married spouse, or dependent relative) to an active Maharashtra National Food Security Act (NFSA) or State Ration Card via RCMS.",
+      "mr": "आरसीएमएस पोर्टलद्वारे सक्रिय महाराष्ट्र राष्ट्रीय अन्न सुरक्षा (एनएफएसए) किंवा राज्य रेशन कार्डमध्ये कुटुंबातील नवीन सदस्याचे (नवजात बालक किंवा नवविवाहित सून) नाव समाविष्ट करण्याची सेवा.",
+      "hi": "आरसीएमएस पोर्टल के माध्यम से सक्रिय महाराष्ट्र राष्ट्रीय खाद्य सुरक्षा (एनएफएसए) या राज्य राशन कार्ड में परिवार के नए सदस्य (नवजात शिशु या नवविवाहित पत्नी) का नाम जोड़ने की सार्वजनिक सेवा।"
+    },
+    "category": "Food, Civil Supplies & Consumer Protection",
+    "state": "Maharashtra",
+    "documents": [
+      "Original Active Ration Card copy",
+      "Aadhaar Card of the member to be added (Mandatory)",
+      "Birth Certificate (in case of newborn child under 5 years)",
+      "Marriage Certificate and Deletion Certificate/Surrender Certificate from previous ration card (in case of spouse)",
+      "Head of Family's Identity Proof & Passport-sized photo"
+    ],
+    "steps": [
+      {
+        "id": "step-1-gather-member-docs",
+        "title": {
+          "en": "Obtain Deletion or Birth Certificate",
+          "mr": "नाव कमी केल्याचा दाखला किंवा जन्म दाखला मिळवा",
+          "hi": "नाम हटाने का प्रमाण पत्र या जन्म प्रमाण पत्र प्राप्त करें"
+        },
+        "description": {
+          "en": "Ensure the new member is deleted from their earlier ration card (for marriage) or obtain the birth certificate (for child). Keep Aadhaar linked.",
+          "mr": "विवाह झाल्यास आधीच्या रेशन कार्डमधून नाव कमी केल्याचा दाखला (डिलीशन सर्टिफिकेट) मिळवा किंवा बालकाचा जन्म दाखला व आधार कार्ड तयार ठेवा.",
+          "hi": "विवाह के मामले में पिछले राशन कार्ड से नाम हटाने का प्रमाण पत्र प्राप्त करें या बच्चे का जन्म प्रमाण पत्र और आधार कार्ड तैयार रखें।"
+        },
+        "status": "current"
+      },
+      {
+        "id": "step-2-access-rcms",
+        "title": {
+          "en": "Access RCMS Maharashtra Portal",
+          "mr": "आरसीएमएस महाराष्ट्र पोर्टलवर जा",
+          "hi": "आरसीएमएस महाराष्ट्र पोर्टल पर जाएं"
+        },
+        "description": {
+          "en": "Open the official Food, Civil Supplies and Consumer Protection Department RCMS portal.",
+          "mr": "अन्न, नागरी पुरवठा व ग्राहक संरक्षण विभागाच्या अधिकृत आरसीएमएस पोर्टलवर जा.",
+          "hi": "खाद्य, नागरिक आपूर्ति एवं उपभोक्ता संरक्षण विभाग के आधिकारिक आरसीएमएस पोर्टल पर जाएं।"
+        },
+        "status": "upcoming"
+      },
+      {
+        "id": "step-3-select-member-addition",
+        "title": {
+          "en": "Select 'Add Member' Online Service",
+          "mr": "'सदस्य जोडा' ऑनलाइन सेवा निवडा",
+          "hi": "'सदस्य जोड़ें' ऑनलाइन सेवा चुनें"
+        },
+        "description": {
+          "en": "Log in to citizen services with Ration Card number and select the 'Add Member' modification service.",
+          "mr": "रेशन कार्ड क्रमांकाद्वारे नागरिक सेवांमध्ये लॉगिन करा आणि 'नवीन सदस्य समाविष्ट करा' पर्याय निवडा.",
+          "hi": "राशन कार्ड नंबर के साथ नागरिक सेवाओं में लॉगिन करें और 'नया सदस्य जोड़ें' विकल्प चुनें।"
+        },
+        "status": "upcoming"
+      },
+      {
+        "id": "step-4-enter-member-info",
+        "title": {
+          "en": "Input New Member Details & Aadhaar",
+          "mr": "नवीन सदस्याचा तपशील आणि आधार क्रमांक भरा",
+          "hi": "नए सदस्य का विवरण और आधार नंबर भरें"
+        },
+        "description": {
+          "en": "Enter the full name (English and Marathi), relationship with head of family, gender, date of birth, and verified 12-digit Aadhaar number.",
+          "mr": "नवीन सदस्याचे पूर्ण नाव (इंग्रजी आणि मराठी), कुटुंब प्रमुखाशी नाते, लिंग, जन्मतारीख आणि आधार क्रमांक नोंदवा.",
+          "hi": "नए सदस्य का पूरा नाम (अंग्रेजी और मराठी), परिवार के मुखिया से संबंध, लिंग, जन्म तिथि और आधार नंबर दर्ज करें।"
+        },
+        "status": "upcoming"
+      },
+      {
+        "id": "step-5-upload-proofs-submit",
+        "title": {
+          "en": "Upload Proofs & Submit to Supply Officer",
+          "mr": "कागदपत्रे अपलोड करा आणि पुरवठा निरीक्षकाकडे सादर करा",
+          "hi": "दस्तावेज अपलोड करें और आपूर्ति अधिकारी को सबमिट करें"
+        },
+        "description": {
+          "en": "Upload supporting proof files and submit. The application is routed to the local Taluka Supply Officer (TSI / DSO) for field verification.",
+          "mr": "संबंधित पुरावे अपलोड करून अर्ज सादर करा. अर्ज पडताळणीसाठी स्थानिक तालुका पुरवठा अधिकाऱ्यांकडे (टीएसओ) वर्ग केला जातो.",
+          "hi": "सहायक दस्तावेज अपलोड करें और सबमिट करें। आवेदन स्थानीय तालुका आपूर्ति अधिकारी के पास सत्यापन के लिए भेजा जाता है।"
+        },
+        "status": "upcoming"
+      }
+    ],
+    "officialSource": {
+      "name": "Food, Civil Supplies and Consumer Protection Department, Maharashtra (RCMS)",
+      "url": "https://rcms.mahafood.gov.in/",
+      "lastVerified": "2026-09-25"
+    }
+  },
+  {
+    "id": "non-creamy-layer-certificate",
+    "name": {
+      "en": "Non-Creamy Layer Certificate",
+      "mr": "नॉन-क्रिमीलेअर प्रमाणपत्र",
+      "hi": "नॉन-क्रीमी लेयर प्रमाण पत्र"
+    },
+    "description": {
+      "en": "Statutory certificate issued to VJNT, OBC, and SBC category citizens establishing that household annual income is within the non-creamy layer threshold (under ₹8 Lakhs), required for reservation benefits in education and government employment.",
+      "mr": "इतर मागासवर्गीय (ओबीसी), विमुक्त जाती व भटक्या जमाती (व्हीजेएनटी) आणि विशेष मागास प्रवर्ग (एसबीसी) प्रवर्गातील नागरिकांचे कौटुंबिक उत्पन्न ८ लाख रुपयांपेक्षा कमी असल्याचे प्रमाणित करणारे प्रमाणपत्र.",
+      "hi": "ओबीसी, वीजेएनटी और एसबीसी श्रेणी के नागरिकों को जारी किया जाने वाला आधिकारिक प्रमाण पत्र जो यह प्रमाणित करता है कि वार्षिक पारिवारिक आय ₹8 लाख की सीमा से कम है।"
+    },
+    "category": "Revenue & Citizen Certificates",
+    "state": "Maharashtra",
+    "documents": [
+      "Proof of Identity (Aadhaar Card / Voter ID)",
+      "Proof of Address (Ration Card / Electricity Bill)",
+      "Caste Certificate of the Applicant or Father",
+      "Income Proof of past 3 consecutive financial years (Salary certificate / Form 16 / ITR / Talathi report)",
+      "Self-Declaration and Affidavit in Form-B"
+    ],
+    "steps": [
+      {
+        "id": "step-1-gather-caste-income-docs",
+        "title": {
+          "en": "Compile 3-Year Income and Caste Records",
+          "mr": "३ वर्षांचे उत्पन्न व जात प्रमाणपत्र गोळा करा",
+          "hi": "3 वर्ष के आय और जाति प्रमाण पत्र एकत्र करें"
+        },
+        "description": {
+          "en": "Assemble Caste Certificate and continuous 3-year income documentation verifying family income remains under ₹8 Lakhs per annum.",
+          "mr": "जात प्रमाणपत्र आणि कुटुंबाचे वार्षिक उत्पन्न ८ लाखांच्या मर्यादेत असल्याचे सिद्ध करणारे सलग ३ वर्षांचे उत्पन्न दाखले तयार ठेवा.",
+          "hi": "जाति प्रमाण पत्र और परिवार की वार्षिक आय ₹8 लाख से कम होने की पुष्टि करने वाले लगातार 3 वर्षों के आय दस्तावेज तैयार रखें।"
+        },
+        "status": "current"
+      },
+      {
+        "id": "step-2-login-and-apply",
+        "title": {
+          "en": "Log In to Aaple Sarkar & Select NCL",
+          "mr": "आपले सरकारवर लॉगिन करून नॉन-क्रिमीलेअर निवडा",
+          "hi": "आपले सरकार पर लॉगिन करें और नॉन-क्रीमी लेयर चुनें"
+        },
+        "description": {
+          "en": "Log in to Aaple Sarkar, select Revenue Department services, and choose 'Non-Creamy Layer Certificate'.",
+          "mr": "आपले सरकारवर लॉगिन करा, महसूल विभागाच्या सेवांमध्ये जाऊन 'नॉन-क्रिमीलेअर प्रमाणपत्र' निवडा.",
+          "hi": "आपले सरकार पर लॉगिन करें, राजस्व विभाग सेवाओं में जाएं और 'नॉन-क्रीमी लेयर प्रमाण पत्र' चुनें।"
+        },
+        "status": "upcoming"
+      },
+      {
+        "id": "step-3-fill-wealth-income",
+        "title": {
+          "en": "Provide Wealth, Agriculture & Income Details",
+          "mr": "संपत्ती, शेतजमीन व उत्पन्नाचा तपशील भरा",
+          "hi": "संपत्ति, कृषि भूमि और आय का विवरण भरें"
+        },
+        "description": {
+          "en": "Fill details regarding agricultural landholding, residential properties, and gross annual income for each of the last 3 financial years.",
+          "mr": "शेतजमीन, निवासी मालमत्ता आणि मागील ३ आर्थिक वर्षांतील एकूण उत्पन्नाचा तपशील नोंदवा.",
+          "hi": "कृषि भूमि, आवासीय संपत्ति और पिछले 3 वित्तीय वर्षों में सकल वार्षिक आय का विवरण दर्ज करें।"
+        },
+        "status": "upcoming"
+      },
+      {
+        "id": "step-4-upload-and-fee",
+        "title": {
+          "en": "Upload Documents and Pay Fee",
+          "mr": "कागदपत्रे अपलोड करा व शुल्क भरा",
+          "hi": "दस्तावेज अपलोड करें और शुल्क भरें"
+        },
+        "description": {
+          "en": "Upload scanned caste and income documents and pay the prescribed fee online.",
+          "mr": "जात व उत्पन्न पुराव्यांच्या स्कॅन केलेल्या प्रती अपलोड करा आणि विहित शुल्क ऑनलाइन भरा.",
+          "hi": "जाति और आय प्रमाण दस्तावेजों की स्कैन प्रतियां अपलोड करें और निर्धारित शुल्क ऑनलाइन जमा करें।"
+        },
+        "status": "upcoming"
+      }
+    ],
+    "officialSource": {
+      "name": "Aaple Sarkar — Revenue Department, Government of Maharashtra",
+      "url": "https://aaplesarkar.mahaonline.gov.in/en/",
+      "lastVerified": "2026-09-25"
+    }
+  },
+  {
+    "id": "senior-citizen-certificate",
+    "name": {
+      "en": "Senior Citizen Certificate",
+      "mr": "ज्येष्ठ नागरिक प्रमाणपत्र",
+      "hi": "वरिष्ठ नागरिक प्रमाण पत्र"
+    },
+    "description": {
+      "en": "Official state identity certificate issued to citizens aged 60 years or above, enabling access to state transport concessions (MSRTC), healthcare benefits, and priority civic services.",
+      "mr": "६० वर्षे किंवा त्याहून अधिक वयाच्या नागरिकांना जारी केलेले अधिकृत प्रमाणपत्र, ज्याद्वारे एसटी प्रवास सवलत (एसटी महामंडळ), आरोग्य लाभ आणि शासकीय सेवांमध्ये प्राधान्य मिळते.",
+      "hi": "60 वर्ष या उससे अधिक आयु के नागरिकों को जारी आधिकारिक प्रमाण पत्र, जिससे राज्य परिवहन रियायतें (एमएसआरटीसी), स्वास्थ्य लाभ और प्राथमिकता सेवाएं प्राप्त होती हैं।"
+    },
+    "category": "Social Justice & Citizen Certificates",
+    "state": "Maharashtra",
+    "documents": [
+      "Proof of Age (Birth Certificate / School Leaving Certificate / Passport / PAN Card / Driving Licence)",
+      "Proof of Address (Ration Card / Electricity Bill / Voter ID)",
+      "Proof of Identity (Aadhaar Card)",
+      "Recent passport-sized photograph",
+      "Medical Certificate (if applying on grounds of physical frailty or health concessions)"
+    ],
+    "steps": [
+      {
+        "id": "step-1-gather-age-proof",
+        "title": {
+          "en": "Verify Age Document (Age 60+)",
+          "mr": "वयाचा पुरावा तपासा (वय ६०+ वर्षे)",
+          "hi": "आयु प्रमाण की पुष्टि करें (आयु 60+ वर्ष)"
+        },
+        "description": {
+          "en": "Ensure you have an authentic government document verifying age 60 years or older (School Leaving Certificate, Birth Certificate, PAN, or Passport).",
+          "mr": "वय ६० वर्षे पूर्ण झाल्याची खात्री देणारे अधिकृत सरकारी ओळखपत्र (शाळा सोडल्याचा दाखला, पॅन कार्ड, पासपोर्ट किंवा आधार) तयार ठेवा.",
+          "hi": "सुनिश्चित करें कि आपके पास 60 वर्ष या उससे अधिक आयु का सत्यापन करने वाला वैध दस्तावेज (स्कूल छोड़ने का प्रमाण पत्र, पैन कार्ड, पासपोर्ट या आधार) उपलब्ध है।"
+        },
+        "status": "current"
+      },
+      {
+        "id": "step-2-apply-aaple-sarkar",
+        "title": {
+          "en": "Apply Online via Aaple Sarkar",
+          "mr": "आपले सरकारद्वारे ऑनलाइन अर्ज करा",
+          "hi": "आपले सरकार के माध्यम से ऑनलाइन आवेदन करें"
+        },
+        "description": {
+          "en": "Log in to Aaple Sarkar, select Social Justice and Special Assistance Department, and choose 'Senior Citizen Certificate'.",
+          "mr": "आपले सरकार पोर्टलवर लॉगिन करा, सामाजिक न्याय व विशेष सहाय्य विभाग निवडून 'ज्येष्ठ नागरिक प्रमाणपत्र' सेवेवर क्लिक करा.",
+          "hi": "आपले सरकार पर लॉगिन करें, सामाजिक न्याय और विशेष सहायता विभाग चुनें और 'वरिष्ठ नागरिक प्रमाण पत्र' पर क्लिक करें।"
+        },
+        "status": "upcoming"
+      },
+      {
+        "id": "step-3-submit-and-track",
+        "title": {
+          "en": "Submit Details & Download Certificate",
+          "mr": "तपशील सादर करा आणि प्रमाणपत्र मिळवा",
+          "hi": "विवरण सबमिट करें और प्रमाण पत्र प्राप्त करें"
+        },
+        "description": {
+          "en": "Submit the form and download the verified Senior Citizen Certificate once authorized by the Sub-Divisional Officer.",
+          "mr": "माहिती भरून अर्ज सादर करा आणि उपविभागीय अधिकाऱ्यांच्या मंजुरीनंतर अधिकृत ज्येष्ठ नागरिक ओळखपत्र डाउनलोड करा.",
+          "hi": "फॉर्म सबमिट करें और उप-विभागीय अधिकारी की स्वीकृति के बाद आधिकारिक वरिष्ठ नागरिक प्रमाण पत्र डाउनलोड करें।"
+        },
+        "status": "upcoming"
+      }
+    ],
+    "officialSource": {
+      "name": "Social Justice and Special Assistance Department, Government of Maharashtra",
+      "url": "https://sjsa.maharashtra.gov.in/",
+      "lastVerified": "2026-09-25"
+    }
+  }
+]

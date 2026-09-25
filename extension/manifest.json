@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "Sahayak AI Companion",
+  "version": "0.1.0",
+  "description": "Civic assistance companion for Maharashtra government portals (Aaple Sarkar, MahaDBT, RTS).",
+  "permissions": [
+    "sidePanel",
+    "activeTab",
+    "storage"
+  ],
+  "host_permissions": [
+    "*://aaplesarkar.mahaonline.gov.in/*",
+    "*://mahadbt.maharashtra.gov.in/*",
+    "*://edistrict.maharashtra.gov.in/*"
+  ]
+}

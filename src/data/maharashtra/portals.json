@@ -1,0 +1,72 @@
+[
+  {
+    "id": "aaple-sarkar",
+    "name": "Aaple Sarkar Citizen Services Portal",
+    "domain": "aaplesarkar.mahaonline.gov.in",
+    "state": "Maharashtra",
+    "supported": true
+  },
+  {
+    "id": "mahadbt",
+    "name": "MahaDBT Direct Benefit Transfer",
+    "domain": "mahadbt.maharashtra.gov.in",
+    "state": "Maharashtra",
+    "supported": true
+  },
+  {
+    "id": "rcms-maharashtra",
+    "name": "Ration Card Management System (RCMS) Maharashtra",
+    "domain": "rcms.mahafood.gov.in",
+    "state": "Maharashtra",
+    "supported": true
+  },
+  {
+    "id": "divyang-sahayak",
+    "name": "Divyang Sahayak Disability Empowerment Portal",
+    "domain": "divyangsahayak.maharashtra.gov.in",
+    "state": "Maharashtra",
+    "supported": true
+  },
+  {
+    "id": "eci-voters",
+    "name": "Election Commission of India Voters' Services",
+    "domain": "voters.eci.gov.in",
+    "state": "Maharashtra",
+    "supported": true
+  },
+  {
+    "id": "myscheme",
+    "name": "myScheme National Scheme Discovery Portal",
+    "domain": "myscheme.gov.in",
+    "state": "Maharashtra",
+    "supported": true
+  },
+  {
+    "id": "nsp",
+    "name": "National Scholarship Portal (NSP)",
+    "domain": "scholarships.gov.in",
+    "state": "Maharashtra",
+    "supported": true
+  },
+  {
+    "id": "udid",
+    "name": "Unique Disability ID (UDID) Swavlamban",
+    "domain": "swavlambancard.gov.in",
+    "state": "Maharashtra",
+    "supported": true
+  },
+  {
+    "id": "pmkisan",
+    "name": "PM-KISAN Samman Nidhi Portal",
+    "domain": "pmkisan.gov.in",
+    "state": "Maharashtra",
+    "supported": true
+  },
+  {
+    "id": "sjsa-maharashtra",
+    "name": "Social Justice and Special Assistance Department",
+    "domain": "sjsa.maharashtra.gov.in",
+    "state": "Maharashtra",
+    "supported": true
+  }
+]
