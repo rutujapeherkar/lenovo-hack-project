@@ -4,26 +4,27 @@
  */
 
 /* Import Google Fonts: Inter for Latin, Noto Sans Devanagari for Marathi/Hindi */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap');
 
 html {
   font-family: var(--font-sans);
   font-size: 16px;
   line-height: var(--line-height-normal);
   color: var(--text-primary);
-  background-color: var(--surface);
+  background-color: var(--surface-soft);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
 }
 
 /* Heading Hierarchy (UI.md Section 10) */
 h1, .h1 {
   font-size: var(--font-size-3xl, 1.875rem);
-  font-weight: 700;
+  font-weight: 800;
   line-height: var(--line-height-tight);
   color: var(--text-primary);
-  letter-spacing: -0.015em;
+  letter-spacing: -0.02em;
   margin: 0 0 var(--space-3) 0;
 }
 
@@ -32,15 +33,16 @@ h2, .h2 {
   font-weight: 700;
   line-height: var(--line-height-tight);
   color: var(--sahayak-blue-dark);
-  letter-spacing: -0.01em;
+  letter-spacing: -0.015em;
   margin: 0 0 var(--space-2) 0;
 }
 
 h3, .h3 {
   font-size: var(--font-size-xl, 1.25rem);
-  font-weight: 600;
+  font-weight: 700;
   line-height: var(--line-height-tight);
   color: var(--text-primary);
+  letter-spacing: -0.01em;
   margin: 0 0 var(--space-2) 0;
 }
 
@@ -89,4 +91,63 @@ a.link {
 
 a.link:hover {
   color: var(--sahayak-blue-dark);
+}
+
+/* ==========================================================================
+   Global Utility Animations
+   ========================================================================== */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+/* Smooth page entry animation */
+.page-container {
+  animation: fadeInUp 0.25s ease-out both;
+}
+
+/* Selection highlight */
+::selection {
+  background-color: var(--sahayak-blue-pale);
+  color: var(--sahayak-blue-dark);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface-soft);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: var(--radius-pill);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--sahayak-blue);
 }

@@ -69,7 +69,7 @@ check("Test P09-A11Y-01: Default state initializes with standard defaults", () =
   assert.strictEqual(DEFAULT_ACCESSIBILITY_PREFERENCES.highContrast, false);
   assert.strictEqual(DEFAULT_ACCESSIBILITY_PREFERENCES.reducedMotion, false);
   assert.strictEqual(DEFAULT_ACCESSIBILITY_PREFERENCES.readAloud, false);
-  assert.strictEqual(DEFAULT_ACCESSIBILITY_PREFERENCES.language, "mr");
+  assert.strictEqual(DEFAULT_ACCESSIBILITY_PREFERENCES.language, "en");
 });
 
 check("Test P09-A11Y-01: SET_TEXT_SCALE transitions textScale correctly", () => {

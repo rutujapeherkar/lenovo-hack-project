@@ -27,17 +27,35 @@ export const SettingsPage: React.FC = () => {
   const isVoiceSupported = VoiceService.isSpeechRecognitionSupported();
   const isTtsSupported = VoiceService.isSpeechSynthesisSupported();
 
+  const badgeText = language === 'mr'
+    ? 'प्राधान्ये आणि सुलभता • Citizen Settings'
+    : language === 'hi'
+    ? 'प्राथमिकताएं और सुगमता • Citizen Settings'
+    : 'Citizen Settings & Accessibility Preferences';
+
+  const headingText = language === 'mr'
+    ? 'सुलभता आणि प्राधान्ये (Accessibility & Interface Preferences)'
+    : language === 'hi'
+    ? 'सुगमता और प्राथमिकताएं (Accessibility & Interface Preferences)'
+    : 'Accessibility & Interface Preferences';
+
+  const subtitleText = language === 'mr'
+    ? 'आपल्या गरजेनुसार वाचन आकार, दृश्य कॉन्ट्रास्ट आणि व्हॉइस पर्याय निवडा (WCAG 2.1 AA / AAA मानके).'
+    : language === 'hi'
+    ? 'अपनी आवश्यकतानुसार फ़ॉन्ट साइज़, कंट्रास्ट और वॉयस विकल्प चुनें (WCAG 2.1 AA / AAA मानक)।'
+    : 'Customize visual contrast, text readability scale, animation behavior, and voice features for optimal comfort under WCAG 2.1 AA / AAA guidelines.';
+
   return (
     <div className="settings-page">
       <div style={{ marginBottom: 'var(--space-6)' }}>
         <Badge variant="info" style={{ marginBottom: 'var(--space-2)' }}>
-          प्राधान्ये आणि सुलभता • Citizen Settings
+          {badgeText}
         </Badge>
         <h1 style={{ fontSize: '2rem', color: 'var(--sahayak-blue-dark)', marginBottom: 'var(--space-2)' }}>
-          Accessibility & Interface Preferences (सुलभता आणि प्राधान्ये)
+          {headingText}
         </h1>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', maxWidth: '800px' }}>
-          Customize visual contrast, text readability scale, animation behavior, and voice features for optimal comfort under WCAG 2.1 AA / AAA guidelines.
+        <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', maxWidth: '800px', lineHeight: 1.6 }}>
+          {subtitleText}
         </p>
       </div>
 

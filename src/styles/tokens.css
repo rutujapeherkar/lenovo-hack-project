@@ -8,44 +8,48 @@
   /* ==========================================================================
      1. Brand & Surface Palette (UI.md Section 6)
      ========================================================================== */
-  --sahayak-blue: #00599F;       /* Primary brand/action colour */
-  --sahayak-blue-dark: #003C6D;  /* Dark sections/footer/strong emphasis */
-  --sahayak-blue-deep: #002048;  /* Deep navy/high-contrast areas */
-  --sahayak-blue-light: #E7EEF5; /* Light blue surfaces */
-  --sahayak-blue-pale: #DBEFFD;  /* Information/accessibility backgrounds */
+  --sahayak-blue: #0A66C2;       /* Primary brand/action colour — richer blue */
+  --sahayak-blue-dark: #004182;  /* Dark sections/footer/strong emphasis */
+  --sahayak-blue-deep: #002050;  /* Deep navy/high-contrast areas */
+  --sahayak-blue-light: #E8F1FB; /* Light blue surfaces */
+  --sahayak-blue-pale: #D6EAFF;  /* Information/accessibility backgrounds */
+
+  --sahayak-orange: #E8630A;     /* Accent / CTA highlight */
+  --sahayak-orange-pale: #FFF0E6;/* Light orange background */
 
   --surface: #FFFFFF;            /* Main background surface */
-  --surface-soft: #F8FAFC;       /* Secondary neutral background */
-  --surface-muted: #EEF2F6;      /* Subtle muted container surface */
+  --surface-soft: #F4F7FB;       /* Secondary neutral background — slightly blue-tinted */
+  --surface-muted: #EBF0F7;      /* Subtle muted container surface */
+  --surface-sunken: #0F1A2A;     /* Dark sunken areas */
 
-  --border: #D9E2EC;             /* Borders & dividers */
-  --border-strong: #BAC7D5;      /* High emphasis borders */
+  --border: #D0DCE9;             /* Borders & dividers — cleaner cool grey */
+  --border-strong: #A8BDD0;      /* High emphasis borders */
 
   /* ==========================================================================
      2. Text & Typography Palette (UI.md Section 6)
      ========================================================================== */
-  --text-primary: #1F2937;       /* Main readable text (slate 800) */
-  --text-secondary: #5B6573;     /* Supporting / body-secondary text */
-  --text-muted: #6B7280;         /* Metadata / helper text */
+  --text-primary: #0D1B2A;       /* Deeper, richer readable text */
+  --text-secondary: #4A5568;     /* Supporting / body-secondary text */
+  --text-muted: #718096;         /* Metadata / helper text */
   --text-inverse: #FFFFFF;       /* Pure white text on dark surfaces */
 
   /* ==========================================================================
      3. Status Palette (UI.md Section 6, 40)
      ========================================================================== */
-  --success: #16803C;            /* Verified / success state */
-  --success-bg: #EAF7EE;         /* Light success background */
-  --warning: #B7791F;            /* Warning / alert state */
-  --warning-bg: #FEF7EC;         /* Light warning background */
+  --success: #0A7C42;            /* Verified / success state */
+  --success-bg: #E6F7EE;         /* Light success background */
+  --warning: #B45309;            /* Warning / alert state */
+  --warning-bg: #FEF3C7;         /* Light warning background */
   --error: #C53030;              /* Error / danger state */
   --error-bg: #FDF2F2;           /* Light error background */
-  --info: #00599F;               /* Informational state */
-  --info-bg: #DBEFFD;            /* Light informational background */
+  --info: #0A66C2;               /* Informational state */
+  --info-bg: #D6EAFF;            /* Light informational background */
 
   /* ==========================================================================
      4. Interactive & Focus (UI.md Section 6, 34)
      ========================================================================== */
-  --focus: #00599F;              /* Keyboard focus ring colour */
-  --focus-ring: 0 0 0 3px rgba(0, 89, 159, 0.35);
+  --focus: #0A66C2;              /* Keyboard focus ring colour */
+  --focus-ring: 0 0 0 3px rgba(10, 102, 194, 0.28);
   --focus-ring-offset: 2px;
 
   /* ==========================================================================
@@ -57,6 +61,7 @@
   --space-4: 16px;
   --space-5: 20px;
   --space-6: 24px;
+  --space-7: 28px;
   --space-8: 32px;
   --space-10: 40px;
   --space-12: 48px;
@@ -66,24 +71,28 @@
      6. Border Radii (UI.md Section 12)
      ========================================================================== */
   --radius-sm: 4px;
-  --radius-button: 8px;          /* Buttons & inputs standard */
-  --radius-card: 12px;           /* Cards standard */
-  --radius-container: 16px;      /* Large containers */
+  --radius-md: 8px;
+  --radius-button: 10px;         /* Buttons & inputs — slightly rounder */
+  --radius-card: 14px;           /* Cards — more modern feel */
+  --radius-lg: 18px;             /* Large containers */
+  --radius-container: 20px;      /* XL containers */
   --radius-pill: 9999px;         /* Badges & indicator pills */
 
   /* ==========================================================================
-     7. Shadows (UI.md Section 13) - Subtle & Civic
+     7. Shadows (UI.md Section 13) - Layered depth system
      ========================================================================== */
-  --shadow-sm: 0 1px 3px rgba(0, 60, 109, 0.05);
-  --shadow-card: 0 2px 10px rgba(0, 60, 109, 0.08);
-  --shadow-hover: 0 4px 14px rgba(0, 60, 109, 0.12);
-  --shadow-dropdown: 0 8px 24px rgba(0, 32, 72, 0.12);
+  --shadow-xs: 0 1px 2px rgba(0, 32, 80, 0.04);
+  --shadow-sm: 0 1px 4px rgba(0, 32, 80, 0.06), 0 1px 2px rgba(0, 32, 80, 0.04);
+  --shadow-card: 0 2px 8px rgba(0, 32, 80, 0.06), 0 1px 3px rgba(0, 32, 80, 0.04);
+  --shadow-hover: 0 6px 20px rgba(0, 32, 80, 0.10), 0 2px 6px rgba(0, 32, 80, 0.06);
+  --shadow-dropdown: 0 12px 32px rgba(0, 20, 64, 0.14), 0 4px 8px rgba(0, 20, 64, 0.06);
+  --shadow-elevated: 0 20px 48px rgba(0, 20, 64, 0.16), 0 8px 16px rgba(0, 20, 64, 0.08);
 
   /* ==========================================================================
      8. Layout & Breakpoints (UI.md Section 15, 43)
      ========================================================================== */
   --container-max-width: 1280px;
-  --header-height: 72px;
+  --header-height: 68px;
 
   /* ==========================================================================
      9. Typography Specs (UI.md Section 9, 10)
@@ -102,9 +111,10 @@
 
   --line-height-tight: 1.25;
   --line-height-normal: 1.5;
-  --line-height-relaxed: 1.65;   /* Crucial for Devanagari matras */
+  --line-height-relaxed: 1.68;   /* Crucial for Devanagari matras */
 
   /* Transitions */
-  --transition-fast: 150ms ease-out;
-  --transition-normal: 250ms ease-out;
+  --transition-fast: 140ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 240ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 360ms cubic-bezier(0.4, 0, 0.2, 1);
 }

@@ -19,50 +19,54 @@
   text-align: center;
   text-decoration: none;
   border-radius: var(--radius-button);
-  border: 1px solid transparent;
+  border: 1.5px solid transparent;
   cursor: pointer;
   transition: all var(--transition-fast);
   user-select: none;
   min-height: 44px; /* Accessible touch target */
+  letter-spacing: 0.01em;
 }
 
 .btn:disabled,
 .btn[aria-disabled="true"] {
-  opacity: 0.6;
+  opacity: 0.55;
   cursor: not-allowed;
   pointer-events: none;
 }
 
-/* Primary Button (Sahayak Blue) */
+/* Primary Button */
 .btn-primary {
-  background-color: var(--sahayak-blue);
+  background: linear-gradient(135deg, var(--sahayak-blue) 0%, #0055A8 100%);
   color: var(--text-inverse);
-  border-color: var(--sahayak-blue);
+  border-color: transparent;
+  box-shadow: 0 2px 8px rgba(10, 102, 194, 0.25), inset 0 1px 0 rgba(255,255,255,0.1);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background-color: var(--sahayak-blue-dark);
-  border-color: var(--sahayak-blue-dark);
-  box-shadow: var(--shadow-sm);
+  background: linear-gradient(135deg, #0055A8 0%, var(--sahayak-blue-dark) 100%);
+  box-shadow: 0 4px 14px rgba(10, 102, 194, 0.35);
+  transform: translateY(-1px);
 }
 
 .btn-primary:active:not(:disabled) {
-  background-color: var(--sahayak-blue-deep);
-  border-color: var(--sahayak-blue-deep);
-  transform: translateY(1px);
+  background: var(--sahayak-blue-dark);
+  transform: translateY(0);
+  box-shadow: 0 1px 4px rgba(10, 102, 194, 0.2);
 }
 
-/* Secondary Button (Clean White Surface) */
+/* Secondary Button */
 .btn-secondary {
   background-color: var(--surface);
   color: var(--text-primary);
   border-color: var(--border);
+  box-shadow: var(--shadow-xs);
 }
 
 .btn-secondary:hover:not(:disabled) {
   background-color: var(--surface-soft);
-  border-color: var(--border-strong);
+  border-color: var(--sahayak-blue);
   color: var(--sahayak-blue-dark);
+  box-shadow: var(--shadow-sm);
 }
 
 .btn-secondary:active:not(:disabled) {
@@ -78,9 +82,10 @@
 }
 
 .btn-outline:hover:not(:disabled) {
-  background-color: var(--sahayak-blue-light);
+  background-color: var(--sahayak-blue-pale);
   border-color: var(--sahayak-blue-dark);
   color: var(--sahayak-blue-dark);
+  box-shadow: 0 2px 8px rgba(10, 102, 194, 0.12);
 }
 
 /* Text / Link Button */
@@ -99,40 +104,50 @@
 
 /* Microphone Button (UI.md Section 35) */
 .btn-mic {
-  width: 52px;
-  height: 52px;
+  width: 40px;
+  height: 40px;
   border-radius: var(--radius-pill);
   padding: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--sahayak-blue);
+  background: linear-gradient(135deg, var(--sahayak-blue), #0055A8);
   color: var(--text-inverse);
-  border: 2px solid transparent;
-  box-shadow: var(--shadow-sm);
+  border: none;
+  box-shadow: 0 2px 8px rgba(10, 102, 194, 0.28);
   transition: all var(--transition-fast);
 }
 
 .btn-mic:hover {
-  background-color: var(--sahayak-blue-dark);
-  transform: scale(1.05);
+  background: linear-gradient(135deg, var(--sahayak-blue-dark), #003c6d);
+  transform: scale(1.07);
+  box-shadow: 0 4px 14px rgba(10, 102, 194, 0.36);
 }
 
 .btn-mic.listening {
-  background-color: var(--error);
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
   animation: pulse-ring 1.5s infinite;
 }
 
 @keyframes pulse-ring {
-  0% {
-    box-shadow: 0 0 0 0 rgba(197, 48, 48, 0.4);
-  }
-  70% {
-    box-shadow: 0 0 0 10px rgba(197, 48, 48, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(197, 48, 48, 0);
-  }
+  0%   { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.45); }
+  70%  { box-shadow: 0 0 0 10px rgba(220, 38, 38, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
+}
+
+/* Size variants */
+.btn-sm {
+  padding: 7px 14px;
+  font-size: var(--font-size-sm);
+  min-height: 36px;
+  border-radius: var(--radius-md);
+}
+
+.btn-lg {
+  padding: 13px 28px;
+  font-size: var(--font-size-md);
+  min-height: 52px;
+  border-radius: var(--radius-button);
 }
 
 /* ==========================================================================
@@ -144,14 +159,24 @@
   border-radius: var(--radius-card);
   box-shadow: var(--shadow-card);
   padding: var(--space-5);
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
   display: flex;
   flex-direction: column;
   position: relative;
 }
 
 .card:hover {
-  border-color: var(--border-strong);
+  border-color: rgba(10, 102, 194, 0.25);
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-2px);
+}
+
+.card-interactive {
+  cursor: default;
+}
+
+.card-interactive:hover {
+  border-color: rgba(10, 102, 194, 0.3);
   box-shadow: var(--shadow-hover);
 }
 
@@ -172,11 +197,12 @@
 }
 
 .card-title {
-  font-size: 1.125rem;
-  font-weight: 600;
+  font-size: 1.0625rem;
+  font-weight: 700;
   color: var(--text-primary);
   margin: 0;
   line-height: 1.35;
+  letter-spacing: -0.01em;
 }
 
 .card-body {
@@ -187,7 +213,7 @@
 }
 
 .card-footer {
-  margin-top: var(--space-6);
+  margin-top: var(--space-5);
   padding-top: var(--space-4);
   border-top: 1px solid var(--border);
   display: flex;
@@ -198,12 +224,13 @@
 
 /* Official Source Card Component (UI.md Section 39) */
 .official-source-card {
-  background-color: var(--surface-soft);
-  border: 1px solid var(--border);
+  background: linear-gradient(135deg, var(--surface-soft), var(--sahayak-blue-light));
+  border: 1px solid rgba(10, 102, 194, 0.15);
   border-left: 4px solid var(--sahayak-blue);
   border-radius: var(--radius-card);
   padding: var(--space-4) var(--space-5);
   margin-top: var(--space-4);
+  box-shadow: var(--shadow-xs);
 }
 
 .official-source-card .authority-title {
@@ -245,12 +272,12 @@
 
 .form-control {
   width: 100%;
-  padding: 12px 16px;
+  padding: 11px 16px;
   font-family: inherit;
   font-size: var(--font-size-base);
   color: var(--text-primary);
   background-color: var(--surface);
-  border: 1px solid var(--border);
+  border: 1.5px solid var(--border);
   border-radius: var(--radius-button);
   box-sizing: border-box;
   transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
@@ -264,6 +291,7 @@
   border-color: var(--sahayak-blue);
   box-shadow: var(--focus-ring);
   outline: none;
+  background-color: #fff;
 }
 
 .form-control.has-error {
@@ -271,7 +299,7 @@
 }
 
 .form-control.has-error:focus {
-  box-shadow: 0 0 0 3px rgba(197, 48, 48, 0.25);
+  box-shadow: 0 0 0 3px rgba(197, 48, 48, 0.2);
 }
 
 .form-help {
@@ -296,25 +324,27 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-1);
-  padding: 4px 10px;
-  font-size: var(--font-size-xs);
-  font-weight: 600;
+  padding: 3px 10px;
+  font-size: 0.7rem;
+  font-weight: 700;
   line-height: 1;
   border-radius: var(--radius-pill);
-  border: 1px solid transparent;
+  border: 1.5px solid transparent;
   white-space: nowrap;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
 }
 
 .badge-success {
   background-color: var(--success-bg);
   color: var(--success);
-  border-color: rgba(22, 128, 60, 0.2);
+  border-color: rgba(10, 124, 66, 0.2);
 }
 
 .badge-warning {
   background-color: var(--warning-bg);
   color: var(--warning);
-  border-color: rgba(183, 121, 31, 0.2);
+  border-color: rgba(180, 83, 9, 0.2);
 }
 
 .badge-error {
@@ -324,13 +354,13 @@
 }
 
 .badge-info {
-  background-color: var(--sahayak-blue-pale);
+  background-color: var(--info-bg);
   color: var(--sahayak-blue-dark);
-  border-color: rgba(0, 89, 159, 0.2);
+  border-color: rgba(10, 102, 194, 0.2);
 }
 
 .badge-neutral {
-  background-color: var(--surface-soft);
+  background-color: var(--surface-muted);
   color: var(--text-secondary);
   border-color: var(--border);
 }
@@ -340,8 +370,8 @@
    ========================================================================== */
 .alert {
   padding: var(--space-4) var(--space-5);
-  border-radius: var(--radius-button);
-  border: 1px solid transparent;
+  border-radius: var(--radius-card);
+  border: 1.5px solid transparent;
   display: flex;
   gap: var(--space-3);
   align-items: flex-start;
@@ -351,29 +381,29 @@
 }
 
 .alert-info {
-  background-color: var(--info-bg);
-  border-color: rgba(0, 89, 159, 0.25);
+  background: linear-gradient(135deg, var(--info-bg), #e8f1fb);
+  border-color: rgba(10, 102, 194, 0.2);
   color: var(--sahayak-blue-deep);
 }
 
 .alert-warning {
-  background-color: var(--warning-bg);
-  border-color: rgba(183, 121, 31, 0.3);
-  color: #744210;
+  background: linear-gradient(135deg, var(--warning-bg), #fef9e7);
+  border-color: rgba(180, 83, 9, 0.25);
+  color: #7c4a03;
 }
 
 .alert-error {
   background-color: var(--error-bg);
-  border-color: rgba(197, 48, 48, 0.3);
+  border-color: rgba(197, 48, 48, 0.25);
   color: #742A2A;
 }
 
 .alert-disclaimer {
-  background-color: var(--surface-soft);
+  background-color: var(--surface);
   border: 1px solid var(--border);
   border-left: 3px solid var(--sahayak-blue);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-card);
   color: var(--text-secondary);
   font-size: var(--font-size-xs);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+  box-shadow: var(--shadow-xs);
 }

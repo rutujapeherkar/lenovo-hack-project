@@ -87,10 +87,13 @@ try {
     },
   });
 
-  // 4. Copy manifest.json & sidepanel.html
-  console.log("  -> Copying manifest.json and sidepanel.html...");
+  // 4. Copy manifest.json, sidepanel.html & logo
+  console.log("  -> Copying manifest.json, sidepanel.html, and sahayak-logo.png...");
   fs.copyFileSync(path.join(extDir, "manifest.json"), path.join(outDir, "manifest.json"));
   fs.copyFileSync(path.join(extDir, "sidepanel.html"), path.join(outDir, "sidepanel.html"));
+  if (fs.existsSync(path.join(extDir, "sahayak-logo.png"))) {
+    fs.copyFileSync(path.join(extDir, "sahayak-logo.png"), path.join(outDir, "sahayak-logo.png"));
+  }
 
   // 5. Package into public/sahayak-extension.zip for 1-click browser download
   const publicDir = path.join(rootDir, "public");

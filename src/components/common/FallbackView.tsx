@@ -145,7 +145,7 @@ const FALLBACK_CONTENT: Record<
 
 export const FallbackView: React.FC<FallbackViewProps> = ({
   reason,
-  language = "mr",
+  language = "en",
   onRetry,
   customTitle,
   customMessage,

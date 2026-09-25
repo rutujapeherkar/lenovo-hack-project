@@ -14,8 +14,14 @@
     "*://localhost/*",
     "*://127.0.0.1/*"
   ],
+  "icons": {
+    "16": "sahayak-logo.png",
+    "48": "sahayak-logo.png",
+    "128": "sahayak-logo.png"
+  },
   "action": {
-    "default_title": "Open Sahayak AI Companion"
+    "default_title": "Open Sahayak AI Companion",
+    "default_icon": "sahayak-logo.png"
   },
   "side_panel": {
     "default_path": "sidepanel.html"

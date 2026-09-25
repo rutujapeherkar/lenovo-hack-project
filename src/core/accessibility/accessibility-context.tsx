@@ -20,6 +20,7 @@ import React, {
   useCallback,
 } from "react";
 import type { AccessibilityPreferences, Language } from "../shared/types";
+import { useLanguage, LANGUAGE_STORAGE_KEY, isValidLanguage } from "../language";
 
 export const A11Y_STORAGE_KEY = "sahayak_a11y_prefs";
 
@@ -28,7 +29,7 @@ export const DEFAULT_ACCESSIBILITY_PREFERENCES: AccessibilityPreferences = {
   highContrast: false,
   reducedMotion: false,
   readAloud: false,
-  language: "mr",
+  language: "en",
 };
 
 export type AccessibilityAction =
@@ -163,19 +164,26 @@ export const AccessibilityProvider: React.FC<AccessibilityProviderProps> = ({
   children,
   initialPreferences,
 }) => {
+  const { language: globalLanguage, setLanguage: setGlobalLanguage } = useLanguage();
+
   const [preferences, dispatch] = useReducer(
     accessibilityReducer,
     DEFAULT_ACCESSIBILITY_PREFERENCES,
     (defaultPrefs) => {
+      let activeLanguage: Language = globalLanguage;
       // Load saved preferences from localStorage if in browser
       if (typeof window !== "undefined" && window.localStorage) {
         try {
           const raw = window.localStorage.getItem(A11Y_STORAGE_KEY);
           if (raw) {
             const parsed = JSON.parse(raw);
+            if (isValidLanguage(parsed.language)) {
+              activeLanguage = parsed.language;
+            }
             return {
               ...defaultPrefs,
               ...parsed,
+              language: activeLanguage,
               ...initialPreferences,
             };
           }
@@ -183,11 +191,18 @@ export const AccessibilityProvider: React.FC<AccessibilityProviderProps> = ({
           // If storage parsing fails, fallback cleanly
         }
       }
-      return { ...defaultPrefs, ...initialPreferences };
+      return { ...defaultPrefs, language: activeLanguage, ...initialPreferences };
     }
   );
 
   const [isPanelOpen, setIsPanelOpen] = useState(false);
+
+  // Keep accessibility language preference synchronized with global LanguageContext
+  useEffect(() => {
+    if (globalLanguage && globalLanguage !== preferences.language) {
+      dispatch({ type: "SET_LANGUAGE", payload: globalLanguage });
+    }
+  }, [globalLanguage, preferences.language]);
 
   // Synchronize state with DOM attributes on change
   useEffect(() => {
@@ -226,8 +241,10 @@ export const AccessibilityProvider: React.FC<AccessibilityProviderProps> = ({
   }, []);
 
   const setLanguage = useCallback((lang: Language) => {
-    dispatch({ type: "SET_LANGUAGE", payload: lang });
-  }, []);
+    const safeLang: Language = isValidLanguage(lang) ? lang : "en";
+    setGlobalLanguage(safeLang);
+    dispatch({ type: "SET_LANGUAGE", payload: safeLang });
+  }, [setGlobalLanguage]);
 
   const cycleTextScale = useCallback(() => {
     dispatch({ type: "CYCLE_TEXT_SCALE" });
@@ -246,8 +263,17 @@ export const AccessibilityProvider: React.FC<AccessibilityProviderProps> = ({
   }, []);
 
   const resetPreferences = useCallback(() => {
+    setGlobalLanguage("en");
     dispatch({ type: "RESET_PREFERENCES" });
-  }, []);
+    if (typeof window !== "undefined" && window.localStorage) {
+      try {
+        window.localStorage.removeItem(LANGUAGE_STORAGE_KEY);
+        window.localStorage.removeItem(A11Y_STORAGE_KEY);
+      } catch {
+        // Storage full or quota exceeded
+      }
+    }
+  }, [setGlobalLanguage]);
 
   const openPanel = useCallback(() => setIsPanelOpen(true), []);
   const closePanel = useCallback(() => setIsPanelOpen(false), []);

@@ -13,6 +13,7 @@ import React from 'react';
 import { Card, CardHeader, CardTitle, CardDescription, CardBody, CardFooter, Button, Badge, Alert } from '../components/ui';
 import { Link } from '../router';
 import { useAccessibility, VoiceService } from '../core/accessibility';
+import { useLanguage } from '../core/language';
 import { MicButton } from '../components/assistant';
 import { ReadAloud } from '../components/accessibility';
 import { SafetyNotice, FallbackView } from '../components/common';
@@ -70,7 +71,8 @@ const QUICK_ACTIONS = [
 ];
 
 export const HomePage: React.FC = () => {
-  const { language, readAloud } = useAccessibility();
+  const { language } = useLanguage();
+  const { readAloud } = useAccessibility();
   const [query, setQuery] = React.useState('');
   const [loading, setLoading] = React.useState(false);
   const [response, setResponse] = React.useState<any>(null);
@@ -79,7 +81,7 @@ export const HomePage: React.FC = () => {
   const [fallbackReason, setFallbackReason] = React.useState<'ai_failure' | 'network_failure' | null>(null);
   const inputRef = React.useRef<HTMLInputElement>(null);
 
-  const lang = (language || 'mr') as 'en' | 'mr' | 'hi';
+  const lang: 'en' | 'mr' | 'hi' = (language === 'mr' || language === 'hi') ? language : 'en';
 
   const handleSearch = async (queryText?: string) => {
     const textToSearch = (queryText !== undefined ? queryText : query).trim();
@@ -172,7 +174,11 @@ export const HomePage: React.FC = () => {
         }}
       >
         <Badge variant="info" style={{ marginBottom: 'var(--space-3)', fontSize: '0.8125rem', padding: '0.25rem 0.75rem' }}>
-          महाराष्ट्र शासन नागरिक सहाय्य • Civic Guidance Platform
+          {lang === 'mr'
+            ? 'महाराष्ट्र शासन नागरिक सहाय्य • नागरी मार्गदर्शन मंच'
+            : lang === 'hi'
+            ? 'महाराष्ट्र शासन नागरिक सहायता • नागरिक मार्गदर्शन मंच'
+            : 'Government of Maharashtra Citizen Assistance • Civic Guidance Platform'}
         </Badge>
 
         <h1
@@ -557,8 +563,119 @@ export const HomePage: React.FC = () => {
       <SafetyNotice
         type="disclaimer"
         language={lang}
-        style={{ marginBottom: 'var(--space-8)' }}
+        style={{ marginBottom: 'var(--space-6)' }}
       />
+
+      {/* ── Hero Impact Banner ──────────────────────────────────────────── */}
+      <div
+        style={{
+          borderRadius: 'var(--radius-lg, 16px)',
+          overflow: 'hidden',
+          marginBottom: 'var(--space-10)',
+          position: 'relative',
+          background: 'linear-gradient(135deg, #003566 0%, #0a66c2 50%, #e67e22 100%)',
+          boxShadow: '0 8px 32px -4px rgba(0, 53, 102, 0.25)',
+        }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: 'var(--space-4)',
+            flexWrap: 'wrap',
+          }}
+        >
+          {/* Text side */}
+          <div style={{ padding: 'var(--space-8)', flex: '1 1 280px', zIndex: 1 }}>
+            <div
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                background: 'rgba(255,255,255,0.15)',
+                borderRadius: '2rem',
+                padding: '0.25rem 0.875rem',
+                marginBottom: 'var(--space-3)',
+              }}
+            >
+              <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.9)', fontWeight: 600, letterSpacing: '0.04em' }}>
+                🇮🇳 {lang === 'mr' ? 'महाराष्ट्र नागरिक सहाय्य' : lang === 'hi' ? 'महाराष्ट्र नागरिक सहायता' : 'Maharashtra Citizen Assistance'}
+              </span>
+            </div>
+            <h2
+              style={{
+                fontSize: 'clamp(1.25rem, 2.5vw, 1.75rem)',
+                fontWeight: 800,
+                color: '#fff',
+                marginBottom: 'var(--space-2)',
+                lineHeight: 1.25,
+                letterSpacing: '-0.02em',
+              }}
+            >
+              {lang === 'mr'
+                ? 'सर्व नागरिकांसाठी डिजिटल सरकारी सेवा'
+                : lang === 'hi'
+                ? 'सभी नागरिकों के लिए डिजिटल सरकारी सेवाएं'
+                : 'Digital Government Services for Every Citizen'}
+            </h2>
+            <p
+              style={{
+                fontSize: '0.9375rem',
+                color: 'rgba(255,255,255,0.85)',
+                lineHeight: 1.6,
+                marginBottom: 'var(--space-5)',
+                maxWidth: '400px',
+              }}
+            >
+              {lang === 'mr'
+                ? 'उत्पन्न प्रमाणपत्रापासून शिष्यवृत्तीपर्यंत — साहायक एआय तुम्हाला मार्गदर्शन करेल, तुमच्या भाषेत.'
+                : lang === 'hi'
+                ? 'आय प्रमाण पत्र से छात्रवृत्ति तक — साहायक एआई आपकी भाषा में मार्गदर्शन करेगा.'
+                : 'From income certificates to scholarships — Sahayak guides you step-by-step, in your language.'}
+            </p>
+            <div style={{ display: 'flex', gap: 'var(--space-3)', flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'rgba(255,255,255,0.9)', fontSize: '0.8125rem', fontWeight: 500 }}>
+                <span style={{ fontSize: '1rem' }}>✅</span>
+                {lang === 'mr' ? '१०+ शासकीय सेवा' : lang === 'hi' ? '10+ सरकारी सेवाएं' : '10+ Government Services'}
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'rgba(255,255,255,0.9)', fontSize: '0.8125rem', fontWeight: 500 }}>
+                <span style={{ fontSize: '1rem' }}>🌐</span>
+                {lang === 'mr' ? 'मराठी • हिंदी • इंग्रजी' : lang === 'hi' ? 'मराठी • हिंदी • अंग्रेज़ी' : 'Marathi • Hindi • English'}
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'rgba(255,255,255,0.9)', fontSize: '0.8125rem', fontWeight: 500 }}>
+                <span style={{ fontSize: '1rem' }}>🔒</span>
+                {lang === 'mr' ? 'शून्य डेटा साठवण' : lang === 'hi' ? 'शून्य डेटा भंडारण' : 'Zero Data Storage'}
+              </div>
+            </div>
+          </div>
+          {/* Illustration side */}
+          <div
+            style={{
+              flex: '0 0 auto',
+              width: 'clamp(200px, 40%, 420px)',
+              alignSelf: 'stretch',
+              overflow: 'hidden',
+              display: 'flex',
+              alignItems: 'flex-end',
+            }}
+          >
+            <img
+              src="/dashboard/hero-citizens.jpg"
+              alt="Diverse Indian citizens using Sahayak AI on mobile and tablets"
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                objectPosition: 'center top',
+                display: 'block',
+                opacity: 0.92,
+              }}
+              loading="lazy"
+            />
+          </div>
+        </div>
+      </div>
 
       {/* ── Core Modules Grid ───────────────────────────────────────────── */}
       <div style={{ marginBottom: 'var(--space-4)' }}>
@@ -575,7 +692,15 @@ export const HomePage: React.FC = () => {
       </div>
       <div className="grid grid-cols-1 grid-cols-2-md grid-cols-4-lg" style={{ marginBottom: 'var(--space-12)' }}>
         {/* Services */}
-        <Card variant="interactive" style={{ display: 'flex', flexDirection: 'column', height: '100%', borderRadius: 'var(--radius-lg, 12px)' }}>
+        <Card variant="interactive" style={{ display: 'flex', flexDirection: 'column', height: '100%', borderRadius: 'var(--radius-lg, 12px)', overflow: 'hidden' }}>
+          <div style={{ width: '100%', height: '140px', overflow: 'hidden', background: '#EFF6FF' }}>
+            <img
+              src="/dashboard/module-services.jpg"
+              alt="Government certificates and documents"
+              style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }}
+              loading="lazy"
+            />
+          </div>
           <CardHeader style={{ flexDirection: 'column', alignItems: 'flex-start', gap: 'var(--space-1)' }}>
             <Badge variant="info" size="sm">
               {lang === 'mr' ? 'शासकीय सेवा' : lang === 'hi' ? 'सरकारी सेवाएं' : 'Civic Services'}
@@ -606,7 +731,15 @@ export const HomePage: React.FC = () => {
         </Card>
 
         {/* Schemes */}
-        <Card variant="interactive" style={{ display: 'flex', flexDirection: 'column', height: '100%', borderRadius: 'var(--radius-lg, 12px)' }}>
+        <Card variant="interactive" style={{ display: 'flex', flexDirection: 'column', height: '100%', borderRadius: 'var(--radius-lg, 12px)', overflow: 'hidden' }}>
+          <div style={{ width: '100%', height: '140px', overflow: 'hidden', background: '#F0FDF4' }}>
+            <img
+              src="/dashboard/module-schemes.jpg"
+              alt="Welfare schemes - family, education, farming"
+              style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }}
+              loading="lazy"
+            />
+          </div>
           <CardHeader style={{ flexDirection: 'column', alignItems: 'flex-start', gap: 'var(--space-1)' }}>
             <Badge variant="success" size="sm">
               {lang === 'mr' ? 'कल्याणकारी योजना' : lang === 'hi' ? 'कल्याण योजनाएं' : 'Welfare Schemes'}
@@ -637,7 +770,15 @@ export const HomePage: React.FC = () => {
         </Card>
 
         {/* Explain Screen */}
-        <Card variant="interactive" style={{ display: 'flex', flexDirection: 'column', height: '100%', borderRadius: 'var(--radius-lg, 12px)' }}>
+        <Card variant="interactive" style={{ display: 'flex', flexDirection: 'column', height: '100%', borderRadius: 'var(--radius-lg, 12px)', overflow: 'hidden' }}>
+          <div style={{ width: '100%', height: '140px', overflow: 'hidden', background: '#FFF7ED' }}>
+            <img
+              src="/dashboard/module-explain.jpg"
+              alt="AI explaining a government form on a smartphone"
+              style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }}
+              loading="lazy"
+            />
+          </div>
           <CardHeader style={{ flexDirection: 'column', alignItems: 'flex-start', gap: 'var(--space-1)' }}>
             <Badge variant="warning" size="sm">
               {lang === 'mr' ? 'दृष्टी सहाय्य' : lang === 'hi' ? 'दृष्टि सहायता' : 'Vision AI'}
@@ -668,7 +809,15 @@ export const HomePage: React.FC = () => {
         </Card>
 
         {/* Browser Extension */}
-        <Card variant="interactive" style={{ display: 'flex', flexDirection: 'column', height: '100%', borderRadius: 'var(--radius-lg, 12px)' }}>
+        <Card variant="interactive" style={{ display: 'flex', flexDirection: 'column', height: '100%', borderRadius: 'var(--radius-lg, 12px)', overflow: 'hidden' }}>
+          <div style={{ width: '100%', height: '140px', overflow: 'hidden', background: '#F8FAFC' }}>
+            <img
+              src="/dashboard/module-extension.jpg"
+              alt="Browser co-pilot side panel assisting with government form"
+              style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }}
+              loading="lazy"
+            />
+          </div>
           <CardHeader style={{ flexDirection: 'column', alignItems: 'flex-start', gap: 'var(--space-1)' }}>
             <Badge variant="neutral" size="sm">
               {lang === 'mr' ? 'ब्राउझर साथी' : lang === 'hi' ? 'ब्राउज़र साथी' : 'Browser Co-Pilot'}

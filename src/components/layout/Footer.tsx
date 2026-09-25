@@ -5,7 +5,7 @@ export interface FooterProps {
   currentLanguage?: 'en' | 'mr' | 'hi';
 }
 
-export const Footer: React.FC<FooterProps> = ({ currentLanguage = 'mr' }) => {
+export const Footer: React.FC<FooterProps> = ({ currentLanguage = 'en' }) => {
   const disclaimerText = {
     en: 'Disclaimer: Sahayak AI provides guidance and does not represent a government department. Always confirm final requirements on official government portals.',
     mr: 'अस्वीकरण: साहाय्यक एआय हे केवळ मार्गदर्शनासाठी आहे आणि ते कोणत्याही सरकारी विभागाचे प्रतिनिधित्व करत नाही. अंतिम माहितीसाठी नेहमी अधिकृत सरकारी पोर्टल तपासा.',
@@ -27,7 +27,21 @@ export const Footer: React.FC<FooterProps> = ({ currentLanguage = 'mr' }) => {
         <div className="footer-grid">
           {/* Col 1: About Sahayak AI */}
           <div>
-            <h3 className="footer-col-title">Sahayak AI</h3>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', marginBottom: '0.75rem' }}>
+              <img
+                src="/sahayak-logo.png"
+                alt="Sahayak AI Logo"
+                width={32}
+                height={32}
+                style={{
+                  borderRadius: 'var(--radius-sm, 6px)',
+                  objectFit: 'contain',
+                  background: 'rgba(255, 255, 255, 0.95)',
+                  padding: '2px',
+                }}
+              />
+              <h3 className="footer-col-title" style={{ margin: 0 }}>Sahayak AI</h3>
+            </div>
             <p style={{ fontSize: '0.875rem', lineHeight: '1.6', color: '#CBD5E1', margin: '0 0 1rem 0' }}>
               {currentLanguage === 'mr'
                 ? 'महाराष्ट्रातील नागरिकांना शासकीय योजना, प्रमाणपत्रे आणि सेवा समजून घेण्यासाठी व अर्ज करण्यासाठी साहाय्यक करणारी एआय प्रणाली.'

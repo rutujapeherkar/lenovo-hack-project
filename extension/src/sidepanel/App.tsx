@@ -356,7 +356,13 @@ export const App: React.FC = () => {
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          <span style={{ fontSize: "1.5rem" }} aria-hidden="true">🏛️</span>
+          <img
+            src="sahayak-logo.png"
+            alt="Sahayak AI Logo"
+            width={28}
+            height={28}
+            style={{ borderRadius: "6px", objectFit: "contain" }}
+          />
           <span style={{ fontWeight: 800, fontSize: "1.125rem", color: "#003366", letterSpacing: "-0.01em" }}>
             {t("appName")}
           </span>

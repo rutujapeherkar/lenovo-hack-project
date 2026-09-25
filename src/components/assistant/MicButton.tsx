@@ -33,7 +33,7 @@ export interface MicButtonProps {
 }
 
 export const MicButton: React.FC<MicButtonProps> = ({
-  language = "mr",
+  language = "en",
   onTranscript,
   onError,
   size = "md",

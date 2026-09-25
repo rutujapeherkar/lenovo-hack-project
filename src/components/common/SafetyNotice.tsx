@@ -46,7 +46,7 @@ const UNVERIFIED_TEXTS = {
 
 export const SafetyNotice: React.FC<SafetyNoticeProps> = ({
   type,
-  language = "mr",
+  language = "en",
   title,
   customMessage,
   className = "",

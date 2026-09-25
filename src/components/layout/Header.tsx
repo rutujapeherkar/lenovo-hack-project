@@ -12,7 +12,7 @@ export interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({
-  currentLanguage = 'mr',
+  currentLanguage = 'en',
   onLanguageChange,
   isHighContrast = false,
   onToggleHighContrast,
@@ -46,9 +46,13 @@ export const Header: React.FC<HeaderProps> = ({
       <div className="header-container">
         {/* Sahayak Brand Identity */}
         <Link href="/" className="brand-link" onClick={closeMobileMenu} aria-label="Sahayak AI Home">
-          <div className="brand-emblem" aria-hidden="true">
-            स
-          </div>
+          <img
+            src="/sahayak-logo.png"
+            alt="Sahayak AI Logo"
+            className="brand-logo"
+            width={40}
+            height={40}
+          />
           <div className="brand-text">
             <span className="brand-title">Sahayak AI</span>
             <span className="brand-subtitle">

@@ -36,9 +36,13 @@ export const DesignSystemShowcase: React.FC = () => {
       <header style={{ borderBottom: '1px solid var(--border)', backgroundColor: 'var(--surface)', padding: 'var(--space-4) 0' }}>
         <Container style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 'var(--space-4)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
-            <div style={{ width: '40px', height: '40px', borderRadius: 'var(--radius-button)', backgroundColor: 'var(--sahayak-blue)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '1.25rem' }}>
-              S
-            </div>
+            <img
+              src="/sahayak-logo.png"
+              alt="Sahayak AI Logo"
+              width={40}
+              height={40}
+              style={{ objectFit: 'contain', borderRadius: '8px' }}
+            />
             <div>
               <h1 style={{ fontSize: 'var(--font-size-xl)', margin: 0, color: 'var(--sahayak-blue-dark)' }}>
                 Sahayak AI <span style={{ fontSize: 'var(--font-size-sm)', fontWeight: 500, color: 'var(--text-secondary)' }}>Design System</span>

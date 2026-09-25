@@ -442,32 +442,57 @@ export const UI_TRANSLATIONS: Record<TranslationKey, Record<Language, string>> =
   },
 };
 
-const LanguageContext = createContext<LanguageContextType>({
-  language: "mr",
-  setLanguage: () => {},
-  t: (key) => UI_TRANSLATIONS[key]?.mr || "",
-});
+export const LANGUAGE_STORAGE_KEY = "sahayak_language";
 
-export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [language, setLanguageState] = useState<Language>(() => {
-    if (typeof window !== "undefined") {
-      const saved = window.localStorage?.getItem("sahayak_language") as Language | null;
-      if (saved === "en" || saved === "mr" || saved === "hi") {
+export const SUPPORTED_LANGUAGES: readonly Language[] = ["en", "mr", "hi"] as const;
+
+export function isValidLanguage(val: unknown): val is Language {
+  return typeof val === "string" && (val === "en" || val === "mr" || val === "hi");
+}
+
+export function getInitialLanguage(): Language {
+  if (typeof window !== "undefined" && window.localStorage) {
+    try {
+      const saved = window.localStorage.getItem(LANGUAGE_STORAGE_KEY);
+      if (isValidLanguage(saved)) {
         return saved;
       }
+    } catch {
+      // Ignore storage access errors (e.g. sandbox or cookies blocked)
     }
-    return "mr";
-  });
+  }
+  // Rule 1 & Rule 8: Default strictly to English on first visit; do NOT infer from browser or OS locale
+  return "en";
+}
+
+const DEFAULT_LANGUAGE_CONTEXT: LanguageContextType = {
+  language: "en",
+  setLanguage: () => {},
+  t: (key) => UI_TRANSLATIONS[key]?.en || "",
+};
+
+const LanguageContext = createContext<LanguageContextType>(DEFAULT_LANGUAGE_CONTEXT);
+
+export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [language, setLanguageState] = useState<Language>(getInitialLanguage);
 
   const setLanguage = (lang: Language) => {
-    setLanguageState(lang);
+    const safeLang: Language = isValidLanguage(lang) ? lang : "en";
+    setLanguageState(safeLang);
     if (typeof window !== "undefined") {
       try {
-        window.localStorage?.setItem("sahayak_language", lang);
+        window.localStorage?.setItem(LANGUAGE_STORAGE_KEY, safeLang);
+        // Synchronize with accessibility preferences store if present
+        const a11yRaw = window.localStorage?.getItem("sahayak_a11y_prefs");
+        if (a11yRaw) {
+          const a11yParsed = JSON.parse(a11yRaw);
+          a11yParsed.language = safeLang;
+          window.localStorage?.setItem("sahayak_a11y_prefs", JSON.stringify(a11yParsed));
+        }
       } catch (_e) {
         // Ignore quota/privacy error
       }
-      document.documentElement.setAttribute("lang", lang);
+      document.documentElement.setAttribute("lang", safeLang);
     }
   };
 
@@ -492,8 +517,6 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
 export const useLanguage = (): LanguageContextType => {
   const context = useContext(LanguageContext);
-  if (!context) {
-    throw new Error("useLanguage must be used within a LanguageProvider");
-  }
-  return context;
+  return context || DEFAULT_LANGUAGE_CONTEXT;
 };
+

@@ -43,7 +43,7 @@ const READ_ALOUD_LABELS = {
 
 export const ReadAloud: React.FC<ReadAloudProps> = ({
   text,
-  language = "mr",
+  language = "en",
   label,
   size = "sm",
   className = "",
