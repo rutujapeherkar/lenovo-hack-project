@@ -88,7 +88,7 @@ const SENSITIVE_CREDENTIAL_PATTERNS = [
   /(गुपित शब्द|गुप्त शब्द|पासवर्ड|पासकोड|गुप्त कोड)/i,
   /\b(cvv|cvc)\b/i,
   /(सीव्हीव्ही|सीवीवी)/i,
-  /\b(debit[- ]card|credit[- ]card|card number|16[- ]digit)\b/i,
+  /\b(debit[- ]card|credit[- ]card|(?:credit|debit|atm)\s+card\s+number|16[- ]digit)\b/i,
   /\b(net[- ]banking|bank password)\b/i,
   /\b(\d{4,6})\b.*\b(otp|pin|code)\b/i,
   /\b(otp|pin|code)\b.*\b(\d{4,6})\b/i,
@@ -120,6 +120,8 @@ export interface SpeakOptions {
 
 export class VoiceService {
   private static recognitionInstance: any = null;
+  /** Active utterance reference to prevent Chrome garbage-collection mid-speech */
+  private static activeUtterance: SpeechSynthesisUtterance | null = null;
 
   /**
    * Check if speech-to-text is supported by the current browser environment
@@ -315,8 +317,12 @@ export class VoiceService {
       // Cancel previous speech before starting new utterance
       this.stopSpeaking();
 
+      // Chrome speech synthesis freeze fix: resume if stuck in paused state
+      if (typeof window !== "undefined" && window.speechSynthesis?.paused) {
+        window.speechSynthesis.resume();
+      }
+
       const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = this.getLocale(language);
       utterance.rate = rate;
       utterance.pitch = pitch;
       utterance.volume = volume;
@@ -324,25 +330,57 @@ export class VoiceService {
       // Select regional voice if available
       const voices = window.speechSynthesis.getVoices();
       const targetLocale = this.getLocale(language);
-      const matchedVoice = voices.find(
+
+      // 1. Primary: exact language match or prefix (e.g. "mr-IN", "mr", "hi-IN", "en-IN")
+      let matchedVoice = voices.find(
         (v) =>
           v.lang.toLowerCase() === targetLocale.toLowerCase() ||
-          v.lang.toLowerCase().startsWith(language)
+          v.lang.toLowerCase().replace('_', '-').startsWith(language) ||
+          v.name.toLowerCase().includes(language === 'mr' ? 'marathi' : language === 'hi' ? 'hindi' : 'english')
       );
+
+      // 2. Devanagari Fallback for Marathi:
+      // Most OSes (macOS, Windows, ChromeOS, iOS) lack a native mr-IN voice out-of-the-box.
+      // However, Marathi is written in Devanagari script.
+      // Hindi TTS voices (hi-IN, e.g. "Google हिन्दी", Apple "Lekha", Microsoft "Swara")
+      // synthesize Devanagari Marathi phonetics accurately and fluently.
+      // When falling back to a Hindi voice, utterance.lang MUST match the voice language (e.g. "hi-IN"),
+      // otherwise Chrome blocks speech with a "language-unavailable" error.
+      if (!matchedVoice && language === "mr") {
+        matchedVoice = voices.find(
+          (v) =>
+            v.lang.toLowerCase().startsWith("hi") ||
+            v.name.toLowerCase().includes("hindi") ||
+            v.name.toLowerCase().includes("lekha")
+        );
+      }
+
+      // 3. Indian English fallback if neither Marathi nor Hindi voice found
+      if (!matchedVoice && (language === "mr" || language === "hi")) {
+        matchedVoice = voices.find((v) => v.lang.toLowerCase().includes("-in"));
+      }
 
       if (matchedVoice) {
         utterance.voice = matchedVoice;
+        utterance.lang = matchedVoice.lang;
+      } else {
+        utterance.lang = targetLocale;
       }
+
+      // Retain active utterance reference to prevent Chrome garbage-collection mid-speech
+      this.activeUtterance = utterance;
 
       utterance.onstart = () => {
         onStart?.();
       };
 
       utterance.onend = () => {
+        this.activeUtterance = null;
         onEnd?.();
       };
 
       utterance.onerror = (event: any) => {
+        this.activeUtterance = null;
         if (event.error !== "canceled" && event.error !== "interrupted") {
           onError?.(new Error(`Speech synthesis error: ${event.error}`));
         }
@@ -352,6 +390,7 @@ export class VoiceService {
       window.speechSynthesis.speak(utterance);
       return true;
     } catch (err: any) {
+      this.activeUtterance = null;
       onError?.(err instanceof Error ? err : new Error(String(err)));
       return false;
     }
@@ -361,6 +400,7 @@ export class VoiceService {
    * Stop active speech synthesis immediately
    */
   public static stopSpeaking(): void {
+    this.activeUtterance = null;
     if (this.isSpeechSynthesisSupported()) {
       try {
         window.speechSynthesis.cancel();
@@ -375,7 +415,14 @@ export class VoiceService {
    */
   public static isSpeaking(): boolean {
     if (!this.isSpeechSynthesisSupported()) return false;
-    return window.speechSynthesis.speaking;
+    return Boolean(window.speechSynthesis.speaking || this.activeUtterance);
+  }
+
+  /**
+   * Get active utterance reference if any is currently speaking
+   */
+  public static getActiveUtterance(): SpeechSynthesisUtterance | null {
+    return this.activeUtterance;
   }
 
   /**

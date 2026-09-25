@@ -171,18 +171,18 @@ export const HomePage: React.FC = () => {
           margin: '0 auto var(--space-10) auto',
         }}
       >
-        <Badge variant="info" style={{ marginBottom: 'var(--space-4)' }}>
+        <Badge variant="info" style={{ marginBottom: 'var(--space-3)', fontSize: '0.8125rem', padding: '0.25rem 0.75rem' }}>
           महाराष्ट्र शासन नागरिक सहाय्य • Civic Guidance Platform
         </Badge>
 
         <h1
           style={{
-            fontSize: 'clamp(1.75rem, 4vw, 2.5rem)',
-            fontWeight: 800,
+            fontSize: 'clamp(1.5rem, 2.5vw, 1.875rem)',
+            fontWeight: 700,
             color: 'var(--sahayak-blue-dark)',
-            marginBottom: 'var(--space-3)',
-            lineHeight: 1.2,
-            letterSpacing: '-0.02em',
+            marginBottom: 'var(--space-2)',
+            lineHeight: 1.25,
+            letterSpacing: '-0.015em',
           }}
         >
           {heroTitle}
@@ -190,12 +190,12 @@ export const HomePage: React.FC = () => {
 
         <p
           style={{
-            fontSize: 'clamp(1rem, 2vw, 1.125rem)',
+            fontSize: '0.9375rem',
             color: 'var(--text-secondary)',
-            lineHeight: '1.65',
-            marginBottom: 'var(--space-7)',
-            maxWidth: '680px',
-            margin: '0 auto var(--space-7) auto',
+            lineHeight: '1.6',
+            marginBottom: 'var(--space-6)',
+            maxWidth: '620px',
+            margin: '0 auto var(--space-6) auto',
           }}
         >
           {heroSubtitle}
@@ -207,20 +207,24 @@ export const HomePage: React.FC = () => {
             e.preventDefault();
             handleSearch();
           }}
-          style={{ maxWidth: '660px', margin: '0 auto' }}
+          style={{ maxWidth: '680px', margin: '0 auto' }}
         >
           <div
             style={{
               display: 'flex',
+              alignItems: 'center',
               gap: 'var(--space-2)',
-              boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
-              borderRadius: 'var(--radius-lg)',
+              boxShadow: '0 4px 20px -2px rgba(0, 45, 82, 0.08), 0 2px 6px -1px rgba(0, 45, 82, 0.04)',
+              borderRadius: 'var(--radius-lg, 14px)',
               background: 'var(--surface)',
-              padding: 'var(--space-1)',
+              padding: '6px 8px 6px 14px',
               border: '1.5px solid var(--border)',
-              transition: 'box-shadow var(--transition-fast)',
+              transition: 'border-color var(--transition-fast), box-shadow var(--transition-fast)',
             }}
           >
+            <span aria-hidden="true" style={{ fontSize: '1.1rem', color: 'var(--text-muted)' }}>
+              🔍
+            </span>
             <input
               ref={inputRef}
               type="text"
@@ -233,7 +237,7 @@ export const HomePage: React.FC = () => {
                 background: 'transparent',
                 boxShadow: 'none',
                 fontSize: '1rem',
-                padding: 'var(--space-2) var(--space-3)',
+                padding: 'var(--space-2) var(--space-1)',
               }}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
@@ -241,6 +245,7 @@ export const HomePage: React.FC = () => {
             />
             <MicButton
               language={language}
+              size="sm"
               onTranscript={(text) => {
                 setQuery(text);
               }}
@@ -250,7 +255,13 @@ export const HomePage: React.FC = () => {
               variant="primary"
               type="submit"
               disabled={loading || !query.trim()}
-              style={{ whiteSpace: 'nowrap', borderRadius: 'var(--radius-md)' }}
+              style={{
+                whiteSpace: 'nowrap',
+                borderRadius: 'var(--radius-md)',
+                minHeight: '38px',
+                padding: '0 18px',
+                fontWeight: 600,
+              }}
             >
               {searchBtnLabel}
             </Button>
@@ -261,7 +272,7 @@ export const HomePage: React.FC = () => {
             style={{
               marginTop: 'var(--space-4)',
               display: 'flex',
-              gap: 'var(--space-2)',
+              gap: '0.5rem',
               justifyContent: 'center',
               flexWrap: 'wrap',
               alignItems: 'center',
@@ -269,10 +280,10 @@ export const HomePage: React.FC = () => {
           >
             <span
               style={{
-                fontSize: '0.8rem',
+                fontSize: '0.8125rem',
                 color: 'var(--text-muted)',
                 fontWeight: 500,
-                letterSpacing: '0.02em',
+                letterSpacing: '0.01em',
               }}
             >
               {lang === 'mr' ? 'त्वरित विचारा:' : lang === 'hi' ? 'जल्दी पूछें:' : 'Quick ask:'}
@@ -290,27 +301,30 @@ export const HomePage: React.FC = () => {
                   gap: '0.375rem',
                   padding: '0.375rem 0.875rem',
                   borderRadius: '2rem',
-                  border: '1.5px solid var(--border)',
-                  background: 'var(--surface)',
-                  color: 'var(--text)',
+                  border: '1px solid var(--border)',
+                  background: 'var(--surface-soft, #f8fafc)',
+                  color: 'var(--text-primary)',
                   fontSize: '0.8125rem',
                   fontWeight: 500,
                   cursor: 'pointer',
                   transition: 'all var(--transition-fast)',
                   fontFamily: 'inherit',
                   lineHeight: 1.4,
+                  boxShadow: '0 1px 2px rgba(0, 0, 0, 0.03)',
                 }}
                 onMouseEnter={(e) => {
                   const t = e.currentTarget;
                   t.style.background = 'var(--sahayak-blue-pale)';
                   t.style.borderColor = 'var(--sahayak-blue)';
                   t.style.color = 'var(--sahayak-blue-dark)';
+                  t.style.transform = 'translateY(-1px)';
                 }}
                 onMouseLeave={(e) => {
                   const t = e.currentTarget;
-                  t.style.background = 'var(--surface)';
+                  t.style.background = 'var(--surface-soft, #f8fafc)';
                   t.style.borderColor = 'var(--border)';
-                  t.style.color = 'var(--text)';
+                  t.style.color = 'var(--text-primary)';
+                  t.style.transform = 'none';
                 }}
               >
                 <span aria-hidden="true">{action.icon}</span>
@@ -403,28 +417,67 @@ export const HomePage: React.FC = () => {
                 {response.steps && response.steps.length > 0 && (
                   <div
                     style={{
-                      marginBottom: 'var(--space-4)',
-                      background: 'var(--sahayak-blue-pale)',
+                      marginBottom: 'var(--space-5)',
+                      background: 'var(--surface-soft, #f8fafc)',
+                      border: '1px solid var(--border)',
                       padding: 'var(--space-4)',
-                      borderRadius: 'var(--radius-md)',
+                      borderRadius: 'var(--radius-lg, 12px)',
                     }}
                   >
-                    <strong style={{ fontSize: '0.9375rem', color: 'var(--sahayak-blue-dark)', display: 'block', marginBottom: 'var(--space-2)' }}>
-                      {lang === 'mr' ? 'मार्गदर्शन पायऱ्या' : lang === 'hi' ? 'मार्गदर्शन चरण' : 'Guidance Steps'} ({response.steps.length}):
-                    </strong>
-                    <ol style={{ paddingLeft: 'var(--space-5)', margin: 0 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', marginBottom: 'var(--space-3)' }}>
+                      <span aria-hidden="true" style={{ fontSize: '1.1rem' }}>📋</span>
+                      <strong style={{ fontSize: '0.9375rem', color: 'var(--sahayak-blue-dark)', margin: 0 }}>
+                        {lang === 'mr' ? 'मार्गदर्शन पायऱ्या' : lang === 'hi' ? 'मार्गदर्शन चरण' : 'Guidance Steps'} ({response.steps.length}):
+                      </strong>
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
                       {response.steps.slice(0, 3).map((st: any, idx: number) => (
-                        <li key={idx} style={{ fontSize: '0.875rem', marginBottom: 'var(--space-1)', lineHeight: 1.55 }}>
-                          <strong>{st.title[lang] || st.title.en}:</strong>{' '}
-                          {st.description[lang] || st.description.en}
-                        </li>
+                        <div
+                          key={idx}
+                          style={{
+                            display: 'flex',
+                            gap: 'var(--space-3)',
+                            alignItems: 'flex-start',
+                            background: 'var(--surface)',
+                            padding: 'var(--space-3) var(--space-4)',
+                            borderRadius: 'var(--radius-md, 8px)',
+                            border: '1px solid var(--border)',
+                          }}
+                        >
+                          <span
+                            style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              width: '24px',
+                              height: '24px',
+                              borderRadius: '50%',
+                              backgroundColor: 'var(--sahayak-blue-pale)',
+                              color: 'var(--sahayak-blue-dark)',
+                              fontWeight: 700,
+                              fontSize: '0.75rem',
+                              flexShrink: 0,
+                              marginTop: '2px',
+                            }}
+                          >
+                            {idx + 1}
+                          </span>
+                          <div style={{ flex: 1, fontSize: '0.875rem', lineHeight: 1.5 }}>
+                            <strong style={{ color: 'var(--text-primary)' }}>
+                              {st.title[lang] || st.title.en}:
+                            </strong>{' '}
+                            <span style={{ color: 'var(--text-secondary)' }}>
+                              {st.description[lang] || st.description.en}
+                            </span>
+                          </div>
+                        </div>
                       ))}
                       {response.steps.length > 3 && (
-                        <li style={{ fontSize: '0.8rem', color: 'var(--text-muted)', listStyle: 'none' }}>
+                        <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', paddingLeft: 'var(--space-2)' }}>
                           + {response.steps.length - 3} {lang === 'mr' ? 'आणखी पायऱ्या' : lang === 'hi' ? 'और चरण' : 'more steps'}…
-                        </li>
+                        </div>
                       )}
-                    </ol>
+                    </div>
                   </div>
                 )}
 
@@ -509,10 +562,10 @@ export const HomePage: React.FC = () => {
 
       {/* ── Core Modules Grid ───────────────────────────────────────────── */}
       <div style={{ marginBottom: 'var(--space-4)' }}>
-        <h2 style={{ fontSize: '1.375rem', fontWeight: 700, color: 'var(--sahayak-blue-dark)', marginBottom: 'var(--space-1)' }}>
+        <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--sahayak-blue-dark)', marginBottom: 'var(--space-1)' }}>
           {lang === 'mr' ? 'मुख्य विभाग' : lang === 'hi' ? 'मुख्य मॉड्यूल' : 'Core Modules'}
         </h2>
-        <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: 'var(--space-5)' }}>
+        <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', marginBottom: 'var(--space-4)' }}>
           {lang === 'mr'
             ? 'शासकीय सेवांसाठी सर्वसमावेशक मार्गदर्शन'
             : lang === 'hi'
@@ -522,11 +575,15 @@ export const HomePage: React.FC = () => {
       </div>
       <div className="grid grid-cols-1 grid-cols-2-md grid-cols-4-lg" style={{ marginBottom: 'var(--space-12)' }}>
         {/* Services */}
-        <Card variant="interactive" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-          <CardHeader style={{ flexDirection: 'column', alignItems: 'flex-start', gap: 'var(--space-2)' }}>
-            <Badge variant="info" size="sm">शासकीय सेवा</Badge>
-            <CardTitle>{lang === 'mr' ? 'सेवा व प्रमाणपत्रे' : lang === 'hi' ? 'सेवाएं और प्रमाण पत्र' : 'Services & Certificates'}</CardTitle>
-            <CardDescription>
+        <Card variant="interactive" style={{ display: 'flex', flexDirection: 'column', height: '100%', borderRadius: 'var(--radius-lg, 12px)' }}>
+          <CardHeader style={{ flexDirection: 'column', alignItems: 'flex-start', gap: 'var(--space-1)' }}>
+            <Badge variant="info" size="sm">
+              {lang === 'mr' ? 'शासकीय सेवा' : lang === 'hi' ? 'सरकारी सेवाएं' : 'Civic Services'}
+            </Badge>
+            <CardTitle style={{ fontSize: '1.0625rem', fontWeight: 600, marginTop: 'var(--space-1)', lineHeight: 1.3 }}>
+              {lang === 'mr' ? 'सेवा व प्रमाणपत्रे' : lang === 'hi' ? 'सेवाएं और प्रमाण पत्र' : 'Services & Certificates'}
+            </CardTitle>
+            <CardDescription style={{ fontSize: '0.8125rem', lineHeight: 1.45 }}>
               {lang === 'mr'
                 ? 'उत्पन्न, जात, अधिवास, रेशन कार्ड — पायरी-पायरी मार्गदर्शन.'
                 : lang === 'hi'
@@ -549,11 +606,15 @@ export const HomePage: React.FC = () => {
         </Card>
 
         {/* Schemes */}
-        <Card variant="interactive" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-          <CardHeader style={{ flexDirection: 'column', alignItems: 'flex-start', gap: 'var(--space-2)' }}>
-            <Badge variant="success" size="sm">कल्याणकारी योजना</Badge>
-            <CardTitle>{lang === 'mr' ? 'शासकीय योजना' : lang === 'hi' ? 'सरकारी योजनाएं' : 'Welfare Schemes'}</CardTitle>
-            <CardDescription>
+        <Card variant="interactive" style={{ display: 'flex', flexDirection: 'column', height: '100%', borderRadius: 'var(--radius-lg, 12px)' }}>
+          <CardHeader style={{ flexDirection: 'column', alignItems: 'flex-start', gap: 'var(--space-1)' }}>
+            <Badge variant="success" size="sm">
+              {lang === 'mr' ? 'कल्याणकारी योजना' : lang === 'hi' ? 'कल्याण योजनाएं' : 'Welfare Schemes'}
+            </Badge>
+            <CardTitle style={{ fontSize: '1.0625rem', fontWeight: 600, marginTop: 'var(--space-1)', lineHeight: 1.3 }}>
+              {lang === 'mr' ? 'शासकीय योजना' : lang === 'hi' ? 'सरकारी योजनाएं' : 'Welfare Schemes'}
+            </CardTitle>
+            <CardDescription style={{ fontSize: '0.8125rem', lineHeight: 1.45 }}>
               {lang === 'mr'
                 ? 'केंद्र व राज्य योजनांचे पात्रता, लाभ व अर्ज मार्गदर्शन.'
                 : lang === 'hi'
@@ -576,11 +637,15 @@ export const HomePage: React.FC = () => {
         </Card>
 
         {/* Explain Screen */}
-        <Card variant="interactive" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-          <CardHeader style={{ flexDirection: 'column', alignItems: 'flex-start', gap: 'var(--space-2)' }}>
-            <Badge variant="warning" size="sm">दृष्टी सहाय्य</Badge>
-            <CardTitle>{lang === 'mr' ? 'स्क्रीन समजावा' : lang === 'hi' ? 'स्क्रीन समझाएं' : 'Explain Screen'}</CardTitle>
-            <CardDescription>
+        <Card variant="interactive" style={{ display: 'flex', flexDirection: 'column', height: '100%', borderRadius: 'var(--radius-lg, 12px)' }}>
+          <CardHeader style={{ flexDirection: 'column', alignItems: 'flex-start', gap: 'var(--space-1)' }}>
+            <Badge variant="warning" size="sm">
+              {lang === 'mr' ? 'दृष्टी सहाय्य' : lang === 'hi' ? 'दृष्टि सहायता' : 'Vision AI'}
+            </Badge>
+            <CardTitle style={{ fontSize: '1.0625rem', fontWeight: 600, marginTop: 'var(--space-1)', lineHeight: 1.3 }}>
+              {lang === 'mr' ? 'स्क्रीन समजावा' : lang === 'hi' ? 'स्क्रीन समझाएं' : 'Explain Screen'}
+            </CardTitle>
+            <CardDescription style={{ fontSize: '0.8125rem', lineHeight: 1.45 }}>
               {lang === 'mr'
                 ? 'सरकारी फॉर्मचा स्क्रीनशॉट अपलोड करा — सोप्या भाषेत स्पष्टीकरण मिळवा.'
                 : lang === 'hi'
@@ -603,11 +668,15 @@ export const HomePage: React.FC = () => {
         </Card>
 
         {/* Browser Extension */}
-        <Card variant="interactive" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-          <CardHeader style={{ flexDirection: 'column', alignItems: 'flex-start', gap: 'var(--space-2)' }}>
-            <Badge variant="neutral" size="sm">ब्राउझर विस्तार</Badge>
-            <CardTitle>{lang === 'mr' ? 'ब्राउझर साथी' : lang === 'hi' ? 'ब्राउज़र साथी' : 'Browser Companion'}</CardTitle>
-            <CardDescription>
+        <Card variant="interactive" style={{ display: 'flex', flexDirection: 'column', height: '100%', borderRadius: 'var(--radius-lg, 12px)' }}>
+          <CardHeader style={{ flexDirection: 'column', alignItems: 'flex-start', gap: 'var(--space-1)' }}>
+            <Badge variant="neutral" size="sm">
+              {lang === 'mr' ? 'ब्राउझर साथी' : lang === 'hi' ? 'ब्राउज़र साथी' : 'Browser Co-Pilot'}
+            </Badge>
+            <CardTitle style={{ fontSize: '1.0625rem', fontWeight: 600, marginTop: 'var(--space-1)', lineHeight: 1.3 }}>
+              {lang === 'mr' ? 'ब्राउझर साथी' : lang === 'hi' ? 'ब्राउज़र साथी' : 'Browser Companion'}
+            </CardTitle>
+            <CardDescription style={{ fontSize: '0.8125rem', lineHeight: 1.45 }}>
               {lang === 'mr'
                 ? 'सरकारी पोर्टलवर ब्राउझ करताना थेट मार्गदर्शन.'
                 : lang === 'hi'

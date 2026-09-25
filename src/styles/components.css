@@ -143,7 +143,7 @@
   border: 1px solid var(--border);
   border-radius: var(--radius-card);
   box-shadow: var(--shadow-card);
-  padding: var(--space-6);
+  padding: var(--space-5);
   transition: transform var(--transition-fast), box-shadow var(--transition-fast);
   display: flex;
   flex-direction: column;
@@ -156,11 +156,11 @@
 }
 
 .card-header {
-  margin-bottom: var(--space-4);
+  margin-bottom: var(--space-3);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--space-2);
+  gap: var(--space-1);
 }
 
 .card-header-row {
@@ -172,10 +172,11 @@
 }
 
 .card-title {
-  font-size: var(--font-size-xl);
+  font-size: 1.125rem;
   font-weight: 600;
   color: var(--text-primary);
   margin: 0;
+  line-height: 1.35;
 }
 
 .card-body {
@@ -369,7 +370,10 @@
 
 .alert-disclaimer {
   background-color: var(--surface-soft);
-  border: 1px dashed var(--border-strong);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--sahayak-blue);
+  border-radius: var(--radius-md);
   color: var(--text-secondary);
   font-size: var(--font-size-xs);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
 }

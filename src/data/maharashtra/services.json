@@ -43,9 +43,9 @@
           "hi": "आपले सरकार पोर्टल पर लॉगिन करें"
         },
         "description": {
-          "en": "Visit the official Aaple Sarkar portal and log in using your registered mobile number and password, or register as a new user with Aadhaar OTP.",
-          "mr": "अधिकृत आपले सरकार पोर्टलवर जा आणि आपल्या नोंदणीकृत मोबाइल नंबर आणि पासवर्डने लॉगिन करा किंवा आधार ओटीपीद्वारे नवीन वापरकर्ता म्हणून नोंदणी करा.",
-          "hi": "आधिकारिक आपले सरकार पोर्टल पर जाएं और अपने पंजीकृत मोबाइल नंबर और पासवर्ड का उपयोग करके लॉगिन करें, या आधार ओटीपी के साथ नए उपयोगकर्ता के रूप में पंजीकरण करें।"
+          "en": "Visit the official Aaple Sarkar portal and log in using your registered credentials, or complete new citizen registration using Aadhaar authentication.",
+          "mr": "अधिकृत आपले सरकार पोर्टलवर जा आणि आपल्या नोंदणीकृत खात्याने लॉगिन करा किंवा आधार प्रमाणीकरणाद्वारे नवीन वापरकर्ता म्हणून नोंदणी करा.",
+          "hi": "आधिकारिक आपले सरकार पोर्टल पर जाएं और अपने पंजीकृत खाते से लॉगिन करें, या आधार प्रमाणीकरण के साथ नए उपयोगकर्ता के रूप में पंजीकरण करें।"
         },
         "status": "upcoming"
       },

@@ -46,12 +46,36 @@ export const Footer: React.FC<FooterProps> = ({ currentLanguage = 'mr' }) => {
               {currentLanguage === 'mr' ? 'जलद दुवे' : currentLanguage === 'hi' ? 'त्वरित लिंक' : 'Quick Navigation'}
             </h3>
             <ul className="footer-links-list">
-              <li><Link href="/" className="footer-link">Home / मुख्यपृष्ठ</Link></li>
-              <li><Link href="/services" className="footer-link">Services / सेवा</Link></li>
-              <li><Link href="/schemes" className="footer-link">Schemes / योजना</Link></li>
-              <li><Link href="/explain-screen" className="footer-link">Explain Screen / स्क्रीन समजावा</Link></li>
-              <li><Link href="/extension" className="footer-link">Extension / विस्तार</Link></li>
-              <li><Link href="/settings" className="footer-link">Settings / प्राधान्ये</Link></li>
+              <li>
+                <Link href="/" className="footer-link">
+                  {currentLanguage === 'mr' ? 'मुख्यपृष्ठ' : currentLanguage === 'hi' ? 'होम' : 'Home'}
+                </Link>
+              </li>
+              <li>
+                <Link href="/services" className="footer-link">
+                  {currentLanguage === 'mr' ? 'सेवा व प्रमाणपत्रे' : currentLanguage === 'hi' ? 'सेवाएं और प्रमाण पत्र' : 'Services & Certificates'}
+                </Link>
+              </li>
+              <li>
+                <Link href="/schemes" className="footer-link">
+                  {currentLanguage === 'mr' ? 'शासकीय योजना' : currentLanguage === 'hi' ? 'सरकारी योजनाएं' : 'Welfare Schemes'}
+                </Link>
+              </li>
+              <li>
+                <Link href="/explain-screen" className="footer-link">
+                  {currentLanguage === 'mr' ? 'स्क्रीन समजावा' : currentLanguage === 'hi' ? 'स्क्रीन समझाएं' : 'Explain Screen'}
+                </Link>
+              </li>
+              <li>
+                <Link href="/extension" className="footer-link">
+                  {currentLanguage === 'mr' ? 'ब्राउझर साथी' : currentLanguage === 'hi' ? 'ब्राउज़र साथी' : 'Browser Companion'}
+                </Link>
+              </li>
+              <li>
+                <Link href="/settings" className="footer-link">
+                  {currentLanguage === 'mr' ? 'सुलभता व प्राधान्ये' : currentLanguage === 'hi' ? 'सुलभता और सेटिंग्स' : 'Settings & Preferences'}
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -68,7 +92,7 @@ export const Footer: React.FC<FooterProps> = ({ currentLanguage = 'mr' }) => {
                   rel="noopener noreferrer"
                   className="footer-link"
                 >
-                  Aaple Sarkar <span className="footer-external-tag">External ↗</span>
+                  Aaple Sarkar <span style={{ opacity: 0.75, fontSize: '0.8rem' }}>↗</span>
                 </a>
               </li>
               <li>
@@ -78,7 +102,7 @@ export const Footer: React.FC<FooterProps> = ({ currentLanguage = 'mr' }) => {
                   rel="noopener noreferrer"
                   className="footer-link"
                 >
-                  MahaDBT Portal <span className="footer-external-tag">External ↗</span>
+                  MahaDBT Portal <span style={{ opacity: 0.75, fontSize: '0.8rem' }}>↗</span>
                 </a>
               </li>
               <li>
@@ -88,7 +112,7 @@ export const Footer: React.FC<FooterProps> = ({ currentLanguage = 'mr' }) => {
                   rel="noopener noreferrer"
                   className="footer-link"
                 >
-                  RTS Maharashtra <span className="footer-external-tag">External ↗</span>
+                  RTS Maharashtra <span style={{ opacity: 0.75, fontSize: '0.8rem' }}>↗</span>
                 </a>
               </li>
               <li>
@@ -98,7 +122,7 @@ export const Footer: React.FC<FooterProps> = ({ currentLanguage = 'mr' }) => {
                   rel="noopener noreferrer"
                   className="footer-link"
                 >
-                  National Portal of India <span className="footer-external-tag">External ↗</span>
+                  National Portal of India <span style={{ opacity: 0.75, fontSize: '0.8rem' }}>↗</span>
                 </a>
               </li>
             </ul>

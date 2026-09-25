@@ -19,25 +19,25 @@ html {
 
 /* Heading Hierarchy (UI.md Section 10) */
 h1, .h1 {
-  font-size: var(--font-size-3xl);
+  font-size: var(--font-size-3xl, 1.875rem);
   font-weight: 700;
   line-height: var(--line-height-tight);
   color: var(--text-primary);
-  letter-spacing: -0.02em;
-  margin: 0 0 var(--space-4) 0;
-}
-
-h2, .h2 {
-  font-size: var(--font-size-2xl);
-  font-weight: 700;
-  line-height: var(--line-height-tight);
-  color: var(--sahayak-blue-dark);
   letter-spacing: -0.015em;
   margin: 0 0 var(--space-3) 0;
 }
 
+h2, .h2 {
+  font-size: var(--font-size-2xl, 1.5rem);
+  font-weight: 700;
+  line-height: var(--line-height-tight);
+  color: var(--sahayak-blue-dark);
+  letter-spacing: -0.01em;
+  margin: 0 0 var(--space-2) 0;
+}
+
 h3, .h3 {
-  font-size: var(--font-size-xl);
+  font-size: var(--font-size-xl, 1.25rem);
   font-weight: 600;
   line-height: var(--line-height-tight);
   color: var(--text-primary);
@@ -45,7 +45,7 @@ h3, .h3 {
 }
 
 h4, .h4 {
-  font-size: var(--font-size-lg);
+  font-size: var(--font-size-lg, 1.125rem);
   font-weight: 600;
   line-height: var(--line-height-normal);
   color: var(--text-primary);
@@ -53,20 +53,20 @@ h4, .h4 {
 }
 
 p, .body {
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-base, 0.9375rem);
   line-height: var(--line-height-relaxed);
   color: var(--text-primary);
   margin: 0 0 var(--space-3) 0;
 }
 
 .body-secondary {
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-sm, 0.8125rem);
   line-height: var(--line-height-normal);
   color: var(--text-secondary);
 }
 
 .caption, .text-muted {
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-xs, 0.75rem);
   line-height: var(--line-height-normal);
   color: var(--text-muted);
 }
