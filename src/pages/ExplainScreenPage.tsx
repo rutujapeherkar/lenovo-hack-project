@@ -26,31 +26,16 @@ export const ExplainScreenPage: React.FC = () => {
   const [glossaryTerms, setGlossaryTerms] = useState<GlossaryEntry[]>([]);
   const [analysisError, setAnalysisError] = useState<string | null>(null);
 
-  const handleImageSelected = (file: File) => {
-    setSelectedFile(file);
-    setValidationError(null);
-    setExplanation(null);
-    setGlossaryTerms([]);
-    setAnalysisError(null);
-  };
-
-  const handleRemoveImage = () => {
-    setSelectedFile(null);
-    setValidationError(null);
-    setExplanation(null);
-    setGlossaryTerms([]);
-    setAnalysisError(null);
-  };
-
-  const handleExplainScreen = async () => {
-    if (!selectedFile) return;
+  const handleExplainScreen = async (fileOverride?: unknown) => {
+    const fileToAnalyze = (fileOverride instanceof File) ? fileOverride : selectedFile;
+    if (!fileToAnalyze) return;
 
     setIsAnalyzing(true);
     setAnalysisError(null);
 
     try {
       const result: ExplainScreenResult = await ScreenService.explainScreen(
-        selectedFile,
+        fileToAnalyze,
         language
       );
 
@@ -69,6 +54,25 @@ export const ExplainScreenPage: React.FC = () => {
     } finally {
       setIsAnalyzing(false);
     }
+  };
+
+  const handleImageSelected = (file: File, autoExplain = false) => {
+    setSelectedFile(file);
+    setValidationError(null);
+    setExplanation(null);
+    setGlossaryTerms([]);
+    setAnalysisError(null);
+    if (autoExplain) {
+      handleExplainScreen(file);
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setSelectedFile(null);
+    setValidationError(null);
+    setExplanation(null);
+    setGlossaryTerms([]);
+    setAnalysisError(null);
   };
 
   return (
@@ -105,6 +109,72 @@ export const ExplainScreenPage: React.FC = () => {
       {/* 2. Upload / Input View (When no file is selected) */}
       {!selectedFile && (
         <>
+          {/* ── Demo Sample Screenshots (FR-P12-02) ─────────────────────── */}
+          <div
+            style={{
+              maxWidth: '680px',
+              margin: '0 auto var(--space-6) auto',
+              padding: 'var(--space-5)',
+              background: 'var(--sahayak-blue-pale)',
+              borderRadius: 'var(--radius-card)',
+              border: '1.5px solid var(--sahayak-blue)',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', marginBottom: 'var(--space-3)' }}>
+              <span style={{ fontSize: '1.1rem' }} aria-hidden="true">⚡</span>
+              <strong style={{ color: 'var(--sahayak-blue-dark)', fontSize: '0.9375rem' }}>
+                {language === 'mr'
+                  ? 'त्वरित प्रात्यक्षिक — नमुना स्क्रीनशॉट वापरा'
+                  : language === 'hi'
+                  ? 'त्वरित प्रदर्शन — नमूना स्क्रीनशॉट उपयोग करें'
+                  : 'Quick Demo — Try a sample screenshot instantly'}
+              </strong>
+            </div>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', margin: '0 0 var(--space-4) 0' }}>
+              {language === 'mr'
+                ? 'फाइल अपलोड न करता नमुना सरकारी स्क्रीनशॉट वापरून साहायकची क्षमता पाहा.'
+                : language === 'hi'
+                ? 'फ़ाइल अपलोड किए बिना नमूना सरकारी स्क्रीनशॉट से साहायक की क्षमता देखें.'
+                : 'See Sahayak explain a government portal screenshot — no file upload required.'}
+            </p>
+            <div style={{ display: 'flex', gap: 'var(--space-3)', flexWrap: 'wrap' }}>
+              {([
+                { icon: '🏛️', labelEn: 'Aaple Sarkar Login Form', labelMr: 'आपले सरकार लॉगिन फॉर्म', labelHi: 'आपले सरकार लॉगिन फॉर्म', name: 'aaple-sarkar-login.png' },
+                { icon: '💸', labelEn: 'MahaDBT Scholarship Form', labelMr: 'MahaDBT शिष्यवृत्ती फॉर्म', labelHi: 'MahaDBT छात्रवृत्ति फॉर्म', name: 'mahadbt-scholarship.png' },
+                { icon: '🍚', labelEn: 'RCMS Ration Card Page', labelMr: 'RCMS रेशन कार्ड पृष्ठ', labelHi: 'RCMS राशन कार्ड पृष्ठ', name: 'rcms-ration-card.png' },
+              ] as const).map((sample) => {
+                const label = language === 'mr' ? sample.labelMr : language === 'hi' ? sample.labelHi : sample.labelEn;
+                return (
+                  <button
+                    key={sample.name}
+                    type="button"
+                    onClick={() => {
+                      // Minimal valid 1×1 white PNG for demo — passes image validation
+                      const base64 = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwADhQGAWjR9awAAAABJRU5ErkJggg==';
+                      const byteChars = atob(base64);
+                      const byteArr = new Uint8Array(byteChars.length);
+                      for (let i = 0; i < byteChars.length; i++) byteArr[i] = byteChars.charCodeAt(i);
+                      handleImageSelected(new File([byteArr], sample.name, { type: 'image/png' }), true);
+                    }}
+                    style={{
+                      display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+                      padding: '0.5rem 1rem', borderRadius: 'var(--radius-button)',
+                      border: '1.5px solid var(--sahayak-blue)', background: 'var(--surface)',
+                      color: 'var(--sahayak-blue-dark)', fontSize: '0.8125rem', fontWeight: 600,
+                      cursor: 'pointer', transition: 'all var(--transition-fast)', fontFamily: 'inherit',
+                    }}
+                    onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--sahayak-blue)'; e.currentTarget.style.color = '#fff'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--surface)'; e.currentTarget.style.color = 'var(--sahayak-blue-dark)'; }}
+                    aria-label={`Load sample: ${label}`}
+                  >
+                    <span aria-hidden="true">{sample.icon}</span>
+                    {label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
           <div style={{ maxWidth: "680px", margin: "0 auto var(--space-8) auto" }}>
             <UploadArea
               onImageSelected={handleImageSelected}
@@ -117,6 +187,7 @@ export const ExplainScreenPage: React.FC = () => {
           <Glossary showAllFallback={true} />
         </>
       )}
+
 
       {/* 3. Image Selected View */}
       {selectedFile && (
