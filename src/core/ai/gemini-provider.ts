@@ -12,8 +12,10 @@
 import type {
   AssistantRequest,
   SahayakResponse,
+  Language,
+  ScreenExplanation,
 } from "../shared/types";
-import { isSahayakResponse, validateOfficialUrl } from "../shared/validators";
+import { isSahayakResponse, isScreenExplanation, validateOfficialUrl } from "../shared/validators";
 import type { AIProvider, AIProviderType } from "./provider";
 import { DemoProvider } from "./demo-provider";
 import { getServices, getSchemes } from "../shared/data-loader";
@@ -174,6 +176,109 @@ Respond with a single JSON object matching this schema:
   "safetyNote": "Civic disclaimer reminder"
 }
 `;
+  }
+
+  /**
+   * Explains an uploaded screenshot using Gemini multimodal vision API,
+   * falling back cleanly to DemoProvider if offline or unconfigured.
+   */
+  public async explainImage(
+    image: File | { base64?: string; mimeType?: string; language?: Language; fileName?: string }
+  ): Promise<ScreenExplanation> {
+    if (!this.apiKey || this.apiKey.trim().length === 0) {
+      return this.fallbackProvider.explainImage(image);
+    }
+
+    try {
+      const base64 = (image as any)?.base64;
+      const mimeType = (image as any)?.mimeType || "image/png";
+      const language: Language = (image as any)?.language || "en";
+
+      const prompt = `
+SYSTEM INSTRUCTIONS:
+You are "Sahayak AI", an accessible civic guidance assistant for Maharashtra public services.
+The user has provided a screenshot of an administrative portal, government service page, or certificate application form.
+
+RULES:
+1. Explain only what is visibly present in the screenshot. Do NOT invent fields or buttons that do not exist.
+2. Do NOT invent eligibility rules, official fees, or government requirements unless explicitly visible.
+3. NEVER ask the user to enter passwords, PINs, OTPs, or bank account details.
+4. Respond in the requested language: "${language}" (${language === "mr" ? "Marathi" : language === "hi" ? "Hindi" : "English"}).
+5. Use clear, simple language appropriate for first-time digital users and senior citizens.
+6. Return a valid JSON object matching the exact ScreenExplanation schema:
+{
+  "summary": "Clear, plain-language description of what this page/form is for",
+  "elements": [
+    {
+      "type": "field" | "button" | "heading" | "label" | "message" | "section" | "unknown",
+      "name": "Visible element label/title",
+      "explanation": "What this element means and what to enter/do in simple words",
+      "importance": "high" | "medium" | "low"
+    }
+  ],
+  "nextAction": "Clear step-by-step guidance on what the citizen should do next on this screen",
+  "warnings": [
+    "Security warning reminding users never to share passwords or OTPs, or official verification advice"
+  ]
+}
+`;
+
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(
+        this.model
+      )}:generateContent?key=${encodeURIComponent(this.apiKey)}`;
+
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), this.timeoutMs);
+
+      const parts: any[] = [];
+      if (base64) {
+        parts.push({
+          inlineData: {
+            mimeType,
+            data: base64,
+          },
+        });
+      }
+      parts.push({ text: prompt });
+
+      const requestBody = {
+        contents: [{ role: "user", parts }],
+        generationConfig: {
+          responseMimeType: "application/json",
+          temperature: 0.1,
+        },
+      };
+
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(requestBody),
+        signal: controller.signal,
+      });
+
+      clearTimeout(timer);
+
+      if (!res.ok) {
+        console.warn(`[GeminiProvider.explainImage] HTTP ${res.status}. Falling back to DemoProvider.`);
+        return this.fallbackProvider.explainImage(image);
+      }
+
+      const json = await res.json();
+      const rawText = json?.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (!rawText) {
+        return this.fallbackProvider.explainImage(image);
+      }
+
+      const parsed = JSON.parse(rawText);
+      if (isScreenExplanation(parsed)) {
+        return parsed;
+      }
+
+      return this.fallbackProvider.explainImage(image);
+    } catch (err: unknown) {
+      console.warn("[GeminiProvider.explainImage] Call failed, using DemoProvider fallback:", err);
+      return this.fallbackProvider.explainImage(image);
+    }
   }
 
   private async fallbackWithSafety(

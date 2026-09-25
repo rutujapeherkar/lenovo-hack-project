@@ -12,6 +12,7 @@ import type {
   AssistantRequest,
   SahayakResponse,
   ScreenExplanation,
+  Language,
   AIProvider as CanonicalAIProvider,
 } from "../shared/types";
 
@@ -28,9 +29,11 @@ export interface AIProvider extends CanonicalAIProvider {
   generateResponse(request: AssistantRequest): Promise<SahayakResponse>;
 
   /**
-   * Optional multimodal vision explanation for screenshots (deferred to Phase P07).
+   * Multimodal vision explanation for screenshots (Phase P07).
    */
-  explainImage?(image: File): Promise<ScreenExplanation>;
+  explainImage?(
+    image: File | { base64?: string; mimeType?: string; language?: Language; fileName?: string }
+  ): Promise<ScreenExplanation>;
 
   /**
    * Returns identifier for current active provider implementation.

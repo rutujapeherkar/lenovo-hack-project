@@ -67,7 +67,27 @@ export type TranslationKey =
   | "backToSchemes"
   | "browseAllSchemes"
   | "beneficiaryGroup"
-  | "allBeneficiaries";
+  | "allBeneficiaries"
+  | "explainScreenTitle"
+  | "explainScreenSubtitle"
+  | "uploadScreenshot"
+  | "dragDropOrChoose"
+  | "chooseScreenshot"
+  | "changeImage"
+  | "removeImage"
+  | "explainScreenButton"
+  | "explainingScreen"
+  | "privacyNotice"
+  | "supportedFormats"
+  | "whatShouldIDoNext"
+  | "detectedElements"
+  | "glossaryTitle"
+  | "tryAgain"
+  | "sahayakExplanation"
+  | "officialDisclaimer"
+  | "importanceHigh"
+  | "importanceMedium"
+  | "importanceLow";
 
 export const UI_TRANSLATIONS: Record<TranslationKey, Record<Language, string>> = {
   servicesTitle: {
@@ -319,6 +339,106 @@ export const UI_TRANSLATIONS: Record<TranslationKey, Record<Language, string>> =
     en: "All Beneficiaries",
     mr: "सर्व लाभार्थी",
     hi: "सभी लाभार्थी",
+  },
+  explainScreenTitle: {
+    en: "Explain This Screen",
+    mr: "स्क्रीन समजावून सांगा",
+    hi: "स्क्रीन समझें",
+  },
+  explainScreenSubtitle: {
+    en: "Upload a screenshot of any government portal, form, or document page to get a simple, step-by-step explanation.",
+    mr: "कोणत्याही शासकीय पोर्टल, फॉर्म किंवा कागदपत्राच्या स्क्रीनचा फोटो अपलोड करा आणि सोप्या भाषेत अर्थ समजून घ्या.",
+    hi: "किसी भी सरकारी पोर्टल, फॉर्म या दस्तावेज़ पृष्ठ का स्क्रीनशॉट अपलोड करें और सरल भाषा में उसका अर्थ समझें।",
+  },
+  uploadScreenshot: {
+    en: "Upload Screenshot",
+    mr: "स्क्रीनशॉट अपलोड करा",
+    hi: "स्क्रीनशॉट अपलोड करें",
+  },
+  dragDropOrChoose: {
+    en: "Drag & drop screenshot here, or click to choose",
+    mr: "येथे स्क्रीनशॉट ड्रॅग करा किंवा फाईल निवडण्यासाठी क्लिक करा",
+    hi: "स्क्रीनशॉट यहां ड्रैग करें या चुनने के लिए क्लिक करें",
+  },
+  chooseScreenshot: {
+    en: "Choose Image",
+    mr: "फोटो निवडा",
+    hi: "छवि चुनें",
+  },
+  changeImage: {
+    en: "Change Image",
+    mr: "दुसरा फोटो निवडा",
+    hi: "दूसरी छवि चुनें",
+  },
+  removeImage: {
+    en: "Remove",
+    mr: "काढून टाका",
+    hi: "हटाएं",
+  },
+  explainScreenButton: {
+    en: "Explain This Screen",
+    mr: "स्क्रीन समजावून सांगा",
+    hi: "स्क्रीन समझें",
+  },
+  explainingScreen: {
+    en: "Explaining this screen...",
+    mr: "स्क्रीनचे विश्लेषण सुरू आहे...",
+    hi: "स्क्रीन का विश्लेषण हो रहा है...",
+  },
+  privacyNotice: {
+    en: "Avoid uploading screenshots containing passwords, OTPs, PINs, or banking credentials.",
+    mr: "पासवर्ड, ओटीपी (OTP), पिन (PIN) किंवा बँक तपशील असलेले स्क्रीनशॉट अपलोड करू नका.",
+    hi: "पासवर्ड, ओटीपी (OTP), पिन (PIN) या बैंक विवरण वाले स्क्रीनशॉट अपलोड न करें।",
+  },
+  supportedFormats: {
+    en: "Supported formats: PNG, JPG, JPEG, WebP. Maximum size: 5 MB.",
+    mr: "समर्थित फॉरमॅट: PNG, JPG, JPEG, WebP. कमाल आकार: ५ MB.",
+    hi: "समर्थित प्रारूप: PNG, JPG, JPEG, WebP. अधिकतम आकार: 5 MB.",
+  },
+  whatShouldIDoNext: {
+    en: "What should I do next?",
+    mr: "पुढे काय करावे?",
+    hi: "आगे क्या करें?",
+  },
+  detectedElements: {
+    en: "Visible Fields & Buttons",
+    mr: "दिसणारे रकाने व बटणे",
+    hi: "दिखने वाले फ़ील्ड और बटन",
+  },
+  glossaryTitle: {
+    en: "Civic Terms Glossary",
+    mr: "प्रशासकीय शब्दकोश",
+    hi: "प्रशासनिक शब्दावली",
+  },
+  tryAgain: {
+    en: "Try Again",
+    mr: "पुन्हा प्रयत्न करा",
+    hi: "पुनः प्रयास करें",
+  },
+  sahayakExplanation: {
+    en: "Sahayak Visual Explanation",
+    mr: "सहायक दृष्टी विश्लेषण",
+    hi: "सहायक दृष्टि विश्लेषण",
+  },
+  officialDisclaimer: {
+    en: "This is an AI-assisted visual interpretation to help you navigate. Always confirm with the official portal.",
+    mr: "हे केवळ मार्गदर्शनासाठी एआय-आधारित विश्लेषण आहे. अंतिम माहितीसाठी अधिकृत पोर्टलवरील सूचनांचे पालन करा.",
+    hi: "यह आपको समझने में मदद करने के लिए एआई-आधारित दृश्य विश्लेषण है। आधिकारिक पोर्टल के निर्देशों का पालन करें।",
+  },
+  importanceHigh: {
+    en: "Important",
+    mr: "महत्त्वाचे",
+    hi: "महत्वपूर्ण",
+  },
+  importanceMedium: {
+    en: "Standard",
+    mr: "सर्वसाधारण",
+    hi: "सामान्य",
+  },
+  importanceLow: {
+    en: "Optional",
+    mr: "ऐच्छिक",
+    hi: "वैकल्पिक",
   },
 };
 

@@ -13,6 +13,7 @@ import type {
   Language,
   OfficialSource,
   SahayakResponse,
+  ScreenExplanation,
   TaskStep,
 } from "../shared/types";
 import type { AIProvider, AIProviderType } from "./provider";
@@ -323,5 +324,148 @@ export class DemoProvider implements AIProvider {
         hi: s.description.hi,
       },
     }));
+  }
+
+  /**
+   * Deterministic multimodal vision explanation for screenshots.
+   */
+  public async explainImage(
+    image: File | { base64?: string; mimeType?: string; language?: Language; fileName?: string }
+  ): Promise<ScreenExplanation> {
+    const lang: Language = (image as any)?.language || "en";
+    const fileName = ((image as any)?.fileName || (image as File)?.name || "").toLowerCase();
+
+    const isCertificate = fileName.includes("income") || fileName.includes("domicile") || fileName.includes("certificate");
+
+    if (lang === "mr") {
+      return {
+        summary: isCertificate
+          ? "ही महाराष्ट्र शासनाच्या आपले सरकार पोर्टलवरील प्रमाणपत्र अर्ज स्क्रीन आहे. याद्वारे तुम्ही नवीन प्रमाणपत्रासाठी तपशील भरू शकता."
+          : "ही महाराष्ट्र शासनाच्या अधिकृत नागरिक सेवा पोर्टलची लॉगिन व प्रमाणीकरण स्क्रीन आहे. याद्वारे नागरिक शासकीय सेवा वापरू शकतात.",
+        elements: [
+          {
+            type: "field",
+            name: "वापरकर्ता आयडी / मोबाइल क्रमांक (User ID / Mobile)",
+            explanation: "येथे आपला नोंदणीकृत १०-अंकी मोबाइल नंबर किंवा वापरकर्ता नाव टाकावे.",
+            importance: "high",
+          },
+          {
+            type: "field",
+            name: "पासवर्ड (Password)",
+            explanation: "नोंदणी करताना तयार केलेला गोपनीय पासवर्ड येथे प्रविष्ट करा. हा कोणाशीही शेअर करू नका.",
+            importance: "high",
+          },
+          {
+            type: "field",
+            name: "कॅप्चा कोड (Captcha Code)",
+            explanation: "सुरक्षेसाठी चित्रात दिसणारे अक्षरे आणि अंक अचूकपणे खालील बॉक्समध्ये टाईप करा.",
+            importance: "medium",
+          },
+          {
+            type: "button",
+            name: "लॉगिन / प्रवेश करा (Login Button)",
+            explanation: "तपशील भरल्यानंतर पोर्टलवर प्रवेश करण्यासाठी या निळ्या बटणावर क्लिक करा.",
+            importance: "high",
+          },
+          {
+            type: "button",
+            name: "नवीन वापरकर्ता नोंदणी (New User Registration)",
+            explanation: "आपले खाते नसल्यास आधार कार्डद्वारे नवीन नोंदणी करण्यासाठी या लिंकवर क्लिक करा.",
+            importance: "medium",
+          },
+        ],
+        nextAction: "आपला नोंदणीकृत मोबाइल नंबर आणि पासवर्ड भरा, कॅप्चा कोड टाईप करा आणि 'लॉगिन' बटण दाबा.",
+        warnings: [
+          "सुरक्षा सूचना: आपला पासवर्ड किंवा ओटीपी कधीही कोणालाही सांगू नका. अधिकृत शासकीय पोर्टल नेहमी https:// ने सुरू होते.",
+        ],
+      };
+    }
+
+    if (lang === "hi") {
+      return {
+        summary: isCertificate
+          ? "यह महाराष्ट्र सरकार के आपले सरकार पोर्टल पर प्रमाण पत्र आवेदन स्क्रीन है। यहां आप नए प्रमाण पत्र का विवरण भर सकते हैं।"
+          : "यह महाराष्ट्र सरकार के आधिकारिक नागरिक सेवा पोर्टल की लॉगिन स्क्रीन है। इसके माध्यम से नागरिक सरकारी सेवाओं का उपयोग कर सकते हैं।",
+        elements: [
+          {
+            type: "field",
+            name: "यूजर आईडी / मोबाइल नंबर (User ID / Mobile)",
+            explanation: "यहां अपना पंजीकृत 10-अंकीय मोबाइल नंबर या यूजरनेम दर्ज करें।",
+            importance: "high",
+          },
+          {
+            type: "field",
+            name: "पासवर्ड (Password)",
+            explanation: "पंजीकरण के समय बनाया गया गोपनीय पासवर्ड दर्ज करें। इसे किसी के साथ साझा न करें।",
+            importance: "high",
+          },
+          {
+            type: "field",
+            name: "कैप्चा कोड (Captcha Code)",
+            explanation: "सुरक्षा चित्र में दिखाए गए अक्षर और अंक नीचे दिए गए बॉक्स में सही टाइप करें।",
+            importance: "medium",
+          },
+          {
+            type: "button",
+            name: "लॉगिन (Login Button)",
+            explanation: "विवरण भरने के बाद पोर्टल में प्रवेश करने के लिए इस बटन पर क्लिक करें।",
+            importance: "high",
+          },
+          {
+            type: "button",
+            name: "नया उपयोगकर्ता पंजीकरण (New User Registration)",
+            explanation: "यदि आपका खाता नहीं है, तो आधार कार्ड से नया खाता बनाने के लिए यहां क्लिक करें।",
+            importance: "medium",
+          },
+        ],
+        nextAction: "अपना पंजीकृत मोबाइल नंबर और पासवर्ड दर्ज करें, कैप्चा कोड भरें और 'लॉगिन' बटन पर क्लिक करें।",
+        warnings: [
+          "सुरक्षा चेतावनी: अपना पासवर्ड या ओटीपी कभी भी किसी के साथ साझा न करें। आधिकारिक पोर्टल हमेशा https:// से शुरू होता है।",
+        ],
+      };
+    }
+
+    // Default English
+    return {
+      summary: isCertificate
+        ? "This is an official Maharashtra certificate application form screen from the Aaple Sarkar portal."
+        : "This is an official Maharashtra citizen portal authentication screen. It allows registered citizens to access public services and track applications.",
+      elements: [
+        {
+          type: "field",
+          name: "User ID / Mobile Number",
+          explanation: "Enter your registered 10-digit mobile phone number or citizen username.",
+          importance: "high",
+        },
+        {
+          type: "field",
+          name: "Password",
+          explanation: "Enter the secret password you created during registration. Never share this with anyone.",
+          importance: "high",
+        },
+        {
+          type: "field",
+          name: "Captcha Code",
+          explanation: "Type the alphanumeric characters shown in the security image to verify you are a human user.",
+          importance: "medium",
+        },
+        {
+          type: "button",
+          name: "Login / Sign In",
+          explanation: "Click this primary button after entering your credentials to access your dashboard.",
+          importance: "high",
+        },
+        {
+          type: "button",
+          name: "New User Registration",
+          explanation: "If you do not have an Aaple Sarkar account, click this link to register using your Aadhaar card.",
+          importance: "medium",
+        },
+      ],
+      nextAction: "Enter your registered mobile number and password, solve the visual captcha code, and click the Login button.",
+      warnings: [
+        "Security Alert: Sahayak AI will never ask for your passwords, OTPs, or PINs. Only enter credentials on verified https:// gov.in domains.",
+      ],
+    };
   }
 }

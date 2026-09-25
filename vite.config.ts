@@ -13,6 +13,10 @@ function assistantApiPlugin(): Plugin {
           const mod = await server.ssrLoadModule('/src/api/assistant/route.ts');
           return mod.assistantMiddleware(req, res, next);
         }
+        if (req.url?.startsWith('/api/explain-screen')) {
+          const mod = await server.ssrLoadModule('/src/api/explain-screen/route.ts');
+          return mod.explainScreenMiddleware(req, res, next);
+        }
         next();
       });
     },
