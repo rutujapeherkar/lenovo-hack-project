@@ -8,8 +8,8 @@
   /* ==========================================================================
      1. Brand & Surface Palette (UI.md Section 6)
      ========================================================================== */
-  --sahayak-blue: #0A66C2;       /* Primary brand/action colour — richer blue */
-  --sahayak-blue-dark: #004182;  /* Dark sections/footer/strong emphasis */
+  --sahayak-blue: #00599F;       /* Primary brand/action colour — civic blue */
+  --sahayak-blue-dark: #003C6D;  /* Dark sections/footer/strong emphasis */
   --sahayak-blue-deep: #002050;  /* Deep navy/high-contrast areas */
   --sahayak-blue-light: #E8F1FB; /* Light blue surfaces */
   --sahayak-blue-pale: #D6EAFF;  /* Information/accessibility backgrounds */
@@ -114,7 +114,7 @@
   --line-height-relaxed: 1.68;   /* Crucial for Devanagari matras */
 
   /* Transitions */
-  --transition-fast: 140ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-fast: 150ms ease-out;
   --transition-normal: 240ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow: 360ms cubic-bezier(0.4, 0, 0.2, 1);
 }

@@ -12,15 +12,15 @@ import { useAccessibility, VoiceService } from '../core/accessibility';
 export const SettingsPage: React.FC = () => {
   const {
     textScale,
-    highContrast,
     reducedMotion,
     readAloud,
     language,
+    theme,
     setTextScale,
-    setHighContrast,
     setReducedMotion,
     setReadAloud,
     setLanguage,
+    setTheme,
     resetPreferences,
   } = useAccessibility();
 
@@ -40,10 +40,10 @@ export const SettingsPage: React.FC = () => {
     : 'Accessibility & Interface Preferences';
 
   const subtitleText = language === 'mr'
-    ? 'आपल्या गरजेनुसार वाचन आकार, दृश्य कॉन्ट्रास्ट आणि व्हॉइस पर्याय निवडा (WCAG 2.1 AA / AAA मानके).'
+    ? 'आपल्या गरजेनुसार वाचन आकार, दृश्य कॉन्ट्रास्ट, लाइट/डार्क थीम आणि व्हॉइस पर्याय निवडा (WCAG 2.1 AA / AAA मानके).'
     : language === 'hi'
-    ? 'अपनी आवश्यकतानुसार फ़ॉन्ट साइज़, कंट्रास्ट और वॉयस विकल्प चुनें (WCAG 2.1 AA / AAA मानक)।'
-    : 'Customize visual contrast, text readability scale, animation behavior, and voice features for optimal comfort under WCAG 2.1 AA / AAA guidelines.';
+    ? 'अपनी आवश्यकतानुसार फ़ॉन्ट साइज़, कंट्रास्ट, लाइट/डार्क थीम और वॉयस विकल्प चुनें (WCAG 2.1 AA / AAA मानक)।'
+    : 'Customize visual theme (Light/Dark mode), contrast, text readability scale, animation behavior, and voice features for optimal comfort under WCAG 2.1 AA / AAA guidelines.';
 
   return (
     <div className="settings-page">
@@ -93,27 +93,87 @@ export const SettingsPage: React.FC = () => {
           </CardBody>
         </Card>
 
-        {/* Contrast Mode */}
+        {/* Theme Mode (Light / Dark & Accessibility) */}
         <Card variant="default">
           <CardHeader>
-            <CardTitle>High-Contrast Theme (उच्च कॉन्ट्रास्ट मोड)</CardTitle>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <CardTitle>
+                {language === 'mr'
+                  ? 'रंग थीम आणि मोड (Theme Mode)'
+                  : language === 'hi'
+                  ? 'रंग थीम और मोड (Theme Mode)'
+                  : 'Theme Mode & Appearance'}
+              </CardTitle>
+              <Badge variant={theme === 'dark' ? 'warning' : 'info'}>
+                {theme === 'dark'
+                  ? '🌙 Dark Mode Active'
+                  : theme === 'high-contrast'
+                  ? '⚡ High Contrast'
+                  : theme === 'black-white'
+                  ? '🔲 Grayscale'
+                  : '☀️ Light Mode Active'}
+              </Badge>
+            </div>
             <CardDescription>
-              Enforces deep pure black text and high-contrast solid borders with contrast ratio $\ge 7:1$ (WCAG AAA).
+              {language === 'mr'
+                ? 'दिवसा किंवा रात्रीच्या सुलभ वाचनासाठी लाइट किंवा डार्क मोड निवडा.'
+                : language === 'hi'
+                ? 'दिन या रात में सहज पठन के लिए लाइट या डार्क मोड चुनें।'
+                : 'Toggle between clean bright Light mode, modern Slate Dark mode, and accessible high-contrast views.'}
             </CardDescription>
           </CardHeader>
           <CardBody>
-            <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 'var(--space-3)' }}>
               <Button
-                variant={!highContrast ? 'primary' : 'outline'}
-                onClick={() => setHighContrast(false)}
+                variant={(theme === 'light' || theme === 'default') ? 'primary' : 'outline'}
+                onClick={() => setTheme('light')}
+                style={{ display: 'flex', flexDirection: 'column', gap: '4px', padding: '12px 8px', height: 'auto' }}
               >
-                Standard Contrast
+                <span style={{ fontSize: '1.25rem' }}>☀️</span>
+                <span style={{ fontWeight: 700 }}>
+                  {language === 'mr' ? 'लाइट मोड' : language === 'hi' ? 'लाइट मोड' : 'Light Mode'}
+                </span>
+                <span style={{ fontSize: '0.75rem', opacity: 0.85 }}>
+                  {language === 'mr' ? 'उजळ व स्पष्ट' : language === 'hi' ? 'उज्ज्वल और स्पष्ट' : 'Daytime Clean'}
+                </span>
               </Button>
+
               <Button
-                variant={highContrast ? 'primary' : 'outline'}
-                onClick={() => setHighContrast(true)}
+                variant={theme === 'dark' ? 'primary' : 'outline'}
+                onClick={() => setTheme('dark')}
+                style={{ display: 'flex', flexDirection: 'column', gap: '4px', padding: '12px 8px', height: 'auto' }}
               >
-                {highContrast ? 'High Contrast Mode: ACTIVE' : 'Enable High Contrast'}
+                <span style={{ fontSize: '1.25rem' }}>🌙</span>
+                <span style={{ fontWeight: 700 }}>
+                  {language === 'mr' ? 'डार्क मोड' : language === 'hi' ? 'डार्क मोड' : 'Dark Mode'}
+                </span>
+                <span style={{ fontSize: '0.75rem', opacity: 0.85 }}>
+                  {language === 'mr' ? 'रात्रीसाठी शांत' : language === 'hi' ? 'आंखों के लिए आरामदायक' : 'Night Modern'}
+                </span>
+              </Button>
+
+              <Button
+                variant={theme === 'high-contrast' ? 'primary' : 'outline'}
+                onClick={() => setTheme('high-contrast')}
+                style={{ display: 'flex', flexDirection: 'column', gap: '4px', padding: '12px 8px', height: 'auto' }}
+              >
+                <span style={{ fontSize: '1.25rem' }}>⚡</span>
+                <span style={{ fontWeight: 700 }}>
+                  {language === 'mr' ? 'उच्च कॉन्ट्रास्ट' : language === 'hi' ? 'उच्च कंट्रास्ट' : 'High Contrast'}
+                </span>
+                <span style={{ fontSize: '0.75rem', opacity: 0.85 }}>WCAG AAA ≥ 7:1</span>
+              </Button>
+
+              <Button
+                variant={theme === 'black-white' ? 'primary' : 'outline'}
+                onClick={() => setTheme('black-white')}
+                style={{ display: 'flex', flexDirection: 'column', gap: '4px', padding: '12px 8px', height: 'auto' }}
+              >
+                <span style={{ fontSize: '1.25rem' }}>🔲</span>
+                <span style={{ fontWeight: 700 }}>
+                  {language === 'mr' ? 'काळा आणि पांढरा' : language === 'hi' ? 'काला-सफ़ेद' : 'Black & White'}
+                </span>
+                <span style={{ fontSize: '0.75rem', opacity: 0.85 }}>100% Grayscale</span>
               </Button>
             </div>
           </CardBody>

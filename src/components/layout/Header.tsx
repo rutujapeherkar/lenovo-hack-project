@@ -4,6 +4,8 @@ import { Link, useRouter } from '../../router';
 export interface HeaderProps {
   currentLanguage?: 'en' | 'mr' | 'hi';
   onLanguageChange?: (lang: 'en' | 'mr' | 'hi') => void;
+  theme?: string;
+  onToggleTheme?: () => void;
   isHighContrast?: boolean;
   onToggleHighContrast?: () => void;
   textScale?: 'default' | 'normal' | 'large' | 'extra-large';
@@ -14,6 +16,8 @@ export interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({
   currentLanguage = 'en',
   onLanguageChange,
+  theme = 'light',
+  onToggleTheme,
   isHighContrast = false,
   onToggleHighContrast,
   textScale = 'default',
@@ -76,6 +80,42 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Header Right Actions */}
         <div className="header-actions">
+          {/* Light / Dark Theme Quick Toggle */}
+          <button
+            type="button"
+            className="theme-toggle-btn"
+            onClick={onToggleTheme}
+            aria-label={
+              theme === 'dark'
+                ? currentLanguage === 'mr' ? 'लाइट मोड निवडा' : currentLanguage === 'hi' ? 'लाइट मोड चुनें' : 'Switch to Light Mode'
+                : currentLanguage === 'mr' ? 'डार्क मोड निवडा' : currentLanguage === 'hi' ? 'डार्क मोड चुनें' : 'Switch to Dark Mode'
+            }
+            title={
+              theme === 'dark'
+                ? currentLanguage === 'mr' ? 'लाइट थीम निवडा (☀️)' : currentLanguage === 'hi' ? 'लाइट थीम चुनें (☀️)' : 'Light Theme (☀️)'
+                : currentLanguage === 'mr' ? 'डार्क थीम निवडा (🌙)' : currentLanguage === 'hi' ? 'डार्क थीम चुनें (🌙)' : 'Dark Theme (🌙)'
+            }
+            aria-pressed={theme === 'dark'}
+          >
+            {theme === 'dark' ? (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ color: '#FBBF24' }}>
+                <circle cx="12" cy="12" r="5" fill="#FBBF24" fillOpacity="0.25" />
+                <line x1="12" y1="1" x2="12" y2="3" />
+                <line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" />
+                <line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+              </svg>
+            ) : (
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ color: 'var(--sahayak-blue-dark)' }}>
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="currentColor" fillOpacity="0.2" />
+              </svg>
+            )}
+          </button>
+
           {/* Language Selector */}
           <div className="lang-select-group" role="group" aria-label="Language Selector">
             <button
@@ -175,6 +215,22 @@ export const Header: React.FC<HeaderProps> = ({
                 {getLabel(item)}
               </Link>
             ))}
+
+            {/* Quick theme switch in mobile drawer */}
+            <div style={{ marginTop: 'var(--space-3)', paddingTop: 'var(--space-3)', borderTop: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <span style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-secondary)' }}>
+                {currentLanguage === 'mr' ? 'थीम (Theme)' : currentLanguage === 'hi' ? 'थीम (Theme)' : 'Theme Mode'}
+              </span>
+              <button
+                type="button"
+                className="btn btn-outline btn-sm"
+                onClick={onToggleTheme}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+              >
+                <span>{theme === 'dark' ? '☀️' : '🌙'}</span>
+                <span>{theme === 'dark' ? (currentLanguage === 'mr' ? 'लाइट मोड' : currentLanguage === 'hi' ? 'लाइट मोड' : 'Light Mode') : (currentLanguage === 'mr' ? 'डार्क मोड' : currentLanguage === 'hi' ? 'डार्क मोड' : 'Dark Mode')}</span>
+              </button>
+            </div>
           </nav>
         </div>
       )}

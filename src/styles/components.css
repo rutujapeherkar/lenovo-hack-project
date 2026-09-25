@@ -291,7 +291,7 @@
   border-color: var(--sahayak-blue);
   box-shadow: var(--focus-ring);
   outline: none;
-  background-color: #fff;
+  background-color: var(--surface);
 }
 
 .form-control.has-error {

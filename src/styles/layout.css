@@ -264,6 +264,35 @@ body {
   box-shadow: 0 1px 4px rgba(10, 102, 194, 0.3);
 }
 
+.theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.375rem;
+  height: 2.375rem;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--border);
+  background-color: var(--surface);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-xs);
+  position: relative;
+}
+
+.theme-toggle-btn:hover {
+  background-color: var(--sahayak-blue-light);
+  border-color: var(--sahayak-blue);
+  color: var(--sahayak-blue-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.theme-toggle-btn:focus-visible {
+  outline: 3px solid var(--focus) !important;
+  outline-offset: 2px !important;
+}
+
 .a11y-quick-btn {
   display: inline-flex;
   align-items: center;

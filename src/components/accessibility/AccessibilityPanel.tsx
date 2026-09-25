@@ -15,6 +15,7 @@
 
 import React, { useEffect, useRef } from "react";
 import { useAccessibility } from "../../core/accessibility";
+import type { ThemeMode } from "../../core/shared/types";
 
 export interface AccessibilityPanelProps {
   isOpen: boolean;
@@ -117,6 +118,31 @@ const PANEL_TEXTS = {
     mr: "पूर्वनिर्धारित पुनर्संचयित करा",
     hi: "डिफ़ॉल्ट पर रीसेट करें",
   },
+  theme: {
+    en: "Color Theme & Mode",
+    mr: "रंग थीम आणि मोड",
+    hi: "रंग थीम और मोड",
+  },
+  themeLight: {
+    en: "Light Mode",
+    mr: "लाइट मोड",
+    hi: "लाइट मोड",
+  },
+  themeDark: {
+    en: "Dark Mode",
+    mr: "डार्क मोड",
+    hi: "डार्क मोड",
+  },
+  themeBW: {
+    en: "Black & White",
+    mr: "काळा आणि पांढरा",
+    hi: "काला और सफ़ेद",
+  },
+  themeHighContrast: {
+    en: "High Contrast",
+    mr: "उच्च कॉन्ट्रास्ट",
+    hi: "उच्च कंट्रास्ट",
+  },
 };
 
 export const AccessibilityPanel: React.FC<AccessibilityPanelProps> = ({
@@ -129,11 +155,13 @@ export const AccessibilityPanel: React.FC<AccessibilityPanelProps> = ({
     reducedMotion,
     readAloud,
     language,
+    theme,
     setTextScale,
     setHighContrast,
     setReducedMotion,
     setReadAloud,
     setLanguage,
+    setTheme,
     resetPreferences,
   } = useAccessibility();
 
@@ -322,7 +350,104 @@ export const AccessibilityPanel: React.FC<AccessibilityPanelProps> = ({
             </div>
           </div>
 
-          {/* 2. Contrast */}
+          {/* 2. Theme (Light & Dark Mode) */}
+          <div role="group" aria-labelledby="heading-theme">
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "var(--space-2)" }}>
+              <h3
+                id="heading-theme"
+                style={{
+                  fontSize: "1rem",
+                  fontWeight: 600,
+                  color: "var(--text-primary)",
+                  margin: 0,
+                }}
+              >
+                {t("theme")}
+              </h3>
+              <span style={{ fontSize: "0.75rem", color: "var(--text-muted)", fontWeight: 500 }}>
+                {theme === "dark" ? "🌙 Dark Active" : theme === "high-contrast" ? "⚡ High Contrast" : theme === "black-white" ? "🔲 Grayscale" : "☀️ Light Active"}
+              </span>
+            </div>
+
+            {/* Quick Light / Dark Toggle Bar */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--space-2)", marginBottom: "var(--space-2)" }}>
+              <button
+                type="button"
+                className={`btn ${(theme === "light" || theme === "default") ? "btn-primary" : "btn-outline"}`}
+                style={{ minHeight: "44px", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "8px", fontWeight: 600 }}
+                onClick={() => setTheme("light")}
+                aria-pressed={theme === "light" || theme === "default"}
+              >
+                <span>☀️</span>
+                <span>{t("themeLight")}</span>
+              </button>
+              <button
+                type="button"
+                className={`btn ${theme === "dark" ? "btn-primary" : "btn-outline"}`}
+                style={{ minHeight: "44px", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "8px", fontWeight: 600 }}
+                onClick={() => setTheme("dark")}
+                aria-pressed={theme === "dark"}
+              >
+                <span>🌙</span>
+                <span>{t("themeDark")}</span>
+              </button>
+            </div>
+
+            {/* All Themes Grid */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--space-2)" }}>
+              {([
+                {
+                  id: "high-contrast" as ThemeMode,
+                  label: t("themeHighContrast"),
+                  icon: "⚡",
+                  preview: (
+                    <div style={{ display: "flex", gap: "3px", marginBottom: "4px" }}>
+                      <div style={{ width: 14, height: 14, borderRadius: "3px", background: "#000" }} />
+                      <div style={{ width: 14, height: 14, borderRadius: "3px", background: "#003C6D" }} />
+                      <div style={{ width: 14, height: 14, borderRadius: "3px", background: "#FFF", border: "2px solid #000" }} />
+                    </div>
+                  ),
+                },
+                {
+                  id: "black-white" as ThemeMode,
+                  label: t("themeBW"),
+                  icon: "🔲",
+                  preview: (
+                    <div style={{ display: "flex", gap: "3px", marginBottom: "4px" }}>
+                      <div style={{ width: 14, height: 14, borderRadius: "3px", background: "#111" }} />
+                      <div style={{ width: 14, height: 14, borderRadius: "3px", background: "#888" }} />
+                      <div style={{ width: 14, height: 14, borderRadius: "3px", background: "#EEE", border: "1px solid #CCC" }} />
+                    </div>
+                  ),
+                },
+              ] as const).map(({ id, label, icon, preview }) => (
+                <button
+                  key={id}
+                  type="button"
+                  className={`btn ${theme === id ? "btn-primary" : "btn-outline"}`}
+                  style={{
+                    minHeight: "56px",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: "0.8125rem",
+                    gap: 0,
+                    padding: "6px 4px",
+                    outline: theme === id ? "2px solid var(--sahayak-blue)" : undefined,
+                    outlineOffset: "2px",
+                  }}
+                  onClick={() => setTheme(id)}
+                  aria-pressed={theme === id}
+                >
+                  {preview}
+                  <span style={{ fontWeight: theme === id ? 700 : 500, lineHeight: 1.2 }}>{icon} {label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* 3. Contrast Mode (legacy quick toggle kept for WCAG shortcuts) */}
           <div role="group" aria-labelledby="heading-contrast">
             <h3
               id="heading-contrast"

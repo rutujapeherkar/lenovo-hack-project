@@ -19,7 +19,7 @@ import React, {
   useState,
   useCallback,
 } from "react";
-import type { AccessibilityPreferences, Language } from "../shared/types";
+import type { AccessibilityPreferences, Language, ThemeMode } from "../shared/types";
 import { useLanguage, LANGUAGE_STORAGE_KEY, isValidLanguage } from "../language";
 
 export const A11Y_STORAGE_KEY = "sahayak_a11y_prefs";
@@ -30,6 +30,7 @@ export const DEFAULT_ACCESSIBILITY_PREFERENCES: AccessibilityPreferences = {
   reducedMotion: false,
   readAloud: false,
   language: "en",
+  theme: "light",
 };
 
 export type AccessibilityAction =
@@ -38,6 +39,8 @@ export type AccessibilityAction =
   | { type: "SET_REDUCED_MOTION"; payload: boolean }
   | { type: "SET_READ_ALOUD"; payload: boolean }
   | { type: "SET_LANGUAGE"; payload: Language }
+  | { type: "SET_THEME"; payload: ThemeMode }
+  | { type: "TOGGLE_THEME" }
   | { type: "CYCLE_TEXT_SCALE" }
   | { type: "TOGGLE_HIGH_CONTRAST" }
   | { type: "TOGGLE_REDUCED_MOTION" }
@@ -56,7 +59,21 @@ export function accessibilityReducer(
       return { ...state, textScale: action.payload };
 
     case "SET_HIGH_CONTRAST":
-      return { ...state, highContrast: action.payload };
+      return {
+        ...state,
+        highContrast: action.payload,
+        theme: action.payload ? "high-contrast" : (state.theme === "high-contrast" ? "light" : state.theme),
+      };
+
+    case "SET_THEME": {
+      const isHighContrast = action.payload === "high-contrast";
+      return { ...state, theme: action.payload, highContrast: isHighContrast };
+    }
+
+    case "TOGGLE_THEME": {
+      const nextTheme: ThemeMode = state.theme === "dark" ? "light" : "dark";
+      return { ...state, theme: nextTheme, highContrast: false };
+    }
 
     case "SET_REDUCED_MOTION":
       return { ...state, reducedMotion: action.payload };
@@ -79,8 +96,14 @@ export function accessibilityReducer(
       return { ...state, textScale: nextScale[state.textScale] || "normal" };
     }
 
-    case "TOGGLE_HIGH_CONTRAST":
-      return { ...state, highContrast: !state.highContrast };
+    case "TOGGLE_HIGH_CONTRAST": {
+      const nextHighContrast = !state.highContrast;
+      return {
+        ...state,
+        highContrast: nextHighContrast,
+        theme: nextHighContrast ? "high-contrast" : "light",
+      };
+    }
 
     case "TOGGLE_REDUCED_MOTION":
       return { ...state, reducedMotion: !state.reducedMotion };
@@ -106,11 +129,33 @@ export function applyAccessibilityToDom(prefs: AccessibilityPreferences): void {
   // 1. Language attribute
   root.setAttribute("lang", prefs.language);
 
-  // 2. High Contrast mode
-  if (prefs.highContrast) {
+  // 2. Theme mode (drives data-theme attribute; also keep data-contrast for backward compat)
+  let theme = prefs.theme ?? "light";
+  if (theme === "default") theme = "light";
+  if (prefs.highContrast && theme !== "high-contrast") {
+    theme = "high-contrast";
+  }
+
+  root.setAttribute("data-theme", theme);
+
+  if (theme === "high-contrast" || prefs.highContrast) {
     root.setAttribute("data-contrast", "high");
   } else {
     root.removeAttribute("data-contrast");
+  }
+
+  // Reflect class on root for styling utilities
+  if (root.classList) {
+    if (theme === "dark") {
+      root.classList.add("dark");
+    } else {
+      root.classList.remove("dark");
+    }
+  }
+
+  // System color-scheme property
+  if (root.style) {
+    root.style.colorScheme = theme === "dark" ? "dark" : "light";
   }
 
   // 3. Text Scaling
@@ -135,11 +180,15 @@ export interface AccessibilityContextType {
   reducedMotion: boolean;
   readAloud: boolean;
   language: Language;
+  theme: ThemeMode;
+  isDark: boolean;
   setTextScale: (scale: "normal" | "large" | "extra-large") => void;
   setHighContrast: (enabled: boolean) => void;
   setReducedMotion: (enabled: boolean) => void;
   setReadAloud: (enabled: boolean) => void;
   setLanguage: (lang: Language) => void;
+  setTheme: (theme: ThemeMode) => void;
+  toggleTheme: () => void;
   cycleTextScale: () => void;
   toggleHighContrast: () => void;
   toggleReducedMotion: () => void;
@@ -232,6 +281,14 @@ export const AccessibilityProvider: React.FC<AccessibilityProviderProps> = ({
     dispatch({ type: "SET_HIGH_CONTRAST", payload: enabled });
   }, []);
 
+  const setTheme = useCallback((theme: ThemeMode) => {
+    dispatch({ type: "SET_THEME", payload: theme });
+  }, []);
+
+  const toggleTheme = useCallback(() => {
+    dispatch({ type: "TOGGLE_THEME" });
+  }, []);
+
   const setReducedMotion = useCallback((enabled: boolean) => {
     dispatch({ type: "SET_REDUCED_MOTION", payload: enabled });
   }, []);
@@ -279,6 +336,9 @@ export const AccessibilityProvider: React.FC<AccessibilityProviderProps> = ({
   const closePanel = useCallback(() => setIsPanelOpen(false), []);
   const togglePanel = useCallback(() => setIsPanelOpen((prev) => !prev), []);
 
+  const activeTheme = preferences.theme ?? "light";
+  const isDark = activeTheme === "dark";
+
   const value: AccessibilityContextType = {
     preferences,
     textScale: preferences.textScale,
@@ -286,11 +346,15 @@ export const AccessibilityProvider: React.FC<AccessibilityProviderProps> = ({
     reducedMotion: preferences.reducedMotion,
     readAloud: preferences.readAloud,
     language: preferences.language,
+    theme: activeTheme,
+    isDark,
     setTextScale,
     setHighContrast,
     setReducedMotion,
     setReadAloud,
     setLanguage,
+    setTheme,
+    toggleTheme,
     cycleTextScale,
     toggleHighContrast,
     toggleReducedMotion,

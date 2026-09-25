@@ -331,6 +331,9 @@ export type ScreenElement = {
 // 8. Accessibility & Interaction Mode Contracts
 // ============================================================================
 
+/** Theme mode for the application */
+export type ThemeMode = "light" | "dark" | "default" | "black-white" | "high-contrast";
+
 /** User accessibility preferences */
 export type AccessibilityPreferences = {
   textScale:
@@ -341,6 +344,7 @@ export type AccessibilityPreferences = {
   reducedMotion: boolean;
   readAloud: boolean;
   language: Language;
+  theme: ThemeMode;
 };
 
 /** User interaction and guidance mode */

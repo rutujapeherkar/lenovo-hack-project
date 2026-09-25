@@ -15,6 +15,8 @@ export interface AppShellProps {
 export const AppShell: React.FC<AppShellProps> = ({ children }) => {
   const { language, setLanguage } = useLanguage();
   const {
+    theme,
+    toggleTheme,
     highContrast,
     toggleHighContrast,
     textScale,
@@ -36,6 +38,8 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
       <Header
         currentLanguage={language}
         onLanguageChange={handleLanguageChange}
+        theme={theme}
+        onToggleTheme={toggleTheme}
         isHighContrast={highContrast}
         onToggleHighContrast={toggleHighContrast}
         textScale={textScale}

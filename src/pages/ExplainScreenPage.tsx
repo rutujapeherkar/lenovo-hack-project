@@ -623,10 +623,8 @@ export const ExplainScreenPage: React.FC = () => {
       const res = await fetch(sample.imageUrl);
       if (!res.ok) throw new Error("Could not load demo image");
       const blob = await res.blob();
-      const file = new File([blob], sample.imageName, { type: "image/jpeg" });
-
-      // Set the file for preview (ImagePreview will create object URL)
-      setSelectedFile(file);
+      // Set the file for preview and trigger explanation
+      handleImageSelected(new File([blob], sample.imageName, { type: "image/jpeg" }), true);
 
       // Immediately compute & set explanation (no API call needed for demos)
       const demoExplanation = getDemoExplanation(sample.key, language);
