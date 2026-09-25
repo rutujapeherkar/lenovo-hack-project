@@ -140,29 +140,51 @@ export const ExplainScreenPage: React.FC = () => {
             isAnalyzing={isAnalyzing}
           />
 
-          {/* Analysis Error Alert with Try Again */}
+          {/* Analysis Error Alert with Try Again & Upload Another Image (Section 11) */}
           {analysisError && (
-            <Alert
-              variant="error"
+            <div
+              role="alert"
+              aria-live="assertive"
               style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                flexWrap: "wrap",
-                gap: "var(--space-2)",
+                backgroundColor: "#FEF2F2",
+                border: "1px solid #F87171",
+                borderRadius: "var(--radius-card)",
+                padding: "var(--space-5)",
               }}
             >
-              <span>{analysisError}</span>
-              <Button
-                type="button"
-                variant="secondary"
-                size="sm"
-                onClick={handleExplainScreen}
-                disabled={isAnalyzing}
-              >
-                {t("tryAgain")}
-              </Button>
-            </Alert>
+              <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)", marginBottom: "var(--space-2)" }}>
+                <span style={{ fontSize: "1.25rem" }} aria-hidden="true">⚠️</span>
+                <strong style={{ color: "#991B1B", fontSize: "1rem" }}>
+                  {language === "mr"
+                    ? "आम्ही या वेळी या स्क्रीनशॉटचे विश्लेषण करू शकलो नाही."
+                    : language === "hi"
+                    ? "हम इस समय इस छवि का विश्लेषण नहीं कर सके।"
+                    : "We couldn't explain this image right now."}
+                </strong>
+              </div>
+              <p style={{ color: "#7F1D1D", fontSize: "0.875rem", margin: "0 0 var(--space-4) 0" }}>
+                {analysisError}
+              </p>
+              <div style={{ display: "flex", gap: "var(--space-2)", flexWrap: "wrap" }}>
+                <Button
+                  type="button"
+                  variant="primary"
+                  size="sm"
+                  onClick={handleExplainScreen}
+                  disabled={isAnalyzing}
+                >
+                  ↻ {language === "mr" ? "पुन्हा प्रयत्न करा" : language === "hi" ? "पुनः प्रयास करें" : "Try Again"}
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={handleRemoveImage}
+                >
+                  📷 {language === "mr" ? "दुसरा स्क्रीनशॉट निवडा" : language === "hi" ? "दूसरी छवि चुनें" : "Upload Another Image"}
+                </Button>
+              </div>
+            </div>
           )}
 
           {/* 4. Structured Explanation Panel (When analysis is complete) */}

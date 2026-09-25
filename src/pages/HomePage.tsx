@@ -4,6 +4,8 @@ import { Link } from '../router';
 import { useAccessibility, VoiceService } from '../core/accessibility';
 import { MicButton } from '../components/assistant';
 import { ReadAloud } from '../components/accessibility';
+import { SafetyNotice, FallbackView } from '../components/common';
+import { sanitizeUserInput } from '../core/security';
 
 export const HomePage: React.FC = () => {
   const { language, readAloud } = useAccessibility();
@@ -11,6 +13,8 @@ export const HomePage: React.FC = () => {
   const [loading, setLoading] = React.useState(false);
   const [response, setResponse] = React.useState<any>(null);
   const [error, setError] = React.useState<string | null>(null);
+  const [sensitiveWarning, setSensitiveWarning] = React.useState<string | null>(null);
+  const [fallbackReason, setFallbackReason] = React.useState<'ai_failure' | 'network_failure' | null>(null);
 
   const getCurrentLang = (): 'en' | 'mr' | 'hi' => {
     return language || 'mr';
@@ -22,13 +26,24 @@ export const HomePage: React.FC = () => {
 
     setLoading(true);
     setError(null);
+    setSensitiveWarning(null);
+    setFallbackReason(null);
     const lang = getCurrentLang();
+
+    // Credential Interception Guard (AC-P10-01, AC-P10-02)
+    const sanitization = sanitizeUserInput(textToSearch, lang);
+    if (sanitization.isSensitive) {
+      setSensitiveWarning(sanitization.warningMessage);
+      setQuery(sanitization.sanitized);
+      setLoading(false);
+      return;
+    }
 
     try {
       const res = await fetch('/api/assistant', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: textToSearch, language: lang }),
+        body: JSON.stringify({ message: sanitization.sanitized, language: lang }),
       });
 
       if (res.ok) {
@@ -41,12 +56,12 @@ export const HomePage: React.FC = () => {
           }
           return;
         }
-        setError(json.error?.message || 'Assistant error');
+        setFallbackReason('ai_failure');
       } else {
-        setError(`Server returned HTTP ${res.status}`);
+        setFallbackReason('ai_failure');
       }
-    } catch (err: any) {
-      setError(err?.message || 'Unable to connect to Sahayak Assistant service.');
+    } catch (_err: any) {
+      setFallbackReason('network_failure');
     } finally {
       setLoading(false);
     }
@@ -127,8 +142,22 @@ export const HomePage: React.FC = () => {
           </div>
         </form>
 
+        {/* Sensitive Credential Alert (AC-P10-01) */}
+        {sensitiveWarning && (
+          <div style={{ marginTop: 'var(--space-4)', textAlign: 'left' }}>
+            <SafetyNotice type="credential" language={getCurrentLang()} customMessage={sensitiveWarning} />
+          </div>
+        )}
+
+        {/* Graceful Fallback View (AC-P10-06) */}
+        {fallbackReason && (
+          <div style={{ marginTop: 'var(--space-4)', textAlign: 'left' }}>
+            <FallbackView reason={fallbackReason} language={getCurrentLang()} onRetry={() => handleSearch()} />
+          </div>
+        )}
+
         {/* Assistant Response Display */}
-        {error && (
+        {error && !fallbackReason && (
           <div style={{ marginTop: 'var(--space-4)', textAlign: 'left' }}>
             <Alert variant="error" title="Assistant Error">{error}</Alert>
           </div>
@@ -136,12 +165,20 @@ export const HomePage: React.FC = () => {
 
         {response && (
           <div style={{ marginTop: 'var(--space-6)', textAlign: 'left' }}>
-            <Card variant="interactive">
+            {/* 1. SAHAYAK GUIDANCE SECTION */}
+            <Card variant="interactive" style={{ marginBottom: 'var(--space-4)', borderLeft: '4px solid var(--sahayak-orange)' }}>
               <CardHeader>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', flexWrap: 'wrap', gap: 'var(--space-2)' }}>
-                  <Badge variant="info">
-                    {response.intent ? `हेतू / Intent: ${response.intent}` : 'सहायक मार्गदर्शन'}
-                  </Badge>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+                    <Badge variant="warning">
+                      🤖 {getCurrentLang() === 'mr' ? 'साहायक मार्गदर्शन' : getCurrentLang() === 'hi' ? 'साहायक मार्गदर्शन' : 'Sahayak Guidance'}
+                    </Badge>
+                    {response.intent && (
+                      <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                        ({response.intent})
+                      </span>
+                    )}
+                  </div>
                   <div style={{ display: 'flex', gap: 'var(--space-2)', alignItems: 'center' }}>
                     <ReadAloud text={response.message} language={getCurrentLang()} />
                     <Button variant="text" size="sm" onClick={() => {
@@ -153,8 +190,15 @@ export const HomePage: React.FC = () => {
                   </div>
                 </div>
                 <CardTitle style={{ marginTop: 'var(--space-2)', fontSize: '1.25rem' }}>
-                  {response.service?.name || (response.schemes?.[0]?.name ? response.schemes[0].name[getCurrentLang()] : 'नागरिक मार्गदर्शन / Guidance')}
+                  {response.service?.name || (response.schemes?.[0]?.name ? response.schemes[0].name[getCurrentLang()] : (getCurrentLang() === 'mr' ? 'नागरिक मार्गदर्शन' : getCurrentLang() === 'hi' ? 'नागरिक मार्गदर्शन' : 'Citizen Guidance'))}
                 </CardTitle>
+                <CardDescription style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
+                  {getCurrentLang() === 'mr'
+                    ? 'खालील माहिती साहायक एआयचे मार्गदर्शन आहे, हा अधिकृत शासकीय आदेश नाही.'
+                    : getCurrentLang() === 'hi'
+                    ? 'नीचे दी गई जानकारी साहायक एआई का मार्गदर्शन है, आधिकारिक सरकारी आदेश नहीं।'
+                    : 'The guidance below is an AI-assisted explanation, not an official government instruction.'}
+                </CardDescription>
               </CardHeader>
               <CardBody>
                 <p style={{ fontSize: '1rem', lineHeight: '1.65', color: 'var(--text)', marginBottom: 'var(--space-4)' }}>
@@ -179,27 +223,12 @@ export const HomePage: React.FC = () => {
 
                 {/* Service Task Journey CTA */}
                 {response.service?.id && (
-                  <div style={{ marginTop: 'var(--space-3)', marginBottom: 'var(--space-3)' }}>
+                  <div style={{ marginTop: 'var(--space-3)', marginBottom: 'var(--space-2)' }}>
                     <Link href={`/services/${response.service.id}`}>
                       <Button variant="primary" size="sm">
                         🧭 Start Guided Task / कार्य मार्गदर्शन सुरू करा →
                       </Button>
                     </Link>
-                  </div>
-                )}
-
-                {/* Official Source Link */}
-                {response.officialSource && (
-                  <div style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
-                    <span>अधिकृत स्त्रोत / Official Source: </span>
-                    <a
-                      href={response.officialSource.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ color: 'var(--sahayak-blue)', textDecoration: 'underline', fontWeight: 600 }}
-                    >
-                      {response.officialSource.name} ↗
-                    </a>
                   </div>
                 )}
               </CardBody>
@@ -211,18 +240,59 @@ export const HomePage: React.FC = () => {
                 </CardFooter>
               )}
             </Card>
+
+            {/* 2. OFFICIAL INFORMATION SECTION (CLEARLY SEPARATED) */}
+            {response.officialSource ? (
+              <Card variant="interactive" style={{ borderLeft: '4px solid var(--sahayak-blue)', backgroundColor: '#F8FAFC' }}>
+                <CardHeader>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+                    <Badge variant="info">
+                      🏛️ {getCurrentLang() === 'mr' ? 'अधिकृत शासकीय माहिती' : getCurrentLang() === 'hi' ? 'आधिकारिक सरकारी जानकारी' : 'Official Information'}
+                    </Badge>
+                  </div>
+                  <CardTitle style={{ marginTop: 'var(--space-2)', fontSize: '1.125rem', color: 'var(--sahayak-blue-dark)' }}>
+                    {response.officialSource.name}
+                  </CardTitle>
+                </CardHeader>
+                <CardBody>
+                  <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: 'var(--space-3)' }}>
+                    {getCurrentLang() === 'mr'
+                      ? 'अधिकृत नियम, कागदपत्रे व प्रक्रिया तपासण्यासाठी अधिकृत शासकीय संकेतस्थळाला भेट द्या.'
+                      : getCurrentLang() === 'hi'
+                      ? 'आधिकारिक नियमों, दस्तावेजों और प्रक्रियाओं की पुष्टि के लिए आधिकारिक सरकारी पोर्टल पर जाएं।'
+                      : 'Verify rules, procedures, and required documents directly on the official government portal.'}
+                  </p>
+                  <div>
+                    <a
+                      href={response.officialSource.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ textDecoration: 'none' }}
+                      aria-label={`View Official Information: ${response.officialSource.name}`}
+                    >
+                      <Button variant="outline" size="sm">
+                        🏛️ {getCurrentLang() === 'mr' ? 'अधिकृत माहिती पहा' : getCurrentLang() === 'hi' ? 'आधिकारिक जानकारी देखें' : 'View Official Information'} ↗
+                      </Button>
+                    </a>
+                  </div>
+                </CardBody>
+              </Card>
+            ) : (
+              <SafetyNotice
+                type="unverified"
+                language={getCurrentLang()}
+              />
+            )}
           </div>
         )}
       </section>
 
-      {/* Mandatory Civic Disclaimer Alert */}
-      <Alert
-        variant="disclaimer"
-        title="Civic Platform Notice"
+      {/* Mandatory Civic Disclaimer Alert (AC-P10-03) */}
+      <SafetyNotice
+        type="disclaimer"
+        language={getCurrentLang()}
         style={{ marginBottom: 'var(--space-8)' }}
-      >
-        Sahayak AI assists citizens with step-by-step guidance for Maharashtra e-District and Aaple Sarkar portals. Application submissions and fee payments occur exclusively on official government domains.
-      </Alert>
+      />
 
       {/* Primary Civic Modules Grid */}
       <h2 style={{ fontSize: '1.5rem', color: 'var(--sahayak-blue-dark)', marginBottom: 'var(--space-4)' }}>

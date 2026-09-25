@@ -19,6 +19,8 @@ import { useLanguage } from "../../core/language";
 import { TaskService } from "../../core/services/task-service";
 import { Button, Badge } from "../ui";
 import { ReadAloud } from "../accessibility";
+import { SafetyNotice } from "../common";
+import { isPaymentStep } from "../../core/security";
 
 export interface TaskJourneyProps {
   service: Service;
@@ -279,6 +281,12 @@ export const TaskJourney: React.FC<TaskJourneyProps> = ({
           >
             {currentStep.description[language] || currentStep.description.en}
           </p>
+
+          {isPaymentStep(currentStep) && (
+            <div style={{ marginTop: "var(--space-4)" }}>
+              <SafetyNotice type="payment" language={language} />
+            </div>
+          )}
         </div>
       )}
 

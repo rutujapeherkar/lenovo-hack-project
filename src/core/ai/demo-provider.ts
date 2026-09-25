@@ -85,6 +85,15 @@ export class DemoProvider implements AIProvider {
       return this.handleRationCard(lang, intent);
     }
 
+    // 6b. Unknown Service Query (Section 9 Anti-Hallucination Fallback)
+    if (
+      intent === "service_guidance" ||
+      (intent === "service_discovery" && /(license|licence|passport|pan card|aadhaar|voter|driving|परवाना|पासपोर्ट|ड्रायव्हिंग|ड्राइविंग)/i.test(msg)) ||
+      /(unknown service|unverified service|driving license|passport application)/i.test(msg)
+    ) {
+      return this.handleUnknownService(lang);
+    }
+
     // 7. Welfare Schemes Queries (Scholarships, Ladki Bahin, Pension)
     if (/(scholarship|शिष्यवृत्ती|छात्रवृत्ति|ebc|shikshan)/i.test(msg)) {
       return this.handleScholarshipScheme(lang, intent);
@@ -112,9 +121,9 @@ export class DemoProvider implements AIProvider {
 
   private handleSensitiveQuery(lang: Language): SahayakResponse {
     const messages: Record<Language, string> = {
-      en: "Sahayak AI will never request or process your OTP, PIN, password, or bank credentials. For your safety, never disclose personal security codes.",
-      mr: "सहायक एआय कधीही तुमचा ओटीपी, पिन, पासवर्ड किंवा बँकेचे तपशील विचारणार नाही. सुरक्षिततेसाठी आपले गुप्त कोड कोणाशीही शेअर करू नका.",
-      hi: "सहायक एआई कभी भी आपका ओटीपी, पिन, पासवर्ड या बैंक विवरण नहीं मांगेगा। अपनी सुरक्षा के लिए कभी भी अपने गोपनीय कोड साझा न करें।",
+      en: "Sahayak AI will never request or process your OTP, PIN, password, or bank credentials. For your safety, never disclose personal security codes. Please enter sensitive credentials yourself directly on the official portal or banking app.",
+      mr: "सहायक एआय कधीही तुमचा ओटीपी, पिन, पासवर्ड किंवा बँकेचे तपशील विचारणार नाही. सुरक्षिततेसाठी आपले गुप्त कोड कोणाशीही शेअर करू नका. कृपया हे गोपनीय तपशील अधिकृत पोर्टलवर स्वतः प्रविष्ट करा.",
+      hi: "सहायक एआई कभी भी आपका ओटीपी, पिन, पासवर्ड या बैंक विवरण नहीं मांगेगा। अपनी सुरक्षा के लिए कभी भी अपने गोपनीय कोड साझा न करें। कृपया यह गोपनीय विवरण आधिकारिक पोर्टल पर स्वयं दर्ज करें।",
     };
 
     return {
@@ -122,6 +131,22 @@ export class DemoProvider implements AIProvider {
       language: lang,
       intent: "general_information",
       safetyNote: SENSITIVE_SAFETY_NOTE[lang],
+    };
+  }
+
+  private handleUnknownService(lang: Language): SahayakResponse {
+    const messages: Record<Language, string> = {
+      en: "I couldn't find a verified Sahayak service matching your request. To prevent misinformation, Sahayak provides guidance exclusively for verified Maharashtra government services.",
+      mr: "आपल्या विनंतीशी जुळणारी अधिकृत पडताळलेली सेवा सापडली नाही. चुकीची माहिती टाळण्यासाठी साहायक केवळ अधिकृत पडताळलेल्या सेवांचे मार्गदर्शन करतो.",
+      hi: "आपके अनुरोध से मेल खाने वाली कोई सत्यापित सेवा नहीं मिली। गलत जानकारी से बचने के लिए साहायक केवल सत्यापित सेवाओं का मार्गदर्शन करता है।",
+    };
+
+    return {
+      message: messages[lang],
+      language: lang,
+      intent: "unknown",
+      officialSource: AAPLE_SARKAR_SOURCE,
+      safetyNote: CIVIC_DISCLAIMER[lang],
     };
   }
 

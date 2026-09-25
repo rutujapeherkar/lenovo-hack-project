@@ -1,11 +1,12 @@
 /**
  * Sahayak AI — Assistant Service Orchestration Layer
  * 
- * Source of Truth: docs/source-of-truth/ARCHITECTURE.md Section 9, 33 & DATA-CONTRACTS.md Section 20-24
- * Phase: P04 — AI Assistant Core
+ * Source of Truth: docs/source-of-truth/ARCHITECTURE.md Section 9, 33, 35 & SECURITY.md
+ * Phase: P10 — Trust, Safety & Fallback
  * 
  * Orchestrates the canonical flow:
- * USER INPUT -> REQUEST NORMALIZATION -> INTENT DETECTION -> RETRIEVAL BOUNDARY -> AI PROVIDER -> VALIDATION -> SAHAYAK RESPONSE
+ * USER INPUT -> SANITIZATION -> INTENT DETECTION -> RETRIEVAL BOUNDARY -> AI PROVIDER -> VALIDATION -> SAHAYAK RESPONSE
+ * With fallback to deterministic registry data whenever external AI providers fail.
  */
 
 import type {
@@ -14,22 +15,30 @@ import type {
   SahayakResponse,
   Service,
   Scheme,
+  Intent,
 } from "../shared/types";
 import { isSahayakResponse, hasNoSensitiveKeys, isLanguage } from "../shared/validators";
 import { detectIntent } from "./intent-engine";
 import { getAIProvider } from "../ai/factory";
 import { getServiceById, getSchemeById, getSchemes } from "../shared/data-loader";
+import { sanitizeUserInput, SENSITIVE_WARNING_MESSAGES } from "../security/sanitizer";
+import { validateOfficialSource } from "../security/official-url-validator";
 
 export class AssistantService {
   /**
-   * Processes an incoming citizen assistant request end-to-end.
+   * Processes an incoming citizen assistant request end-to-end with safety and fallback.
    */
   public static async processRequest(rawRequest: unknown): Promise<SahayakResponse> {
     // 1. Validate & Normalize Request
     const normalizedRequest = this.validateAndNormalizeRequest(rawRequest);
 
-    // 2. Sensitive Keys & Security Sanitization
-    if (!hasNoSensitiveKeys(normalizedRequest)) {
+    // 2. Sensitive Keys & Credential Interception Guard (AC-P10-01, AC-P10-02)
+    const sanitization = sanitizeUserInput(
+      normalizedRequest.message,
+      normalizedRequest.language
+    );
+
+    if (!hasNoSensitiveKeys(normalizedRequest) || sanitization.isSensitive) {
       return this.createSafetyRefusalResponse(normalizedRequest.language);
     }
 
@@ -40,35 +49,47 @@ export class AssistantService {
 
     // 4. Intent Detection
     const detectedIntent = detectIntent(
-      normalizedRequest.message,
+      sanitization.sanitized,
       normalizedRequest.pageContext
     );
 
-    // 5. Retrieval Boundary (Context enrichment without coupling AI to data storage)
+    // 5. Retrieval Boundary (Context enrichment from verified Maharashtra registry)
     const contextEnrichment = this.retrieveContext(
       detectedIntent,
-      normalizedRequest.message,
+      sanitization.sanitized,
       normalizedRequest.language
     );
 
-    // 6. AI Generation Boundary
-    const provider = getAIProvider();
-    const rawResponse = await provider.generateResponse({
-      ...normalizedRequest,
-    });
+    // 6. AI Generation Boundary with Graceful Error Catching (AC-P10-06)
+    let rawResponse: unknown;
+    try {
+      const provider = getAIProvider();
+      rawResponse = await provider.generateResponse({
+        ...normalizedRequest,
+        message: sanitization.sanitized,
+      });
+    } catch (err: any) {
+      console.warn(
+        "[AssistantService] External AI Provider failed or timed out. Falling back to deterministic registry:",
+        err?.message || err
+      );
+      return this.createGracefulFallbackResponse(
+        normalizedRequest.language,
+        detectedIntent,
+        contextEnrichment
+      );
+    }
 
     // 7. Response Validation & Contract Enforcement
     if (!isSahayakResponse(rawResponse)) {
-      console.warn("[AssistantService] Provider response failed contract validation; applying safety defaults.");
-      const fallbackMsg = typeof (rawResponse as unknown as Record<string, unknown>)?.message === "string"
-        ? (rawResponse as unknown as Record<string, unknown>).message as string
-        : "Service guidance is available on official portals.";
-      return {
-        message: fallbackMsg,
-        language: normalizedRequest.language,
-        intent: detectedIntent,
-        safetyNote: "Sahayak AI provides guidance and does not represent a government department.",
-      };
+      console.warn(
+        "[AssistantService] Provider response failed contract validation; applying safety defaults."
+      );
+      return this.createGracefulFallbackResponse(
+        normalizedRequest.language,
+        detectedIntent,
+        contextEnrichment
+      );
     }
 
     // Ensure detected intent is preserved if provider did not assign one
@@ -80,13 +101,31 @@ export class AssistantService {
     if (contextEnrichment.service && !rawResponse.service) {
       rawResponse.service = {
         id: contextEnrichment.service.id,
-        name: contextEnrichment.service.name[normalizedRequest.language] || contextEnrichment.service.name.en,
+        name:
+          contextEnrichment.service.name[normalizedRequest.language] ||
+          contextEnrichment.service.name.en,
       };
     }
 
-    if (contextEnrichment.schemes && (!rawResponse.schemes || rawResponse.schemes.length === 0)) {
+    if (
+      contextEnrichment.schemes &&
+      (!rawResponse.schemes || rawResponse.schemes.length === 0)
+    ) {
       rawResponse.schemes = contextEnrichment.schemes;
     }
+
+    // Official URL Protection (AC-P10-07): Validate any provided officialSource
+    if (rawResponse.officialSource) {
+      const validated = validateOfficialSource(rawResponse.officialSource);
+      if (!validated) {
+        // Strip invalid or non-government URL
+        delete rawResponse.officialSource;
+      }
+    }
+
+    // Mandatory Trust Disclaimer Invariant
+    rawResponse.safetyNote =
+      "Sahayak AI provides guidance and does not represent a government department.";
 
     return rawResponse;
   }
@@ -160,14 +199,16 @@ export class AssistantService {
   }
 
   private static createSafetyRefusalResponse(lang: Language): SahayakResponse {
-    const messages: Record<Language, string> = {
-      en: "Security Alert: Sahayak AI never requests or processes passwords, OTPs, PINs, or banking credentials. Never share these with anyone.",
-      mr: "सुरक्षा सूचना: सहायक एआय कधीही पासवर्ड, ओटीपी, पिन किंवा बँक तपशील विचारत नाही. हे तपशील कोणाशीही शेअर करू नका.",
-      hi: "सुरक्षा चेतावनी: सहायक एआई कभी भी पासवर्ड, ओटीपी, पिन या बैंक क्रेडेंशियल नहीं मांगता है। इन्हें किसी के साथ साझा न करें।",
-    };
+    const warning = SENSITIVE_WARNING_MESSAGES[lang] || SENSITIVE_WARNING_MESSAGES.en;
 
     return {
-      message: messages[lang],
+      message: `${warning} ${
+        lang === "mr"
+          ? "सुरक्षा कारणास्तव साहायक हे इनपुट स्वीकारत नाही."
+          : lang === "hi"
+          ? "सुरक्षा कारणों से साहायक यह इनपुट स्वीकार नहीं करता है।"
+          : "For security reasons, Sahayak does not process this input."
+      }`,
       language: lang,
       intent: "general_information",
       safetyNote: "Never share confidential security credentials or OTPs with any person or software application.",
@@ -188,11 +229,71 @@ export class AssistantService {
       safetyNote: "Sahayak AI provides public guidance and does not represent a government department.",
     };
   }
+
+  /**
+   * Deterministic fallback when AI provider fails or is unreachable (AC-P10-06)
+   */
+  private static createGracefulFallbackResponse(
+    lang: Language,
+    intent: Intent,
+    context: { service?: Service; schemes?: Scheme[] }
+  ): SahayakResponse {
+    if (context.service) {
+      const svcName = context.service.name[lang] || context.service.name.en;
+      const msgs = {
+        en: `Sahayak could not process the dynamic AI response right now, but verified deterministic guidance for ${svcName} is available below.`,
+        mr: `साहायक या वेळी एआय प्रतिसादावर प्रक्रिया करू शकला नाही, परंतु ${svcName} साठी अधिकृत पडताळलेले मार्गदर्शन खाली उपलब्ध आहे.`,
+        hi: `साहायक इस समय एआई प्रतिक्रिया उत्पन्न नहीं कर सका, लेकिन ${svcName} के लिए सत्यापित आधिकारिक मार्गदर्शन नीचे उपलब्ध है।`,
+      };
+      return {
+        message: msgs[lang] || msgs.en,
+        language: lang,
+        intent,
+        service: {
+          id: context.service.id,
+          name: svcName,
+        },
+        steps: context.service.steps,
+        officialSource: context.service.officialSource,
+        safetyNote: "Sahayak AI provides guidance and does not represent a government department.",
+      };
+    }
+
+    if (context.schemes && context.schemes.length > 0) {
+      const msgs = {
+        en: "Sahayak could not connect to external AI services right now, but here are verified welfare schemes matching your topic.",
+        mr: "साहायक या वेळी बाह्य एआय सेवेशी संपर्क करू शकला नाही, परंतु आपल्या विषयाशी जुळणाऱ्या अधिकृत कल्याणकारी योजना खाली दिल्या आहेत.",
+        hi: "साहायक इस समय बाहरी एआई सेवा से कनेक्ट नहीं कर सका, लेकिन आपके विषय से संबंधित सत्यापित कल्याणकारी योजनाएं नीचे दी गई हैं।",
+      };
+      return {
+        message: msgs[lang] || msgs.en,
+        language: lang,
+        intent,
+        schemes: context.schemes,
+        safetyNote: "Sahayak AI provides guidance and does not represent a government department.",
+      };
+    }
+
+    const fallbackMsgs = {
+      en: "Sahayak could not process that request right now. You can try again or continue with the available service guidance.",
+      mr: "साहायक या वेळी आपल्या विनंतीवर प्रक्रिया करू शकला नाही. आपण पुन्हा प्रयत्न करू शकता किंवा उपलब्ध अधिकृत सेवा मार्गदर्शन पाहू शकता.",
+      hi: "साहायक इस समय आपके अनुरोध पर कार्रवाई नहीं कर सका। आप पुनः प्रयास कर सकते हैं या उपलब्ध आधिकारिक सेवा मार्गदर्शन देख सकते हैं।",
+    };
+
+    return {
+      message: fallbackMsgs[lang] || fallbackMsgs.en,
+      language: lang,
+      intent,
+      safetyNote: "Sahayak AI provides guidance and does not represent a government department.",
+    };
+  }
 }
 
 /**
  * Convenience wrapper for the assistant orchestrator.
  */
-export async function processAssistantRequest(request: AssistantRequest): Promise<SahayakResponse> {
+export async function processAssistantRequest(
+  request: AssistantRequest
+): Promise<SahayakResponse> {
   return AssistantService.processRequest(request);
 }

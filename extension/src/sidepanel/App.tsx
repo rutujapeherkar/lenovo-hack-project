@@ -49,9 +49,9 @@ export const SIDEPANEL_STRINGS = {
     hi: "सहायक यह पृष्ठ पहचानता है",
   },
   aiStatus: {
-    en: "Sahayak can explain this page using AI",
-    mr: "सहायक एआय द्वारे हे पान समजावून सांगू शकतो",
-    hi: "सहायक एआई से यह पृष्ठ समझा सकता है",
+    en: "Sahayak does not have a verified guide for this page.",
+    mr: "साहायककडे या पृष्ठासाठी पडताळलेले मार्गदर्शक उपलब्ध नाही.",
+    hi: "साहायक के पास इस पृष्ठ के लिए कोई सत्यापित गाइड नहीं है।",
   },
   howCanIHelp: {
     en: "How can I help you today?",
@@ -253,9 +253,7 @@ export const App: React.FC = () => {
   // Action: Help me fill this form
   const handleStartFormGuidance = () => {
     const url = pageContext?.url || "";
-    const guide =
-      FormGuideRepository.matchGuide(url, pageContext?.visibleText) ||
-      FormGuideRepository.getGuideById("aaple-sarkar-login");
+    const guide = FormGuideRepository.matchGuide(url, pageContext?.visibleText);
 
     if (guide && guide.pages.length > 0 && guide.pages[0].fields.length > 0) {
       setCurrentGuide(guide);
@@ -263,7 +261,8 @@ export const App: React.FC = () => {
       setActiveView("formGuide");
       triggerFieldHighlight(guide.pages[0].fields[0]);
     } else {
-      setFieldHighlightError(t("fieldNotFound"));
+      // Switched to AI explanation / limited guidance with appropriate trust messaging (Section 12)
+      handleExplainPage();
     }
   };
 

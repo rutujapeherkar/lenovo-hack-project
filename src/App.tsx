@@ -3,6 +3,7 @@ import { RouterProvider, useRouter } from './router';
 import { LanguageProvider } from './core/language';
 import { AccessibilityProvider } from './core/accessibility';
 import { AppShell } from './components/layout';
+import { ErrorBoundary } from './components/common';
 import {
   HomePage,
   ServicesPage,
@@ -20,28 +21,60 @@ const AppContent: React.FC = () => {
 
   const renderRoute = () => {
     if (path === '/' || path === '') {
-      return <HomePage />;
+      return (
+        <ErrorBoundary sectionName="Home">
+          <HomePage />
+        </ErrorBoundary>
+      );
     }
 
     if (path === '/services' || path.startsWith('/services/')) {
-      return <ServicesPage />;
+      return (
+        <ErrorBoundary sectionName="Services">
+          <ServicesPage />
+        </ErrorBoundary>
+      );
     }
 
     if (path === '/schemes' || path.startsWith('/schemes/')) {
-      return <SchemesPage />;
+      return (
+        <ErrorBoundary sectionName="Schemes">
+          <SchemesPage />
+        </ErrorBoundary>
+      );
     }
 
     switch (path) {
       case '/explain-screen':
-        return <ExplainScreenPage />;
+        return (
+          <ErrorBoundary sectionName="Explain Screen">
+            <ExplainScreenPage />
+          </ErrorBoundary>
+        );
       case '/extension':
-        return <ExtensionPage />;
+        return (
+          <ErrorBoundary sectionName="Extension">
+            <ExtensionPage />
+          </ErrorBoundary>
+        );
       case '/help':
-        return <HelpPage />;
+        return (
+          <ErrorBoundary sectionName="Help">
+            <HelpPage />
+          </ErrorBoundary>
+        );
       case '/settings':
-        return <SettingsPage />;
+        return (
+          <ErrorBoundary sectionName="Settings">
+            <SettingsPage />
+          </ErrorBoundary>
+        );
       case '/design-system':
-        return <DesignSystemPage />;
+        return (
+          <ErrorBoundary sectionName="Design System">
+            <DesignSystemPage />
+          </ErrorBoundary>
+        );
       default:
         return (
           <div style={{ textAlign: 'center', padding: 'var(--space-12) 0' }}>
@@ -59,7 +92,11 @@ const AppContent: React.FC = () => {
     }
   };
 
-  return <AppShell>{renderRoute()}</AppShell>;
+  return (
+    <ErrorBoundary sectionName="Application Shell">
+      <AppShell>{renderRoute()}</AppShell>
+    </ErrorBoundary>
+  );
 };
 
 export const App: React.FC = () => {
@@ -75,3 +112,4 @@ export const App: React.FC = () => {
 };
 
 export default App;
+
