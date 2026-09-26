@@ -16,7 +16,7 @@
 
 import React, { useState } from "react";
 import type { Scheme } from "../../core/shared/types";
-import { useLanguage } from "../../core/language";
+import { useLanguage, getLocalizedDocument } from "../../core/language";
 import { SchemeService } from "../../core/schemes/scheme-service";
 import { EligibilityList } from "./EligibilityList";
 import { OfficialSourceBox } from "./OfficialSourceBox";
@@ -255,7 +255,7 @@ export const SchemeDetails: React.FC<SchemeDetailsProps> = ({ scheme, onBack }) 
               }}
             >
               <span>📋</span>
-              <span>{doc}</span>
+              <span>{getLocalizedDocument(doc, language)}</span>
             </li>
           ))}
         </ul>

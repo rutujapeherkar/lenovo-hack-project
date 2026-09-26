@@ -12,7 +12,7 @@
  */
 
 import React, { useState, useEffect } from "react";
-import { useLanguage } from "../../core/language";
+import { useLanguage, getLocalizedDocument } from "../../core/language";
 import { Badge } from "../ui";
 
 export interface DocumentChecklistProps {
@@ -26,7 +26,7 @@ export const DocumentChecklist: React.FC<DocumentChecklistProps> = ({
   serviceId,
   documents,
 }) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   const [checkedDocs, setCheckedDocs] = useState<string[]>(() => {
     if (typeof window !== "undefined") {
@@ -129,6 +129,7 @@ export const DocumentChecklist: React.FC<DocumentChecklistProps> = ({
         {documents.map((doc, idx) => {
           const checkboxId = `doc-check-${serviceId}-${idx}`;
           const isChecked = checkedDocs.includes(doc);
+          const localizedDoc = getLocalizedDocument(doc, language);
 
           return (
             <li
@@ -157,7 +158,7 @@ export const DocumentChecklist: React.FC<DocumentChecklistProps> = ({
                   accentColor: "var(--sahayak-blue)",
                   cursor: "pointer",
                 }}
-                aria-label={doc}
+                aria-label={localizedDoc}
               />
               <label
                 htmlFor={checkboxId}
@@ -171,7 +172,7 @@ export const DocumentChecklist: React.FC<DocumentChecklistProps> = ({
                   userSelect: "none",
                 }}
               >
-                {doc}
+                {localizedDoc}
               </label>
             </li>
           );
@@ -192,7 +193,11 @@ export const DocumentChecklist: React.FC<DocumentChecklistProps> = ({
       >
         <span>🔒</span>
         <span>
-          Sahayak AI does not collect or upload your physical or digital documents.
+          {language === "mr"
+            ? "साहाय्यक एआय आपली प्रत्यक्ष किंवा डिजिटल कागदपत्रे संकलित किंवा अपलोड करत नाही."
+            : language === "hi"
+            ? "सहायक एआई आपके भौतिक या डिजिटल दस्तावेज़ एकत्र या अपलोड नहीं करता है।"
+            : "Sahayak AI does not collect or upload your physical or digital documents."}
         </span>
       </div>
     </div>

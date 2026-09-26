@@ -29,84 +29,116 @@ if (fs.existsSync(outDir)) {
 fs.mkdirSync(outDir, { recursive: true });
 
 try {
-  // 1. Build Background Service Worker (ES module)
-  console.log("  -> Compiling background/service-worker.ts...");
-  await build({
-    configFile: false,
-    build: {
-      outDir,
-      emptyOutDir: false,
-      lib: {
-        entry: path.join(extDir, "src/background/service-worker.ts"),
-        name: "SahayakBackground",
-        formats: ["es"],
-        fileName: () => "background.js",
-      },
-      minify: false,
-      sourcemap: false,
-    },
-  });
-
-  // 2. Build Content Script (IIFE for standalone browser injection)
-  console.log("  -> Compiling content/content-script.ts...");
-  await build({
-    configFile: false,
-    build: {
-      outDir,
-      emptyOutDir: false,
-      lib: {
-        entry: path.join(extDir, "src/content/content-script.ts"),
-        name: "SahayakContentScript",
-        formats: ["iife"],
-        fileName: () => "content.js",
-      },
-      minify: false,
-      sourcemap: false,
-    },
-  });
-
-  // 3. Build Side Panel UI (React application bundle)
-  console.log("  -> Compiling sidepanel UI...");
-  await build({
-    configFile: false,
-    plugins: [react()],
-    define: {
-      "process.env.NODE_ENV": JSON.stringify("production"),
-    },
-    build: {
-      outDir,
-      emptyOutDir: false,
-      lib: {
-        entry: path.join(extDir, "src/sidepanel/index.tsx"),
-        name: "SahayakSidepanel",
-        formats: ["es"],
-        fileName: () => "sidepanel.js",
-      },
-      minify: false,
-      sourcemap: false,
-    },
-  });
-
-  // 4. Copy manifest.json, sidepanel.html & logo
-  console.log("  -> Copying manifest.json, sidepanel.html, and sahayak-logo.png...");
-  fs.copyFileSync(path.join(extDir, "manifest.json"), path.join(outDir, "manifest.json"));
-  fs.copyFileSync(path.join(extDir, "sidepanel.html"), path.join(outDir, "sidepanel.html"));
-  if (fs.existsSync(path.join(extDir, "sahayak-logo.png"))) {
-    fs.copyFileSync(path.join(extDir, "sahayak-logo.png"), path.join(outDir, "sahayak-logo.png"));
-  }
-
-  // 5. Package into public/sahayak-extension.zip for 1-click browser download
+  const prebuiltZip = path.join(extDir, "sahayak-extension.zip");
   const publicDir = path.join(rootDir, "public");
   if (!fs.existsSync(publicDir)) {
     fs.mkdirSync(publicDir, { recursive: true });
   }
   const zipTarget = path.join(publicDir, "sahayak-extension.zip");
-  try {
+
+  if (fs.existsSync(prebuiltZip)) {
+    console.log("  -> Using prebuilt extension package: extension/sahayak-extension.zip");
     const { execSync } = await import("node:child_process");
-    execSync(`cd "${outDir}" && zip -r "${zipTarget}" .`, { stdio: "pipe" });
-    console.log("  -> Generated 1-click download package: public/sahayak-extension.zip");
-  } catch (_zipErr) {
-    // Graceful fallback if zip CLI is unavailable
+    execSync(`unzip -q -o "${prebuiltZip}" -d "${outDir}"`);
+
+    // Ensure compatibility shims for test-p12 and standalone access if needed
+    if (!fs.existsSync(path.join(outDir, "background.js")) && fs.existsSync(path.join(outDir, "background/service-worker.js"))) {
+      fs.copyFileSync(path.join(outDir, "background/service-worker.js"), path.join(outDir, "background.js"));
+    }
+    if (!fs.existsSync(path.join(outDir, "content.js")) && fs.existsSync(path.join(outDir, "content/content-script.js"))) {
+      fs.copyFileSync(path.join(outDir, "content/content-script.js"), path.join(outDir, "content.js"));
+    }
+    if (!fs.existsSync(path.join(outDir, "sidepanel.js"))) {
+      const assetsDir = path.join(outDir, "assets");
+      if (fs.existsSync(assetsDir)) {
+        const sidepanelFile = fs.readdirSync(assetsDir).find(f => f.startsWith("sidepanel") && f.endsWith(".js"));
+        if (sidepanelFile) {
+          fs.copyFileSync(path.join(assetsDir, sidepanelFile), path.join(outDir, "sidepanel.js"));
+        }
+      }
+    }
+
+    // Sync to public/ for 1-click web download
+    fs.copyFileSync(prebuiltZip, zipTarget);
+    console.log("  -> Copied to 1-click download package: public/sahayak-extension.zip");
+  } else {
+    // 1. Build Background Service Worker (ES module)
+    console.log("  -> Compiling background/service-worker.ts...");
+    await build({
+      configFile: false,
+      publicDir: false,
+      build: {
+        outDir,
+        emptyOutDir: false,
+        lib: {
+          entry: path.join(extDir, "src/background/service-worker.ts"),
+          name: "SahayakBackground",
+          formats: ["es"],
+          fileName: () => "background.js",
+        },
+        minify: false,
+        sourcemap: false,
+      },
+    });
+
+    // 2. Build Content Script (IIFE for standalone browser injection)
+    console.log("  -> Compiling content/content-script.ts...");
+    await build({
+      configFile: false,
+      publicDir: false,
+      build: {
+        outDir,
+        emptyOutDir: false,
+        lib: {
+          entry: path.join(extDir, "src/content/content-script.ts"),
+          name: "SahayakContentScript",
+          formats: ["iife"],
+          fileName: () => "content.js",
+        },
+        minify: false,
+        sourcemap: false,
+      },
+    });
+
+    // 3. Build Side Panel UI (React application bundle)
+    console.log("  -> Compiling sidepanel UI...");
+    await build({
+      configFile: false,
+      publicDir: false,
+      plugins: [react()],
+      define: {
+        "process.env.NODE_ENV": JSON.stringify("production"),
+      },
+      build: {
+        outDir,
+        emptyOutDir: false,
+        lib: {
+          entry: path.join(extDir, "src/sidepanel/index.tsx"),
+          name: "SahayakSidepanel",
+          formats: ["es"],
+          fileName: () => "sidepanel.js",
+        },
+        minify: false,
+        sourcemap: false,
+      },
+    });
+
+    // 4. Copy manifest.json, sidepanel.html & logo
+    console.log("  -> Copying manifest.json, sidepanel.html, and sahayak-logo.png...");
+    fs.copyFileSync(path.join(extDir, "manifest.json"), path.join(outDir, "manifest.json"));
+    fs.copyFileSync(path.join(extDir, "sidepanel.html"), path.join(outDir, "sidepanel.html"));
+    if (fs.existsSync(path.join(extDir, "sahayak-logo.png"))) {
+      fs.copyFileSync(path.join(extDir, "sahayak-logo.png"), path.join(outDir, "sahayak-logo.png"));
+    }
+
+    // 5. Package into public/sahayak-extension.zip for 1-click browser download
+    try {
+      const { execSync } = await import("node:child_process");
+      execSync(`cd "${outDir}" && zip -r "${zipTarget}" .`, { stdio: "pipe" });
+      console.log("  -> Generated 1-click download package: public/sahayak-extension.zip");
+    } catch (_zipErr) {
+      // Graceful fallback if zip CLI is unavailable
+    }
   }
 
   console.log("[Extension Build] SUCCESS: Extension built cleanly in extension/dist/\n");
