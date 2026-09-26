@@ -189,14 +189,24 @@ export const MicButton: React.FC<MicButtonProps> = ({
       onResult: (text, isFinal) => {
         onTranscript(text, isFinal);
 
-        // Check if citizen said "done" during manual session
-        if (VoiceService.containsDoneWord(text)) {
+        // Check if citizen said "stop" while assistant is speaking
+        if (VoiceService.isSpeaking() && VoiceService.containsStopWord(text)) {
+          VoiceService.stopSpeaking();
+          return;
+        }
+
+        // Check if citizen said "done" or "read" during manual session
+        const isDone = VoiceService.containsDoneWord(text);
+        const isRead = VoiceService.containsReadWord(text);
+
+        if (isDone || isRead) {
           if (stopListeningRef.current) {
             stopListeningRef.current();
             stopListeningRef.current = null;
           }
           setState("idle");
-          const shouldRead = VoiceService.containsReadWord(text);
+          setAnnouncement(VoiceService.getMessage("success", language));
+          const shouldRead = isRead;
           const cleanQuery = VoiceService.cleanVoiceQuery(text);
           if (cleanQuery && onDoneRef.current) {
             onDoneRef.current(cleanQuery, shouldRead);

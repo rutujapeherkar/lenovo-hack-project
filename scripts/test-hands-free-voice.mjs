@@ -39,11 +39,12 @@ function check(desc, fn) {
 }
 
 async function run() {
-    const {
+  const {
     VoiceService,
     containsWakeWord,
     containsDoneWord,
     containsReadWord,
+    containsStopWord,
     cleanVoiceQuery,
   } = await import("../src/core/accessibility/voice-service.ts");
 
@@ -116,6 +117,14 @@ async function run() {
     assert.strictEqual(cleanedMr, "शेतकरी योजना");
   });
 
+  check("Rule 3f: containsStopWord detects 'stop', 'stop reading', and Marathi 'थांबा' / Hindi 'रोको'", () => {
+    assert.strictEqual(containsStopWord("stop"), true);
+    assert.strictEqual(containsStopWord("please stop reading"), true);
+    assert.strictEqual(containsStopWord("थांबा"), true);
+    assert.strictEqual(containsStopWord("रोको"), true);
+    assert.strictEqual(cleanVoiceQuery("income certificate stop"), "income certificate");
+  });
+
   // ── 4. VoiceService API ──────────────────────────────────────────────────
   check("Rule 4a: VoiceService exposes requestMicrophonePermission function", () => {
     assert.strictEqual(typeof VoiceService.requestMicrophonePermission, "function");
@@ -127,6 +136,11 @@ async function run() {
 
   check("Rule 4c: VoiceService exposes containsReadWord function", () => {
     assert.strictEqual(typeof VoiceService.containsReadWord, "function");
+  });
+
+  check("Rule 4d: VoiceService exposes containsStopWord function and stopSpeaking method", () => {
+    assert.strictEqual(typeof VoiceService.containsStopWord, "function");
+    assert.strictEqual(typeof VoiceService.stopSpeaking, "function");
   });
 
   // ── 5. Integrated MicButton Voice Trigger & Immediate Search ────────────
@@ -174,6 +188,13 @@ async function run() {
     const combined = `${speechChunks} ${doneChunk}`;
     assert.strictEqual(containsDoneWord(doneChunk), true);
     assert.strictEqual(cleanVoiceQuery(combined), "मला नवीन रेशन कार्ड हवे आहे");
+  });
+
+  check("Rule 5d: 'read' instead of done completes query with shouldRead=true", () => {
+    const query = "college scholarships";
+    const speech = `${query} read`;
+    assert.strictEqual(containsReadWord(speech), true);
+    assert.strictEqual(cleanVoiceQuery(speech), "college scholarships");
   });
 
   console.log(`\n=============================================`);

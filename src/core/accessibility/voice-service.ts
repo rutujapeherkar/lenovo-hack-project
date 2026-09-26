@@ -203,15 +203,54 @@ export function containsReadWord(text: string): boolean {
 }
 
 /**
- * Strips wake word, done keywords, and read keywords from transcribed query
+ * Detects whether spoken transcript requests to stop reading aloud ("stop", "थांबा", "रोको", etc.)
+ */
+export function containsStopWord(text: string): boolean {
+  if (!text || typeof text !== "string") return false;
+  const lower = text.toLowerCase().trim();
+
+  const enMatches = [
+    "stop",
+    "stop reading",
+    "stop speaking",
+    "shut up",
+    "quiet",
+    "cancel",
+    "pause",
+    "silence",
+  ];
+  for (const w of enMatches) {
+    if (
+      new RegExp(`(^|\\s|[^a-zA-Z0-9])${w}($|\\s|[^a-zA-Z0-9])`, "i").test(lower) ||
+      lower === w
+    ) {
+      return true;
+    }
+  }
+
+  const indicMatches = [
+    "थांबा",
+    "बंद करा",
+    "थांब",
+    "रोको",
+    "रुकिए",
+    "रुको",
+    "शांत",
+    "चुप",
+  ];
+  return indicMatches.some((w) => text.includes(w));
+}
+
+/**
+ * Strips wake word, done keywords, read keywords, and stop keywords from transcribed query
  */
 export function cleanVoiceQuery(text: string): string {
   if (!text || typeof text !== "string") return "";
   let cleaned = text
     .replace(/\b(ok sahayak|okay sahayak|hey sahayak|hello sahayak|ok sahyak|sahayak)\b/gi, "")
     .replace(/(ओके साहायक|साहायक|सहायक|ओके सहायक)/g, "")
-    .replace(/\b(i'm done|im done|i am done|done|finished|stop listening|search now|submit|that's it|thats it)\b/gi, "")
-    .replace(/(हो झाले|झाले|पूर्ण|हो गया|बस|डन|सर्च करा|खोजो)/g, "")
+    .replace(/\b(i'm done|im done|i am done|done|finished|stop listening|stop reading|stop speaking|stop|quiet|shut up|cancel|pause|search now|submit|that's it|thats it)\b/gi, "")
+    .replace(/(हो झाले|झाले|पूर्ण|हो गया|बस|डन|सर्च करा|खोजो|थांबा|बंद करा|थांब|रोको|रुकिए|रुको|शांत|चुप)/g, "")
     .replace(/\b(read aloud|read out|read this|read it|read|speak aloud|speak it|speak)\b/gi, "")
     .replace(/(वाचून दाखवा|वाचून सांगा|वाचा|वाच|पढ़कर सुनाओ|पढ़ो|पढो|सुनाओ|बोला)/g, "")
     .trim();
@@ -345,7 +384,6 @@ export class VoiceService {
     let phase: "waiting_wake" | "recording_query" = "waiting_wake";
     let recognition: any = null;
     let accumulatedQueryText = "";
-    let readRequested = false;
 
     const startSession = () => {
       if (isManuallyStopped) return;
@@ -381,57 +419,59 @@ export class VoiceService {
 
           if (!latestChunk && !fullSessionTranscript) return;
 
+          // 1. While assistant is actively reading aloud, listen for "stop" keyword to halt speech immediately
+          if (VoiceService.isSpeaking()) {
+            if (containsStopWord(latestChunk) || containsStopWord(fullSessionTranscript)) {
+              VoiceService.stopSpeaking();
+            }
+            // Ignore other TTS audio feedback so assistant doesn't hear itself
+            return;
+          }
+
+          // 2. Waiting for wake word
           if (phase === "waiting_wake") {
             if (containsWakeWord(latestChunk) || containsWakeWord(fullSessionTranscript)) {
               phase = "recording_query";
-              readRequested = false;
               onStatusChange?.("recording_query");
               onWakeWordDetected();
 
-              // Check if read keyword was already mentioned
-              if (containsReadWord(latestChunk) || containsReadWord(fullSessionTranscript)) {
-                readRequested = true;
-              }
+              // Check if user finished in same breath with "read" or "done"
+              const isDone = containsDoneWord(latestChunk) || containsDoneWord(fullSessionTranscript);
+              const isRead = containsReadWord(latestChunk) || containsReadWord(fullSessionTranscript);
 
-              // Extract any words already spoken in the same breath after wake word
-              const initialQuery = cleanVoiceQuery(fullSessionTranscript || latestChunk);
-              accumulatedQueryText = initialQuery;
-              if (initialQuery) {
-                onTranscriptUpdate(initialQuery);
-              }
-
-              // Check if they said "done" in the same breath
-              if (containsDoneWord(latestChunk) || containsDoneWord(fullSessionTranscript)) {
+              if (isDone || isRead) {
                 phase = "waiting_wake";
                 onStatusChange?.("processing");
-                const finalQuery = cleanVoiceQuery(fullSessionTranscript || accumulatedQueryText);
-                const shouldRead =
-                  readRequested ||
-                  containsReadWord(latestChunk) ||
-                  containsReadWord(fullSessionTranscript);
+                const finalQuery = cleanVoiceQuery(fullSessionTranscript || latestChunk);
                 accumulatedQueryText = "";
-                readRequested = false;
-                onDoneDetected(finalQuery, shouldRead);
+                onDoneDetected(finalQuery, isRead);
+              } else {
+                const initialQuery = cleanVoiceQuery(fullSessionTranscript || latestChunk);
+                accumulatedQueryText = initialQuery;
+                if (initialQuery) {
+                  onTranscriptUpdate(initialQuery);
+                }
               }
             }
           } else if (phase === "recording_query") {
-            // Check if user requested read aloud during speech
-            if (containsReadWord(latestChunk) || containsReadWord(fullSessionTranscript)) {
-              readRequested = true;
+            // Check for cancel / stop while recording
+            if (containsStopWord(latestChunk) || containsStopWord(fullSessionTranscript)) {
+              phase = "waiting_wake";
+              onStatusChange?.("idle");
+              accumulatedQueryText = "";
+              return;
             }
 
-            const isDoneSpoken =
-              containsDoneWord(latestChunk) ||
-              containsDoneWord(fullSessionTranscript);
+            // Check completion: "done" (search only) vs "read" (search & read aloud)
+            const isDoneSpoken = containsDoneWord(latestChunk) || containsDoneWord(fullSessionTranscript);
+            const isReadSpoken = containsReadWord(latestChunk) || containsReadWord(fullSessionTranscript);
 
-            if (isDoneSpoken) {
+            if (isDoneSpoken || isReadSpoken) {
               phase = "waiting_wake";
               onStatusChange?.("processing");
 
-              const shouldRead =
-                readRequested ||
-                containsReadWord(latestChunk) ||
-                containsReadWord(fullSessionTranscript);
+              // If user said "read", read aloud is true! If user said "done", read aloud is false!
+              const shouldRead = isReadSpoken;
 
               // Compute the full final query from session and accumulated buffer
               let finalQuery = cleanVoiceQuery(fullSessionTranscript);
@@ -444,7 +484,6 @@ export class VoiceService {
               finalQuery = cleanVoiceQuery(finalQuery);
 
               accumulatedQueryText = "";
-              readRequested = false;
               onDoneDetected(finalQuery, shouldRead);
             } else {
               // Update live transcript while query is being spoken
@@ -505,6 +544,7 @@ export class VoiceService {
   public static containsWakeWord = containsWakeWord;
   public static containsDoneWord = containsDoneWord;
   public static containsReadWord = containsReadWord;
+  public static containsStopWord = containsStopWord;
   public static cleanVoiceQuery = cleanVoiceQuery;
 
   /**
