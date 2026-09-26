@@ -289,6 +289,7 @@ export class VoiceService {
   private static recognitionInstance: any = null;
   /** Active utterance reference to prevent Chrome garbage-collection mid-speech */
   private static activeUtterance: SpeechSynthesisUtterance | null = null;
+  private static isReadingResult = false;
 
   /**
    * Check if speech-to-text is supported by the current browser environment
@@ -740,19 +741,22 @@ export class VoiceService {
         utterance.lang = targetLocale;
       }
 
-      // Retain active utterance reference to prevent Chrome garbage-collection mid-speech
+      VoiceService.isReadingResult = true;
       this.activeUtterance = utterance;
 
       utterance.onstart = () => {
+        VoiceService.isReadingResult = true;
         onStart?.();
       };
 
       utterance.onend = () => {
+        VoiceService.isReadingResult = false;
         this.activeUtterance = null;
         onEnd?.();
       };
 
       utterance.onerror = (event: any) => {
+        VoiceService.isReadingResult = false;
         this.activeUtterance = null;
         if (event.error !== "canceled" && event.error !== "interrupted") {
           onError?.(new Error(`Speech synthesis error: ${event.error}`));
@@ -763,6 +767,7 @@ export class VoiceService {
       window.speechSynthesis.speak(utterance);
       return true;
     } catch (err: any) {
+      VoiceService.isReadingResult = false;
       this.activeUtterance = null;
       onError?.(err instanceof Error ? err : new Error(String(err)));
       return false;
@@ -773,6 +778,7 @@ export class VoiceService {
    * Stop active speech synthesis immediately
    */
   public static stopSpeaking(): void {
+    this.isReadingResult = false;
     this.activeUtterance = null;
     if (this.isSpeechSynthesisSupported()) {
       try {
@@ -784,11 +790,10 @@ export class VoiceService {
   }
 
   /**
-   * Check if speech synthesis is currently active
+   * Check if speech synthesis is currently active reading results
    */
   public static isSpeaking(): boolean {
-    if (!this.isSpeechSynthesisSupported()) return false;
-    return Boolean(window.speechSynthesis.speaking || this.activeUtterance);
+    return this.isReadingResult;
   }
 
   /**

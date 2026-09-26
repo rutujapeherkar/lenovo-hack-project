@@ -98,20 +98,11 @@ export const MicButton: React.FC<MicButtonProps> = ({
     const stop = VoiceService.startHandsFreeListening({
       language,
       onWakeWordDetected: () => {
-        // Red voice icon triggers!
+        // Red voice icon triggers immediately and stays completely receptive to citizen speech!
         setState("listening");
         const listenMsg = VoiceService.getMessage("listening", language);
         setAnnouncement(listenMsg);
         onWakeWordRef.current?.();
-
-        // Spoken confirmation cue
-        const promptText =
-          language === "mr"
-            ? "साहायक ऐकत आहे, सांगा..."
-            : language === "hi"
-            ? "साहायक सुन रहा है, बताइए..."
-            : "Sahayak is listening, tell me...";
-        VoiceService.speakText(promptText, language);
       },
       onTranscriptUpdate: (cleanedTranscript) => {
         if (cleanedTranscript) {
