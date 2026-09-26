@@ -39,10 +39,11 @@ function check(desc, fn) {
 }
 
 async function run() {
-  const {
+    const {
     VoiceService,
     containsWakeWord,
     containsDoneWord,
+    containsReadWord,
     cleanVoiceQuery,
   } = await import("../src/core/accessibility/voice-service.ts");
 
@@ -84,7 +85,7 @@ async function run() {
     assert.strictEqual(containsDoneWord("अर्ज माहिती पूर्ण"), true);
   });
 
-  // ── 3. Query Cleaning ────────────────────────────────────────────────────
+  // ── 3. Query Cleaning & Read Keyword ─────────────────────────────────────
   check("Rule 3a: cleanVoiceQuery strips wake word and done keyword in English", () => {
     const cleaned = cleanVoiceQuery("Ok Sahayak I need an income certificate done");
     assert.strictEqual(cleaned, "I need an income certificate");
@@ -95,6 +96,26 @@ async function run() {
     assert.strictEqual(cleaned, "मला रेशन कार्ड हवे आहे");
   });
 
+  check("Rule 3c: containsReadWord detects English 'read' and 'read aloud'", () => {
+    assert.strictEqual(containsReadWord("read"), true);
+    assert.strictEqual(containsReadWord("read aloud"), true);
+    assert.strictEqual(containsReadWord("read it please"), true);
+  });
+
+  check("Rule 3d: containsReadWord detects Marathi 'वाचा' and Hindi 'पढो'", () => {
+    assert.strictEqual(containsReadWord("माहिती वाचा"), true);
+    assert.strictEqual(containsReadWord("वाचून दाखवा"), true);
+    assert.strictEqual(containsReadWord("योजना पढो"), true);
+    assert.strictEqual(containsReadWord("पढ़कर सुनाओ"), true);
+  });
+
+  check("Rule 3e: cleanVoiceQuery strips 'read' keyword from query text", () => {
+    const cleaned = cleanVoiceQuery("Ok Sahayak explain scholarship read done");
+    assert.strictEqual(cleaned, "explain scholarship");
+    const cleanedMr = cleanVoiceQuery("ओके साहायक शेतकरी योजना वाचा झाले");
+    assert.strictEqual(cleanedMr, "शेतकरी योजना");
+  });
+
   // ── 4. VoiceService API ──────────────────────────────────────────────────
   check("Rule 4a: VoiceService exposes requestMicrophonePermission function", () => {
     assert.strictEqual(typeof VoiceService.requestMicrophonePermission, "function");
@@ -102,6 +123,10 @@ async function run() {
 
   check("Rule 4b: VoiceService exposes startHandsFreeListening function", () => {
     assert.strictEqual(typeof VoiceService.startHandsFreeListening, "function");
+  });
+
+  check("Rule 4c: VoiceService exposes containsReadWord function", () => {
+    assert.strictEqual(typeof VoiceService.containsReadWord, "function");
   });
 
   // ── 5. Integrated MicButton Voice Trigger & Immediate Search ────────────
@@ -120,7 +145,7 @@ async function run() {
     );
   });
 
-  check("Rule 5b: HomePage has NO separate card and integrates voice directly in MicButton", () => {
+  check("Rule 5b: HomePage has NO separate card and clears search field on 'ok sahayak'", () => {
     const homeContent = fs.readFileSync(
       path.join(rootDir, "src/pages/HomePage.tsx"),
       "utf-8"
@@ -134,12 +159,12 @@ async function run() {
       "HomePage must render integrated MicButton in search input bar"
     );
     assert.ok(
-      homeContent.includes("setReadAloud(true)"),
-      "Must activate read aloud on wake word 'ok sahayak'"
+      homeContent.includes("setQuery('')"),
+      "Must clear query text field when 'ok sahayak' is detected for a fresh start"
     );
     assert.ok(
-      homeContent.includes("handleSearch(textToSearch, true)"),
-      "Must search immediately upon 'done' detection with voice playback"
+      homeContent.includes("handleSearch(textToSearch, shouldRead)"),
+      "Must search immediately with conditional shouldRead flag"
     );
   });
 

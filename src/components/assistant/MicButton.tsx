@@ -29,7 +29,7 @@ export interface MicButtonProps {
   disabled?: boolean;
   enableHandsFree?: boolean;
   onWakeWord?: () => void;
-  onDone?: (query: string) => void;
+  onDone?: (query: string, shouldRead: boolean) => void;
 }
 
 export const MicButton: React.FC<MicButtonProps> = ({
@@ -118,13 +118,13 @@ export const MicButton: React.FC<MicButtonProps> = ({
           onTranscriptRef.current(cleanedTranscript, false);
         }
       },
-      onDoneDetected: (finalQuery) => {
+      onDoneDetected: (finalQuery, shouldRead) => {
         // Stop red voice mode immediately!
         setState("idle");
         setAnnouncement(VoiceService.getMessage("success", language));
         const queryToSearch = finalQuery.trim();
         if (queryToSearch && onDoneRef.current) {
-          onDoneRef.current(queryToSearch);
+          onDoneRef.current(queryToSearch, shouldRead);
         }
       },
       onError: (errState, errMsg) => {
@@ -196,10 +196,10 @@ export const MicButton: React.FC<MicButtonProps> = ({
             stopListeningRef.current = null;
           }
           setState("idle");
-          setAnnouncement(VoiceService.getMessage("success", language));
+          const shouldRead = VoiceService.containsReadWord(text);
           const cleanQuery = VoiceService.cleanVoiceQuery(text);
           if (cleanQuery && onDoneRef.current) {
-            onDoneRef.current(cleanQuery);
+            onDoneRef.current(cleanQuery, shouldRead);
           }
           return;
         }

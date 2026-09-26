@@ -118,7 +118,8 @@ export const HomePage: React.FC = () => {
         if (json.success && json.data) {
           setResponse(json.data);
           setLoading(false);
-          if ((readAloud || forceReadAloud) && json.data.message) {
+          const shouldSpeak = forceReadAloud !== undefined ? forceReadAloud : readAloud;
+          if (shouldSpeak && json.data.message) {
             VoiceService.speakText(json.data.message, lang);
           }
           return;
@@ -261,14 +262,20 @@ export const HomePage: React.FC = () => {
                 setQuery(text);
               }}
               onWakeWord={() => {
-                setReadAloud(true);
+                setQuery('');
+                setResponse(null);
+                setError(null);
+                inputRef.current?.focus();
               }}
-              onDone={(spokenQuery) => {
+              onDone={(spokenQuery, shouldRead) => {
                 const textToSearch = (spokenQuery || query).trim();
                 if (textToSearch) {
                   setQuery(textToSearch);
                   inputRef.current?.focus();
-                  handleSearch(textToSearch, true);
+                  if (shouldRead) {
+                    setReadAloud(true);
+                  }
+                  handleSearch(textToSearch, shouldRead);
                 }
               }}
               disabled={loading}
