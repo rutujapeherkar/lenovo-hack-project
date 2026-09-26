@@ -3,3 +3,4 @@
  */
 
 export * from "./MicButton";
+export * from "./HandsFreeVoiceAssistant";

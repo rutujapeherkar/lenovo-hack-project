@@ -102,6 +102,66 @@ export function containsSensitiveCredentials(text: string): boolean {
   return SENSITIVE_CREDENTIAL_PATTERNS.some((pattern) => pattern.test(text));
 }
 
+/**
+ * Detects whether spoken transcript contains wake keyword ("ok sahayak", "okay sahayak", "sahayak", etc.)
+ */
+export function containsWakeWord(text: string): boolean {
+  if (!text || typeof text !== "string") return false;
+  const normalized = text.toLowerCase();
+  return (
+    normalized.includes("ok sahayak") ||
+    normalized.includes("okay sahayak") ||
+    normalized.includes("hey sahayak") ||
+    normalized.includes("hello sahayak") ||
+    normalized.includes("sahayak") ||
+    normalized.includes("ओके साहायक") ||
+    normalized.includes("साहायक") ||
+    normalized.includes("सहायक")
+  );
+}
+
+/**
+ * Detects whether spoken transcript contains completion keyword ("done", "झाले", "हो गया", etc.)
+ */
+export function containsDoneWord(text: string): boolean {
+  if (!text || typeof text !== "string") return false;
+  const normalized = text.toLowerCase();
+  return (
+    /\b(done|i'm done|im done|finished|stop|search now)\b/i.test(normalized) ||
+    normalized.includes("झाले") ||
+    normalized.includes("हो झाले") ||
+    normalized.includes("पूर्ण") ||
+    normalized.includes("हो गया") ||
+    normalized.includes("डन")
+  );
+}
+
+/**
+ * Strips wake word and done keywords from transcribed query
+ */
+export function cleanVoiceQuery(text: string): string {
+  if (!text || typeof text !== "string") return "";
+  let cleaned = text
+    .replace(/\b(ok sahayak|okay sahayak|hey sahayak|hello sahayak|sahayak)\b/gi, "")
+    .replace(/(ओके साहायक|साहायक|सहायक)/g, "")
+    .replace(/\b(i'm done|im done|done|finished|stop|search now)\b/gi, "")
+    .replace(/(हो झाले|झाले|पूर्ण|हो गया|डन)/g, "")
+    .trim();
+
+  // Strip leading/trailing punctuation and whitespace
+  cleaned = cleaned.replace(/^[,\.\s\-:]+|[,\.\s\-:]+$/g, "").trim();
+  return cleaned;
+}
+
+export interface HandsFreeVoiceOptions {
+  language: Language;
+  onWakeWordDetected: () => void;
+  onTranscriptUpdate: (transcript: string) => void;
+  onDoneDetected: (finalQuery: string) => void;
+  onError?: (state: VoiceInputState, errorMessage: string) => void;
+  onStatusChange?: (status: "idle" | "listening_wake" | "recording_query" | "processing") => void;
+}
+
 export interface VoiceRecognitionOptions {
   language: Language;
   onResult: (text: string, isFinal: boolean) => void;
@@ -173,6 +233,151 @@ export class VoiceService {
     const langDict = VOICE_MESSAGES[language] || VOICE_MESSAGES.en;
     return langDict[state] || langDict.error;
   }
+
+  /**
+   * Immediately requests browser microphone permission via getUserMedia
+   */
+  public static async requestMicrophonePermission(): Promise<boolean> {
+    if (typeof navigator === "undefined" || !navigator.mediaDevices?.getUserMedia) {
+      return false;
+    }
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      stream.getTracks().forEach((track) => track.stop());
+      return true;
+    } catch (_err) {
+      return false;
+    }
+  }
+
+  /**
+   * Start hands-free keyword-activated voice session:
+   * 1. Listens continuously for wake word "Ok Sahayak"
+   * 2. When wake word is detected, triggers onWakeWordDetected (e.g. activates read feature)
+   * 3. Continuously records until user says "Done"
+   * 4. When "Done" is detected, stops and passes cleaned query to onDoneDetected
+   */
+  public static startHandsFreeListening(options: HandsFreeVoiceOptions): () => void {
+    const {
+      language,
+      onWakeWordDetected,
+      onTranscriptUpdate,
+      onDoneDetected,
+      onError,
+      onStatusChange,
+    } = options;
+
+    if (!this.isSpeechRecognitionSupported()) {
+      onError?.("not_supported", this.getMessage("not_supported", language));
+      onStatusChange?.("idle");
+      return () => {};
+    }
+
+    let isManuallyStopped = false;
+    let phase: "waiting_wake" | "recording_query" = "waiting_wake";
+    let recognition: any = null;
+
+    const startSession = () => {
+      if (isManuallyStopped) return;
+
+      try {
+        const SpeechRecognitionConstructor =
+          (window as any).SpeechRecognition ||
+          (window as any).webkitSpeechRecognition;
+
+        recognition = new SpeechRecognitionConstructor();
+        recognition.lang = this.getLocale(language);
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.maxAlternatives = 1;
+
+        recognition.onstart = () => {
+          onStatusChange?.(phase === "waiting_wake" ? "listening_wake" : "recording_query");
+        };
+
+        recognition.onresult = (event: any) => {
+          let currentSessionText = "";
+          for (let i = event.resultIndex; i < event.results.length; ++i) {
+            currentSessionText += event.results[i][0].transcript;
+          }
+
+          if (!currentSessionText.trim()) return;
+
+          if (phase === "waiting_wake") {
+            if (containsWakeWord(currentSessionText)) {
+              phase = "recording_query";
+              onStatusChange?.("recording_query");
+              onWakeWordDetected();
+
+              // Extract any words already spoken in the same breath after wake word
+              const cleanInitial = cleanVoiceQuery(currentSessionText);
+              if (cleanInitial) {
+                onTranscriptUpdate(cleanInitial);
+              }
+
+              // Check if they said "done" in the same breath
+              if (containsDoneWord(currentSessionText)) {
+                phase = "waiting_wake";
+                onStatusChange?.("processing");
+                const finalQuery = cleanVoiceQuery(currentSessionText);
+                onDoneDetected(finalQuery);
+              }
+            }
+          } else if (phase === "recording_query") {
+            const cleanText = cleanVoiceQuery(currentSessionText);
+            onTranscriptUpdate(cleanText);
+
+            if (containsDoneWord(currentSessionText)) {
+              phase = "waiting_wake";
+              onStatusChange?.("processing");
+              const finalQuery = cleanVoiceQuery(currentSessionText);
+              onDoneDetected(finalQuery);
+            }
+          }
+        };
+
+        recognition.onerror = (event: any) => {
+          const errorType = event.error;
+          if (errorType === "not-allowed" || errorType === "service-not-allowed") {
+            onError?.("permission_denied", this.getMessage("permission_denied", language));
+            isManuallyStopped = true;
+          }
+        };
+
+        recognition.onend = () => {
+          // In Chrome, recognition stops after silence; auto-restart for seamless hands-free operation
+          if (!isManuallyStopped) {
+            setTimeout(() => {
+              if (!isManuallyStopped) {
+                startSession();
+              }
+            }, 250);
+          }
+        };
+
+        recognition.start();
+      } catch (err: any) {
+        onError?.("error", err?.message || "Failed to initialize hands-free voice");
+      }
+    };
+
+    startSession();
+
+    return () => {
+      isManuallyStopped = true;
+      if (recognition) {
+        try {
+          recognition.abort();
+        } catch {
+          // Ignore abort
+        }
+      }
+    };
+  }
+
+  public static containsWakeWord = containsWakeWord;
+  public static containsDoneWord = containsDoneWord;
+  public static cleanVoiceQuery = cleanVoiceQuery;
 
   /**
    * Start listening for voice input using Web Speech API

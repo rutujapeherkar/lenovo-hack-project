@@ -14,7 +14,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardBody, CardFooter, But
 import { Link } from '../router';
 import { useAccessibility, VoiceService } from '../core/accessibility';
 import { useLanguage } from '../core/language';
-import { MicButton } from '../components/assistant';
+import { MicButton, HandsFreeVoiceAssistant } from '../components/assistant';
 import { ReadAloud } from '../components/accessibility';
 import { SafetyNotice, FallbackView } from '../components/common';
 import { sanitizeUserInput } from '../core/security';
@@ -72,7 +72,7 @@ const QUICK_ACTIONS = [
 
 export const HomePage: React.FC = () => {
   const { language } = useLanguage();
-  const { readAloud } = useAccessibility();
+  const { readAloud, setReadAloud } = useAccessibility();
   const [query, setQuery] = React.useState('');
   const [loading, setLoading] = React.useState(false);
   const [response, setResponse] = React.useState<any>(null);
@@ -83,7 +83,7 @@ export const HomePage: React.FC = () => {
 
   const lang: 'en' | 'mr' | 'hi' = (language === 'mr' || language === 'hi') ? language : 'en';
 
-  const handleSearch = async (queryText?: string) => {
+  const handleSearch = async (queryText?: string, forceReadAloud?: boolean) => {
     const textToSearch = (queryText !== undefined ? queryText : query).trim();
     if (!textToSearch) return;
 
@@ -114,7 +114,7 @@ export const HomePage: React.FC = () => {
         if (json.success && json.data) {
           setResponse(json.data);
           setLoading(false);
-          if (readAloud && json.data.message) {
+          if ((readAloud || forceReadAloud) && json.data.message) {
             VoiceService.speakText(json.data.message, lang);
           }
           return;
@@ -206,6 +206,20 @@ export const HomePage: React.FC = () => {
         >
           {heroSubtitle}
         </p>
+
+        {/* ── Accessible Hands-Free Voice Assistant HUD ─────────── */}
+        <HandsFreeVoiceAssistant
+          language={lang}
+          isSearching={loading}
+          onWakeWord={() => {
+            setReadAloud(true);
+          }}
+          onQuerySubmit={(spokenQuery) => {
+            setQuery(spokenQuery);
+            inputRef.current?.focus();
+            handleSearch(spokenQuery, true);
+          }}
+        />
 
         {/* ── Search Input Row ────────────────────────────────────── */}
         <form
