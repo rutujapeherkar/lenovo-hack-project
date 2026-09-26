@@ -175,6 +175,9 @@ export function containsReadWord(text: string): boolean {
     "read aloud",
     "read out",
     "read this",
+    "reading",
+    "red",
+    "reed",
     "speak",
     "speak it",
     "speak aloud",
@@ -198,6 +201,8 @@ export function containsReadWord(text: string): boolean {
     "पढ़कर सुनाओ",
     "सुनाओ",
     "बोला",
+    "रीड",
+    "रेड",
   ];
   return indicMatches.some((w) => text.includes(w));
 }
@@ -251,8 +256,8 @@ export function cleanVoiceQuery(text: string): string {
     .replace(/(ओके साहायक|साहायक|सहायक|ओके सहायक)/g, "")
     .replace(/\b(i'm done|im done|i am done|done|finished|stop listening|stop reading|stop speaking|stop|quiet|shut up|cancel|pause|search now|submit|that's it|thats it)\b/gi, "")
     .replace(/(हो झाले|झाले|पूर्ण|हो गया|बस|डन|सर्च करा|खोजो|थांबा|बंद करा|थांब|रोको|रुकिए|रुको|शांत|चुप)/g, "")
-    .replace(/\b(read aloud|read out|read this|read it|read|speak aloud|speak it|speak)\b/gi, "")
-    .replace(/(वाचून दाखवा|वाचून सांगा|वाचा|वाच|पढ़कर सुनाओ|पढ़ो|पढो|सुनाओ|बोला)/g, "")
+    .replace(/\b(read aloud|read out|read this|read it|reading|read|speak aloud|speak it|speak|red|reed)\b/gi, "")
+    .replace(/(वाचून दाखवा|वाचून सांगा|वाचा|वाच|पढ़कर सुनाओ|पढ़ो|पढो|सुनाओ|बोला|रीड|रेड)/g, "")
     .trim();
 
   // Strip leading/trailing punctuation and whitespace
@@ -446,6 +451,11 @@ export class VoiceService {
                 const finalQuery = cleanVoiceQuery(fullSessionTranscript || latestChunk);
                 accumulatedQueryText = "";
                 onDoneDetected(finalQuery, isRead);
+                try {
+                  recognition.abort();
+                } catch {
+                  // Ignore abort errors
+                }
               } else {
                 const initialQuery = cleanVoiceQuery(fullSessionTranscript || latestChunk);
                 accumulatedQueryText = initialQuery;
@@ -486,6 +496,14 @@ export class VoiceService {
 
               accumulatedQueryText = "";
               onDoneDetected(finalQuery, shouldRead);
+
+              // Abort active recognition session so Chrome clears its internal event.results buffer!
+              // The recognition.onend handler will automatically restart a clean standby session 250ms later.
+              try {
+                recognition.abort();
+              } catch {
+                // Ignore abort errors
+              }
             } else {
               // Update live transcript while query is being spoken
               const cleanFull = cleanVoiceQuery(fullSessionTranscript);
@@ -732,6 +750,14 @@ export class VoiceService {
       // 3. Indian English fallback if neither Marathi nor Hindi voice found
       if (!matchedVoice && (language === "mr" || language === "hi")) {
         matchedVoice = voices.find((v) => v.lang.toLowerCase().includes("-in"));
+      }
+
+      // 4. General fallback: English voice or first available voice if system lacks target regional voice
+      if (!matchedVoice && voices.length > 0) {
+        matchedVoice =
+          voices.find((v) => v.lang.toLowerCase().startsWith("en")) ||
+          voices.find((v) => v.default) ||
+          voices[0];
       }
 
       if (matchedVoice) {

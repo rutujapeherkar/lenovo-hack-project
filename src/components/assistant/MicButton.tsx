@@ -82,7 +82,7 @@ export const MicButton: React.FC<MicButtonProps> = ({
 
   // Set up continuous Hands-Free background wake-word listening
   useEffect(() => {
-    if (!isSupported || !enableHandsFree || disabled) {
+    if (!isSupported || !enableHandsFree) {
       if (stopHandsFreeRef.current) {
         stopHandsFreeRef.current();
         stopHandsFreeRef.current = null;
@@ -141,7 +141,7 @@ export const MicButton: React.FC<MicButtonProps> = ({
         stopHandsFreeRef.current = null;
       }
     };
-  }, [isSupported, enableHandsFree, disabled, language, onError]);
+  }, [isSupported, enableHandsFree, language, onError]);
 
   // Clean up listening on unmount
   useEffect(() => {

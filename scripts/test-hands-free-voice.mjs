@@ -97,17 +97,21 @@ async function run() {
     assert.strictEqual(cleaned, "मला रेशन कार्ड हवे आहे");
   });
 
-  check("Rule 3c: containsReadWord detects English 'read' and 'read aloud'", () => {
+  check("Rule 3c: containsReadWord detects English 'read', 'read aloud', and homophones 'red'/'reed'", () => {
     assert.strictEqual(containsReadWord("read"), true);
     assert.strictEqual(containsReadWord("read aloud"), true);
     assert.strictEqual(containsReadWord("read it please"), true);
+    assert.strictEqual(containsReadWord("red"), true);
+    assert.strictEqual(containsReadWord("reed"), true);
+    assert.strictEqual(containsReadWord("reading"), true);
   });
 
-  check("Rule 3d: containsReadWord detects Marathi 'वाचा' and Hindi 'पढो'", () => {
+  check("Rule 3d: containsReadWord detects Marathi 'वाचा' and Hindi 'पढो' and 'रीड'", () => {
     assert.strictEqual(containsReadWord("माहिती वाचा"), true);
     assert.strictEqual(containsReadWord("वाचून दाखवा"), true);
     assert.strictEqual(containsReadWord("योजना पढो"), true);
     assert.strictEqual(containsReadWord("पढ़कर सुनाओ"), true);
+    assert.strictEqual(containsReadWord("रीड"), true);
   });
 
   check("Rule 3e: cleanVoiceQuery strips 'read' keyword from query text", () => {
@@ -115,6 +119,8 @@ async function run() {
     assert.strictEqual(cleaned, "explain scholarship");
     const cleanedMr = cleanVoiceQuery("ओके साहायक शेतकरी योजना वाचा झाले");
     assert.strictEqual(cleanedMr, "शेतकरी योजना");
+    const cleanedHomophone = cleanVoiceQuery("scholarship details red");
+    assert.strictEqual(cleanedHomophone, "scholarship details");
   });
 
   check("Rule 3f: containsStopWord detects 'stop', 'stop reading', and Marathi 'थांबा' / Hindi 'रोको'", () => {
