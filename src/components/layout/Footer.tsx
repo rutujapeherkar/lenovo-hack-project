@@ -7,9 +7,9 @@ export interface FooterProps {
 
 export const Footer: React.FC<FooterProps> = ({ currentLanguage = 'en' }) => {
   const disclaimerText = {
-    en: 'Disclaimer: Sahayak AI provides guidance and does not represent a government department. Always confirm final requirements on official government portals.',
-    mr: 'अस्वीकरण: साहाय्यक एआय हे केवळ मार्गदर्शनासाठी आहे आणि ते कोणत्याही सरकारी विभागाचे प्रतिनिधित्व करत नाही. अंतिम माहितीसाठी नेहमी अधिकृत सरकारी पोर्टल तपासा.',
-    hi: 'अस्वीकरण: सहायक एआई केवल मार्गदर्शन प्रदान करता है और किसी भी सरकारी विभाग का प्रतिनिधित्व नहीं करता है। अंतिम जानकारी के लिए हमेशा आधिकारिक सरकारी पोर्टल देखें।',
+    en: 'Sahayak AI provides guidance and does not represent a government department. Always confirm final requirements on official government portals.',
+    mr: 'साहाय्यक एआय हे केवळ मार्गदर्शनासाठी आहे आणि ते कोणत्याही सरकारी विभागाचे प्रतिनिधित्व करत नाही. अंतिम माहितीसाठी नेहमी अधिकृत सरकारी पोर्टल तपासा.',
+    hi: 'सहायक एआई केवल मार्गदर्शन प्रदान करता है और किसी भी सरकारी विभाग का प्रतिनिधित्व नहीं करता है। अंतिम जानकारी के लिए हमेशा आधिकारिक सरकारी पोर्टल देखें।',
   };
 
   return (

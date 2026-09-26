@@ -113,7 +113,7 @@ export const SchemesPage: React.FC<SchemesPageProps> = ({ initialSchemeId }) => 
       {/* Page Header */}
       <div style={{ marginBottom: "var(--space-6)" }}>
         <Badge variant="success" style={{ marginBottom: "var(--space-2)" }}>
-          कल्याणकारी योजना शोध • Verified Welfare Schemes
+          {language === 'mr' ? 'शासकीय योजना' : language === 'hi' ? 'सरकारी योजनाएं' : 'Welfare Schemes'}
         </Badge>
         <h1
           style={{

@@ -147,16 +147,16 @@ export const HomePage: React.FC = () => {
     : 'How can Sahayak help you today?';
 
   const heroSubtitle = lang === 'mr'
-    ? 'साहायक एआय — शासकीय सेवा, प्रमाणपत्रे आणि कल्याणकारी योजनांसाठी विश्वासार्ह मार्गदर्शन.'
+    ? 'शासकीय सेवा, आवश्यक कागदपत्रे आणि योजनांची माहिती सोप्या भाषेत मिळवा.'
     : lang === 'hi'
-    ? 'साहायक एआई — सरकारी सेवाओं, प्रमाण पत्रों और कल्याण योजनाओं के लिए विश्वसनीय मार्गदर्शन.'
-    : 'Sahayak AI guides you through government services, certificates, and welfare schemes — step by step, in your language.';
+    ? 'सरकारी सेवाओं, आवश्यक दस्तावेजों और योजनाओं की जानकारी सरल भाषा में प्राप्त करें।'
+    : 'Understand government services, required documents, and welfare schemes in plain language.';
 
   const searchPlaceholder = lang === 'mr'
-    ? 'उदा. मला जात प्रमाणपत्र काढायचे आहे...'
+    ? 'कोणत्याही सेवेबद्दल विचारा (उदा. उत्पन्न प्रमाणपत्र, शिष्यवृत्ती)...'
     : lang === 'hi'
-    ? 'उदा. मुझे जाति प्रमाण पत्र चाहिए...'
-    : 'e.g. I need an income certificate or find scholarships for students...';
+    ? 'किसी भी सेवा के बारे में पूछें (उदा. आय प्रमाण पत्र, छात्रवृत्ति)...'
+    : 'Ask about any service or scheme (e.g. Income Certificate, Scholarships)...';
 
   const searchBtnLabel = loading
     ? (lang === 'mr' ? 'शोधत आहे...' : lang === 'hi' ? 'खोज रहे हैं...' : 'Searching...')
@@ -175,10 +175,10 @@ export const HomePage: React.FC = () => {
       >
         <Badge variant="info" style={{ marginBottom: 'var(--space-3)', fontSize: '0.8125rem', padding: '0.25rem 0.75rem' }}>
           {lang === 'mr'
-            ? 'महाराष्ट्र शासन नागरिक सहाय्य • नागरी मार्गदर्शन मंच'
+            ? 'महाराष्ट्र नागरी सहाय्यक'
             : lang === 'hi'
-            ? 'महाराष्ट्र शासन नागरिक सहायता • नागरिक मार्गदर्शन मंच'
-            : 'Government of Maharashtra Citizen Assistance • Civic Guidance Platform'}
+            ? 'महाराष्ट्र नागरिक सहायक'
+            : 'Maharashtra Civic Assistant'}
         </Badge>
 
         <h1
@@ -408,10 +408,10 @@ export const HomePage: React.FC = () => {
                 </CardTitle>
                 <CardDescription style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>
                   {lang === 'mr'
-                    ? 'खालील माहिती साहायक एआयचे मार्गदर्शन आहे, हा अधिकृत शासकीय आदेश नाही.'
+                    ? 'अधिकृत नियमांनुसार पडताळणीकृत मार्गदर्शन.'
                     : lang === 'hi'
-                    ? 'नीचे दी गई जानकारी साहायक एआई का मार्गदर्शन है, आधिकारिक सरकारी आदेश नहीं।'
-                    : 'Guidance below is an AI-assisted explanation — not an official government order.'}
+                    ? 'आधिकारिक नियमों के अनुसार सत्यापित मार्गदर्शन।'
+                    : 'Verified procedural guidance based on official portal rules.'}
                 </CardDescription>
               </CardHeader>
               <CardBody>
@@ -559,13 +559,6 @@ export const HomePage: React.FC = () => {
         )}
       </section>
 
-      {/* ── Mandatory Civic Disclaimer (AC-P10-03) ─────────────────────── */}
-      <SafetyNotice
-        type="disclaimer"
-        language={lang}
-        style={{ marginBottom: 'var(--space-6)' }}
-      />
-
       {/* ── Hero Impact Banner ──────────────────────────────────────────── */}
       <div
         style={{
@@ -614,10 +607,10 @@ export const HomePage: React.FC = () => {
               }}
             >
               {lang === 'mr'
-                ? 'सर्व नागरिकांसाठी डिजिटल सरकारी सेवा'
+                ? 'सुलभ डिजिटल सरकारी सेवा'
                 : lang === 'hi'
-                ? 'सभी नागरिकों के लिए डिजिटल सरकारी सेवाएं'
-                : 'Digital Government Services for Every Citizen'}
+                ? 'सरल डिजिटल सरकारी सेवाएं'
+                : 'Government Services Made Simple'}
             </h2>
             <p
               style={{
@@ -625,19 +618,19 @@ export const HomePage: React.FC = () => {
                 color: 'rgba(255,255,255,0.85)',
                 lineHeight: 1.6,
                 marginBottom: 'var(--space-5)',
-                maxWidth: '400px',
+                maxWidth: '420px',
               }}
             >
               {lang === 'mr'
-                ? 'उत्पन्न प्रमाणपत्रापासून शिष्यवृत्तीपर्यंत — साहायक एआय तुम्हाला मार्गदर्शन करेल, तुमच्या भाषेत.'
+                ? 'पात्रता, आवश्यक कागदपत्रे आणि अधिकृत अर्ज लिंक तुमच्या भाषेत तपासा.'
                 : lang === 'hi'
-                ? 'आय प्रमाण पत्र से छात्रवृत्ति तक — साहायक एआई आपकी भाषा में मार्गदर्शन करेगा.'
-                : 'From income certificates to scholarships — Sahayak guides you step-by-step, in your language.'}
+                ? 'पात्रता, आवश्यक दस्तावेज और आधिकारिक आवेदन लिंक अपनी भाषा में देखें।'
+                : 'Check eligibility criteria, required documents, and official application portals in your language.'}
             </p>
             <div style={{ display: 'flex', gap: 'var(--space-3)', flexWrap: 'wrap' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'rgba(255,255,255,0.9)', fontSize: '0.8125rem', fontWeight: 500 }}>
                 <span style={{ fontSize: '1rem' }}>✅</span>
-                {lang === 'mr' ? '१०+ शासकीय सेवा' : lang === 'hi' ? '10+ सरकारी सेवाएं' : '10+ Government Services'}
+                {lang === 'mr' ? '१०+ सेवा व योजना' : lang === 'hi' ? '10+ सेवाएं और योजनाएं' : '10+ Services & Schemes'}
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'rgba(255,255,255,0.9)', fontSize: '0.8125rem', fontWeight: 500 }}>
                 <span style={{ fontSize: '1rem' }}>🌐</span>
@@ -645,7 +638,7 @@ export const HomePage: React.FC = () => {
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'rgba(255,255,255,0.9)', fontSize: '0.8125rem', fontWeight: 500 }}>
                 <span style={{ fontSize: '1rem' }}>🔒</span>
-                {lang === 'mr' ? 'शून्य डेटा साठवण' : lang === 'hi' ? 'शून्य डेटा भंडारण' : 'Zero Data Storage'}
+                {lang === 'mr' ? 'शून्य डेटा साठवण' : lang === 'hi' ? 'शून्य डेटा भंडारण' : 'Zero Data Retained'}
               </div>
             </div>
           </div>
@@ -684,10 +677,10 @@ export const HomePage: React.FC = () => {
         </h2>
         <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', marginBottom: 'var(--space-4)' }}>
           {lang === 'mr'
-            ? 'शासकीय सेवांसाठी सर्वसमावेशक मार्गदर्शन'
+            ? 'शासकीय सेवा, योजना आणि सहाय्यक साधनांमध्ये थेट प्रवेश.'
             : lang === 'hi'
-            ? 'सरकारी सेवाओं के लिए व्यापक मार्गदर्शन'
-            : 'Comprehensive guidance for government services, schemes, and forms.'}
+            ? 'सरकारी सेवाओं, योजनाओं और सहायक टूल्स में सीधा प्रवेश।'
+            : 'Direct access to verified services, welfare schemes, and application tools.'}
         </p>
       </div>
       <div className="grid grid-cols-1 grid-cols-2-md grid-cols-4-lg" style={{ marginBottom: 'var(--space-12)' }}>
@@ -703,22 +696,22 @@ export const HomePage: React.FC = () => {
           </div>
           <CardHeader style={{ flexDirection: 'column', alignItems: 'flex-start', gap: 'var(--space-1)' }}>
             <Badge variant="info" size="sm">
-              {lang === 'mr' ? 'शासकीय सेवा' : lang === 'hi' ? 'सरकारी सेवाएं' : 'Civic Services'}
+              {lang === 'mr' ? 'सेवा' : lang === 'hi' ? 'सेवाएं' : 'Services'}
             </Badge>
             <CardTitle style={{ fontSize: '1.0625rem', fontWeight: 600, marginTop: 'var(--space-1)', lineHeight: 1.3 }}>
               {lang === 'mr' ? 'सेवा व प्रमाणपत्रे' : lang === 'hi' ? 'सेवाएं और प्रमाण पत्र' : 'Services & Certificates'}
             </CardTitle>
             <CardDescription style={{ fontSize: '0.8125rem', lineHeight: 1.45 }}>
               {lang === 'mr'
-                ? 'उत्पन्न, जात, अधिवास, रेशन कार्ड — पायरी-पायरी मार्गदर्शन.'
+                ? 'प्रमाणपत्रांसाठी पायरी-पायरी मार्गदर्शन आणि कागदपत्रांची यादी.'
                 : lang === 'hi'
-                ? 'आय, जाति, अधिवास, राशन कार्ड — चरण-दर-चरण मार्गदर्शन.'
-                : 'Income, Caste, Domicile, Ration Card — step-by-step guidance.'}
+                ? 'प्रमाण पत्रों के लिए चरण-दर-चरण मार्गदर्शन और दस्तावेज चेकलिस्ट।'
+                : 'Step-by-step guides and document checklists for certificates.'}
             </CardDescription>
           </CardHeader>
           <CardBody style={{ flex: 1 }}>
             <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', margin: 0 }}>
-              Aaple Sarkar • Revenue Dept • Food & Civil Supplies
+              Income • Caste • Domicile • Ration Card
             </p>
           </CardBody>
           <CardFooter>
@@ -742,22 +735,22 @@ export const HomePage: React.FC = () => {
           </div>
           <CardHeader style={{ flexDirection: 'column', alignItems: 'flex-start', gap: 'var(--space-1)' }}>
             <Badge variant="success" size="sm">
-              {lang === 'mr' ? 'कल्याणकारी योजना' : lang === 'hi' ? 'कल्याण योजनाएं' : 'Welfare Schemes'}
+              {lang === 'mr' ? 'योजना' : lang === 'hi' ? 'योजनाएं' : 'Schemes'}
             </Badge>
             <CardTitle style={{ fontSize: '1.0625rem', fontWeight: 600, marginTop: 'var(--space-1)', lineHeight: 1.3 }}>
               {lang === 'mr' ? 'शासकीय योजना' : lang === 'hi' ? 'सरकारी योजनाएं' : 'Welfare Schemes'}
             </CardTitle>
             <CardDescription style={{ fontSize: '0.8125rem', lineHeight: 1.45 }}>
               {lang === 'mr'
-                ? 'केंद्र व राज्य योजनांचे पात्रता, लाभ व अर्ज मार्गदर्शन.'
+                ? 'पात्रता, मिळणारे लाभ आणि थेट अर्ज करण्याचे अधिकृत दुवे.'
                 : lang === 'hi'
-                ? 'केंद्र और राज्य योजनाओं की पात्रता, लाभ और आवेदन मार्गदर्शन.'
-                : 'Central & Maharashtra welfare schemes, eligibility, benefits.'}
+                ? 'पात्रता, लाभ और सीधे आवेदन करने के आधिकारिक लिंक।'
+                : 'Eligibility criteria, benefits, and direct application links.'}
             </CardDescription>
           </CardHeader>
           <CardBody style={{ flex: 1 }}>
             <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', margin: 0 }}>
-              MahaDBT • Ladki Bahin • PM-KISAN • Sanjay Gandhi Niradhar
+              MahaDBT • Ladki Bahin • PM-KISAN • Pension
             </p>
           </CardBody>
           <CardFooter>
@@ -781,22 +774,22 @@ export const HomePage: React.FC = () => {
           </div>
           <CardHeader style={{ flexDirection: 'column', alignItems: 'flex-start', gap: 'var(--space-1)' }}>
             <Badge variant="warning" size="sm">
-              {lang === 'mr' ? 'दृष्टी सहाय्य' : lang === 'hi' ? 'दृष्टि सहायता' : 'Vision AI'}
+              {lang === 'mr' ? 'दृष्टी सहाय्य' : lang === 'hi' ? 'दृष्टि सहायता' : 'Vision Assist'}
             </Badge>
             <CardTitle style={{ fontSize: '1.0625rem', fontWeight: 600, marginTop: 'var(--space-1)', lineHeight: 1.3 }}>
               {lang === 'mr' ? 'स्क्रीन समजावा' : lang === 'hi' ? 'स्क्रीन समझाएं' : 'Explain Screen'}
             </CardTitle>
             <CardDescription style={{ fontSize: '0.8125rem', lineHeight: 1.45 }}>
               {lang === 'mr'
-                ? 'सरकारी फॉर्मचा स्क्रीनशॉट अपलोड करा — सोप्या भाषेत स्पष्टीकरण मिळवा.'
+                ? 'सरकारी फॉर्मचा स्क्रीनशॉट अपलोड करून प्रत्येक रकाना समजून घ्या.'
                 : lang === 'hi'
-                ? 'सरकारी फॉर्म का स्क्रीनशॉट अपलोड करें — सरल भाषा में समझाइए.'
+                ? 'सरकारी फॉर्म का स्क्रीनशॉट अपलोड करके हर फील्ड को आसानी से समझें।'
                 : 'Upload a portal screenshot to understand complex form fields.'}
             </CardDescription>
           </CardHeader>
           <CardBody style={{ flex: 1 }}>
             <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', margin: 0 }}>
-              Visual Form Explanation • मराठी & हिंदी • Privacy Striping
+              Screenshot Visual Explanation • Field Breakdown
             </p>
           </CardBody>
           <CardFooter>
@@ -820,22 +813,22 @@ export const HomePage: React.FC = () => {
           </div>
           <CardHeader style={{ flexDirection: 'column', alignItems: 'flex-start', gap: 'var(--space-1)' }}>
             <Badge variant="neutral" size="sm">
-              {lang === 'mr' ? 'ब्राउझर साथी' : lang === 'hi' ? 'ब्राउज़र साथी' : 'Browser Co-Pilot'}
+              {lang === 'mr' ? 'विस्तार' : lang === 'hi' ? 'एक्सटेंशन' : 'Extension'}
             </Badge>
             <CardTitle style={{ fontSize: '1.0625rem', fontWeight: 600, marginTop: 'var(--space-1)', lineHeight: 1.3 }}>
               {lang === 'mr' ? 'ब्राउझर साथी' : lang === 'hi' ? 'ब्राउज़र साथी' : 'Browser Companion'}
             </CardTitle>
             <CardDescription style={{ fontSize: '0.8125rem', lineHeight: 1.45 }}>
               {lang === 'mr'
-                ? 'सरकारी पोर्टलवर ब्राउझ करताना थेट मार्गदर्शन.'
+                ? 'आपले सरकार आणि महाडीबीटीवर अर्ज करताना थेट स्क्रीनवर सहाय्य.'
                 : lang === 'hi'
-                ? 'सरकारी पोर्टल पर ब्राउज़ करते समय सीधे मार्गदर्शन.'
-                : 'Side-panel co-pilot for Aaple Sarkar and MahaDBT portals.'}
+                ? 'पोर्टल पर आवेदन भरते समय स्क्रीन पर ही सीधा मार्गदर्शन।'
+                : 'In-browser guidance on Aaple Sarkar and MahaDBT portals.'}
             </CardDescription>
           </CardHeader>
           <CardBody style={{ flex: 1 }}>
             <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', margin: 0 }}>
-              Aaple Sarkar Overlay • Step Roadmap • Zero Credential Logging
+              Side-Panel Assistant • Step-by-Step Helper
             </p>
           </CardBody>
           <CardFooter>

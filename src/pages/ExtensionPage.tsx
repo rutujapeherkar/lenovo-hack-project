@@ -118,17 +118,17 @@ export const ExtensionPage: React.FC = () => {
       {/* Page Header */}
       <div style={{ marginBottom: 'var(--space-6)' }}>
         <Badge variant="info" style={{ marginBottom: 'var(--space-2)' }}>
-          ब्राउझर विस्तार • Browser Companion
+          {lang === 'mr' ? 'ब्राउझर विस्तार' : lang === 'hi' ? 'ब्राउज़र एक्सटेंशन' : 'Browser Extension'}
         </Badge>
         <h1 style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 800, color: 'var(--sahayak-blue-dark)', marginBottom: 'var(--space-2)', letterSpacing: '-0.01em' }}>
-          {lang === 'mr' ? 'साहायक AI Chrome साइड-पॅनेल साथी' : lang === 'hi' ? 'साहायक AI Chrome साइड-पैनल साथी' : 'Sahayak AI Chrome Side-Panel Companion'}
+          {lang === 'mr' ? 'साहायक AI ब्राउझर साथी' : lang === 'hi' ? 'साहायक AI ब्राउज़र साथी' : 'Sahayak AI Browser Companion'}
         </h1>
         <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', maxWidth: '800px', lineHeight: 1.6 }}>
           {lang === 'mr'
-            ? 'Chrome ब्राउझरमध्ये आपले सरकार आणि MahaDBT पोर्टलसह उघडणारा इन-ब्राउझर सहाय्यक, जो प्रासंगिक पायरी रोडमॅप आणि फील्ड-स्तरीय मार्गदर्शन प्रदान करतो.'
+            ? 'सरकारी पोर्टलवर अर्ज करताना थेट स्क्रीनवर पायरी-पायरी मार्गदर्शन आणि फील्ड स्पष्टीकरण मिळवा.'
             : lang === 'hi'
-            ? 'Chrome ब्राउज़र में आपले सरकार और MahaDBT पोर्टल के साथ खुलने वाला इन-ब्राउज़र सहायक, जो संदर्भात्मक चरण रोडमैप और फ़ील्ड-स्तरीय मार्गदर्शन प्रदान करता है.'
-            : 'An in-browser assistant that opens alongside Aaple Sarkar and MahaDBT portals, providing contextual step roadmaps and field-level guidance.'}
+            ? 'सरकारी पोर्टल पर आवेदन करते समय स्क्रीन पर ही चरण-दर-चरण मार्गदर्शन और फ़ील्ड विवरण प्राप्त करें।'
+            : 'Real-time side-panel guidance and field explanations while navigating government portals.'}
         </p>
       </div>
 

@@ -146,9 +146,9 @@ export const UI_TRANSLATIONS: Record<TranslationKey, Record<Language, string>> =
     hi: "आवश्यक दस्तावेजों की चेकलिस्ट",
   },
   documentsGuidance: {
-    en: "Verify and check off documents as you prepare them before visiting the official portal.",
-    mr: "अधिकृत पोर्टलवर जाण्यापूर्वी ही कागदपत्रे तयार ठेवा आणि खूण करा.",
-    hi: "आधिकारिक पोर्टल पर जाने से पहले इन दस्तावेजों को तैयार रखें और चेक करें।",
+    en: "Keep these documents ready before starting your application.",
+    mr: "अर्ज सुरू करण्यापूर्वी ही कागदपत्रे तयार ठेवा.",
+    hi: "आवेदन शुरू करने से पहले ये दस्तावेज तैयार रखें।",
   },
   docsPrepared: {
     en: "documents prepared",
@@ -186,9 +186,9 @@ export const UI_TRANSLATIONS: Record<TranslationKey, Record<Language, string>> =
     hi: "कार्यप्रणाली मार्गदर्शन पूरा हुआ",
   },
   taskCompletedDesc: {
-    en: "You have reviewed all official procedural steps. You can now access the verified government portal to proceed with your application.",
-    mr: "तुम्ही सर्व अधिकृत प्रशासकीय पायऱ्या तपासल्या आहेत. आता तुम्ही अर्जाची प्रक्रिया सुरू करण्यासाठी अधिकृत सरकारी पोर्टलवर जाऊ शकता.",
-    hi: "आपने सभी आधिकारिक प्रक्रियात्मक चरणों की समीक्षा कर ली है। अब आप अपने आवेदन को आगे बढ़ाने के लिए आधिकारिक सरकारी पोर्टल पर जा सकते हैं।",
+    en: "You have reviewed all steps. You can now proceed to the official portal to apply.",
+    mr: "तुम्ही सर्व पायऱ्या तपासल्या आहेत. आता तुम्ही अर्जासाठी अधिकृत पोर्टलवर जाऊ शकता.",
+    hi: "आपने सभी चरण देख लिए हैं। अब आप आवेदन के लिए आधिकारिक पोर्टल पर जा सकते हैं।",
   },
   officialSource: {
     en: "Official Government Source",

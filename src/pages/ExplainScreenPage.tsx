@@ -669,7 +669,7 @@ export const ExplainScreenPage: React.FC = () => {
       {/* 1. Page Header */}
       <div style={{ marginBottom: "var(--space-6)" }}>
         <Badge variant="warning" style={{ marginBottom: "var(--space-2)" }}>
-          दृष्टी सहाय्य • Visual Assist
+          {language === 'mr' ? 'दृष्टी सहाय्य' : language === 'hi' ? 'दृष्टि सहायता' : 'Visual Assist'}
         </Badge>
         <h1
           style={{
@@ -722,10 +722,10 @@ export const ExplainScreenPage: React.FC = () => {
               </span>
               <strong style={{ color: "var(--sahayak-blue-dark)", fontSize: "0.9375rem" }}>
                 {language === "mr"
-                  ? "त्वरित प्रात्यक्षिक — नमुना स्क्रीनशॉट वापरा"
+                  ? "त्वरित प्रात्यक्षिक — नमुना निवडा"
                   : language === "hi"
-                  ? "त्वरित प्रदर्शन — नमूना स्क्रीनशॉट उपयोग करें"
-                  : "Quick Demo — Try a sample screenshot instantly"}
+                  ? "त्वरित प्रदर्शन — नमूना चुनें"
+                  : "Quick Demo — Choose a sample screenshot"}
               </strong>
             </div>
             <p
@@ -736,10 +736,10 @@ export const ExplainScreenPage: React.FC = () => {
               }}
             >
               {language === "mr"
-                ? "फाइल अपलोड न करता नमुना सरकारी स्क्रीनशॉट वापरून साहायकची क्षमता पाहा."
+                ? "नमुना सरकारी स्क्रीनशॉट निवडून प्रत्येक रकान्याचे सोपे स्पष्टीकरण पाहा."
                 : language === "hi"
-                ? "फ़ाइल अपलोड किए बिना नमूना सरकारी स्क्रीनशॉट से साहायक की क्षमता देखें."
-                : "See Sahayak explain a government portal screenshot — no file upload required."}
+                ? "नमूना सरकारी स्क्रीनशॉट चुनकर प्रत्येक फील्ड का सरल विवरण देखें।"
+                : "Select a sample portal screenshot to see instant field-by-field guidance."}
             </p>
             <div style={{ display: "flex", gap: "var(--space-3)", flexWrap: "wrap" }}>
               {DEMO_SAMPLES.map((sample) => {

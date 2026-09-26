@@ -95,7 +95,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ initialServiceId }) 
       {/* Page Header */}
       <div style={{ marginBottom: "var(--space-6)" }}>
         <Badge variant="info" style={{ marginBottom: "var(--space-2)" }}>
-          नागरी सेवा मार्गदर्शक • Maharashtra Public Services
+          {language === 'mr' ? 'शासकीय सेवा' : language === 'hi' ? 'सरकारी सेवाएं' : 'Public Services'}
         </Badge>
         <h1
           style={{
