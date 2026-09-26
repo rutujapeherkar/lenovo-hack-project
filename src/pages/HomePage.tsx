@@ -14,7 +14,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardBody, CardFooter, But
 import { Link } from '../router';
 import { useAccessibility, VoiceService } from '../core/accessibility';
 import { useLanguage } from '../core/language';
-import { MicButton, HandsFreeVoiceAssistant } from '../components/assistant';
+import { MicButton } from '../components/assistant';
 import { ReadAloud } from '../components/accessibility';
 import { SafetyNotice, FallbackView } from '../components/common';
 import { sanitizeUserInput } from '../core/security';
@@ -80,8 +80,12 @@ export const HomePage: React.FC = () => {
   const [sensitiveWarning, setSensitiveWarning] = React.useState<string | null>(null);
   const [fallbackReason, setFallbackReason] = React.useState<'ai_failure' | 'network_failure' | null>(null);
   const inputRef = React.useRef<HTMLInputElement>(null);
-
   const lang: 'en' | 'mr' | 'hi' = (language === 'mr' || language === 'hi') ? language : 'en';
+
+  // Request microphone permission immediately on load for hands-free readiness
+  React.useEffect(() => {
+    VoiceService.requestMicrophonePermission();
+  }, []);
 
   const handleSearch = async (queryText?: string, forceReadAloud?: boolean) => {
     const textToSearch = (queryText !== undefined ? queryText : query).trim();
@@ -207,20 +211,6 @@ export const HomePage: React.FC = () => {
           {heroSubtitle}
         </p>
 
-        {/* ── Accessible Hands-Free Voice Assistant HUD ─────────── */}
-        <HandsFreeVoiceAssistant
-          language={lang}
-          isSearching={loading}
-          onWakeWord={() => {
-            setReadAloud(true);
-          }}
-          onQuerySubmit={(spokenQuery) => {
-            setQuery(spokenQuery);
-            inputRef.current?.focus();
-            handleSearch(spokenQuery, true);
-          }}
-        />
-
         {/* ── Search Input Row ────────────────────────────────────── */}
         <form
           onSubmit={(e) => {
@@ -266,8 +256,20 @@ export const HomePage: React.FC = () => {
             <MicButton
               language={language}
               size="sm"
+              enableHandsFree={true}
               onTranscript={(text) => {
                 setQuery(text);
+              }}
+              onWakeWord={() => {
+                setReadAloud(true);
+              }}
+              onDone={(spokenQuery) => {
+                const textToSearch = (spokenQuery || query).trim();
+                if (textToSearch) {
+                  setQuery(textToSearch);
+                  inputRef.current?.focus();
+                  handleSearch(textToSearch, true);
+                }
               }}
               disabled={loading}
             />

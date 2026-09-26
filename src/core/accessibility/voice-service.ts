@@ -125,15 +125,41 @@ export function containsWakeWord(text: string): boolean {
  */
 export function containsDoneWord(text: string): boolean {
   if (!text || typeof text !== "string") return false;
-  const normalized = text.toLowerCase();
-  return (
-    /\b(done|i'm done|im done|finished|stop|search now)\b/i.test(normalized) ||
-    normalized.includes("झाले") ||
-    normalized.includes("हो झाले") ||
-    normalized.includes("पूर्ण") ||
-    normalized.includes("हो गया") ||
-    normalized.includes("डन")
-  );
+  const lower = text.toLowerCase().trim();
+
+  const enMatches = [
+    "done",
+    "i'm done",
+    "im done",
+    "i am done",
+    "finished",
+    "stop listening",
+    "search now",
+    "submit",
+    "that's it",
+    "thats it",
+  ];
+  for (const w of enMatches) {
+    if (
+      new RegExp(`(^|\\s|[^a-zA-Z0-9])${w.replace("'", "['’]?")}($|\\s|[^a-zA-Z0-9])`, "i").test(lower) ||
+      lower === w
+    ) {
+      return true;
+    }
+  }
+
+  const indicMatches = [
+    "झाले",
+    "हो झाले",
+    "पूर्ण",
+    "हो गया",
+    "बस",
+    "डन",
+    "शोध",
+    "सर्च करा",
+    "खोजो",
+  ];
+  return indicMatches.some((w) => text.includes(w));
 }
 
 /**
@@ -142,14 +168,14 @@ export function containsDoneWord(text: string): boolean {
 export function cleanVoiceQuery(text: string): string {
   if (!text || typeof text !== "string") return "";
   let cleaned = text
-    .replace(/\b(ok sahayak|okay sahayak|hey sahayak|hello sahayak|sahayak)\b/gi, "")
-    .replace(/(ओके साहायक|साहायक|सहायक)/g, "")
-    .replace(/\b(i'm done|im done|done|finished|stop|search now)\b/gi, "")
-    .replace(/(हो झाले|झाले|पूर्ण|हो गया|डन)/g, "")
+    .replace(/\b(ok sahayak|okay sahayak|hey sahayak|hello sahayak|ok sahyak|sahayak)\b/gi, "")
+    .replace(/(ओके साहायक|साहायक|सहायक|ओके सहायक)/g, "")
+    .replace(/\b(i'm done|im done|i am done|done|finished|stop listening|search now|submit|that's it|thats it)\b/gi, "")
+    .replace(/(हो झाले|झाले|पूर्ण|हो गया|बस|डन|सर्च करा|खोजो)/g, "")
     .trim();
 
   // Strip leading/trailing punctuation and whitespace
-  cleaned = cleaned.replace(/^[,\.\s\-:]+|[,\.\s\-:]+$/g, "").trim();
+  cleaned = cleaned.replace(/^[,\.\s\-:?।!]+|[,\.\s\-:?।!]+$/g, "").trim();
   return cleaned;
 }
 
@@ -276,6 +302,7 @@ export class VoiceService {
     let isManuallyStopped = false;
     let phase: "waiting_wake" | "recording_query" = "waiting_wake";
     let recognition: any = null;
+    let accumulatedQueryText = "";
 
     const startSession = () => {
       if (isManuallyStopped) return;
@@ -296,42 +323,77 @@ export class VoiceService {
         };
 
         recognition.onresult = (event: any) => {
-          let currentSessionText = "";
-          for (let i = event.resultIndex; i < event.results.length; ++i) {
-            currentSessionText += event.results[i][0].transcript;
-          }
+          let fullSessionTranscript = "";
+          let latestChunk = "";
 
-          if (!currentSessionText.trim()) return;
+          for (let i = 0; i < event.results.length; ++i) {
+            fullSessionTranscript += event.results[i][0].transcript + " ";
+          }
+          fullSessionTranscript = fullSessionTranscript.trim();
+
+          for (let i = event.resultIndex; i < event.results.length; ++i) {
+            latestChunk += event.results[i][0].transcript + " ";
+          }
+          latestChunk = latestChunk.trim();
+
+          if (!latestChunk && !fullSessionTranscript) return;
 
           if (phase === "waiting_wake") {
-            if (containsWakeWord(currentSessionText)) {
+            if (containsWakeWord(latestChunk) || containsWakeWord(fullSessionTranscript)) {
               phase = "recording_query";
               onStatusChange?.("recording_query");
               onWakeWordDetected();
 
               // Extract any words already spoken in the same breath after wake word
-              const cleanInitial = cleanVoiceQuery(currentSessionText);
-              if (cleanInitial) {
-                onTranscriptUpdate(cleanInitial);
+              const initialQuery = cleanVoiceQuery(fullSessionTranscript || latestChunk);
+              accumulatedQueryText = initialQuery;
+              if (initialQuery) {
+                onTranscriptUpdate(initialQuery);
               }
 
               // Check if they said "done" in the same breath
-              if (containsDoneWord(currentSessionText)) {
+              if (containsDoneWord(latestChunk) || containsDoneWord(fullSessionTranscript)) {
                 phase = "waiting_wake";
                 onStatusChange?.("processing");
-                const finalQuery = cleanVoiceQuery(currentSessionText);
+                const finalQuery = cleanVoiceQuery(fullSessionTranscript || accumulatedQueryText);
+                accumulatedQueryText = "";
                 onDoneDetected(finalQuery);
               }
             }
           } else if (phase === "recording_query") {
-            const cleanText = cleanVoiceQuery(currentSessionText);
-            onTranscriptUpdate(cleanText);
+            const isDoneSpoken =
+              containsDoneWord(latestChunk) ||
+              containsDoneWord(fullSessionTranscript);
 
-            if (containsDoneWord(currentSessionText)) {
+            if (isDoneSpoken) {
               phase = "waiting_wake";
               onStatusChange?.("processing");
-              const finalQuery = cleanVoiceQuery(currentSessionText);
+
+              // Compute the full final query from session and accumulated buffer
+              let finalQuery = cleanVoiceQuery(fullSessionTranscript);
+              if (!finalQuery || finalQuery.length < 2) {
+                finalQuery = cleanVoiceQuery(accumulatedQueryText + " " + latestChunk);
+              }
+              if (!finalQuery) {
+                finalQuery = accumulatedQueryText;
+              }
+              finalQuery = cleanVoiceQuery(finalQuery);
+
+              accumulatedQueryText = "";
               onDoneDetected(finalQuery);
+            } else {
+              // Update live transcript while query is being spoken
+              const cleanFull = cleanVoiceQuery(fullSessionTranscript);
+              if (cleanFull) {
+                accumulatedQueryText = cleanFull;
+                onTranscriptUpdate(cleanFull);
+              } else {
+                const cleanChunk = cleanVoiceQuery(latestChunk);
+                if (cleanChunk) {
+                  accumulatedQueryText = (accumulatedQueryText + " " + cleanChunk).trim();
+                  onTranscriptUpdate(accumulatedQueryText);
+                }
+              }
             }
           }
         };
@@ -345,7 +407,7 @@ export class VoiceService {
         };
 
         recognition.onend = () => {
-          // In Chrome, recognition stops after silence; auto-restart for seamless hands-free operation
+          // Restart standby recognition seamlessly unless cancelled
           if (!isManuallyStopped) {
             setTimeout(() => {
               if (!isManuallyStopped) {

@@ -1,18 +1,15 @@
 /**
- * Sahayak AI — Accessible Microphone Button (Web Speech Integration)
+ * Sahayak AI — Accessible Microphone Button (Web Speech & Hands-Free Integration)
  * 
  * Source of Truth: docs/source-of-truth/UI.md Section 35 & P09 Specification
  * Phase: P09 — Accessibility & Voice
  * 
- * States:
- * 1. idle: Standard mic icon ready to capture audio.
- * 2. listening: Pulsing red/amber status with "Listening..." live region.
- * 3. processing: Spinner/loading status while transcribing.
- * 4. unavailable: Disabled state when browser lacks Web Speech API.
- * 
- * Invariants:
- * - Emits transcribed text for user review and editing; NEVER auto-submits.
- * - Screen-reader accessible with aria-live="polite" announcements.
+ * Features:
+ * 1. Immediate microphone permission request on mount for hands-free readiness.
+ * 2. Background wake keyword detection ('ok sahayak', 'okay sahayak', 'साहायक', 'ओके साहायक').
+ * 3. Triggers red pulsing active voice state and activates read-aloud when wake word is detected.
+ * 4. Listens for completion keyword ('done', 'झाले', 'हो गया', 'पूर्ण') to stop voice mode and search immediately.
+ * 5. Manual click toggle fallback with full screen-reader accessibility (aria-live="polite", role="status").
  */
 
 import React, { useState, useEffect, useRef } from "react";
@@ -30,6 +27,9 @@ export interface MicButtonProps {
   showStatusText?: boolean;
   className?: string;
   disabled?: boolean;
+  enableHandsFree?: boolean;
+  onWakeWord?: () => void;
+  onDone?: (query: string) => void;
 }
 
 export const MicButton: React.FC<MicButtonProps> = ({
@@ -40,10 +40,29 @@ export const MicButton: React.FC<MicButtonProps> = ({
   showStatusText = false,
   className = "",
   disabled = false,
+  enableHandsFree = true,
+  onWakeWord,
+  onDone,
 }) => {
   const [state, setState] = useState<VoiceInputState>("idle");
   const [announcement, setAnnouncement] = useState<string>("");
   const stopListeningRef = useRef<(() => void) | null>(null);
+  const stopHandsFreeRef = useRef<(() => void) | null>(null);
+  const onTranscriptRef = useRef(onTranscript);
+  const onDoneRef = useRef(onDone);
+  const onWakeWordRef = useRef(onWakeWord);
+
+  useEffect(() => {
+    onTranscriptRef.current = onTranscript;
+  }, [onTranscript]);
+
+  useEffect(() => {
+    onDoneRef.current = onDone;
+  }, [onDone]);
+
+  useEffect(() => {
+    onWakeWordRef.current = onWakeWord;
+  }, [onWakeWord]);
 
   const isSupported = VoiceService.isSpeechRecognitionSupported();
 
@@ -54,12 +73,95 @@ export const MicButton: React.FC<MicButtonProps> = ({
     }
   }, [isSupported, language]);
 
+  // Request microphone permission immediately on mount for seamless accessibility
+  useEffect(() => {
+    if (typeof window !== "undefined" && isSupported) {
+      VoiceService.requestMicrophonePermission();
+    }
+  }, [isSupported]);
+
+  // Set up continuous Hands-Free background wake-word listening
+  useEffect(() => {
+    if (!isSupported || !enableHandsFree || disabled) {
+      if (stopHandsFreeRef.current) {
+        stopHandsFreeRef.current();
+        stopHandsFreeRef.current = null;
+      }
+      return;
+    }
+
+    if (stopHandsFreeRef.current) {
+      stopHandsFreeRef.current();
+      stopHandsFreeRef.current = null;
+    }
+
+    const stop = VoiceService.startHandsFreeListening({
+      language,
+      onWakeWordDetected: () => {
+        // Red voice icon triggers!
+        setState("listening");
+        const listenMsg = VoiceService.getMessage("listening", language);
+        setAnnouncement(listenMsg);
+        onWakeWordRef.current?.();
+
+        // Spoken confirmation cue
+        const promptText =
+          language === "mr"
+            ? "साहायक ऐकत आहे, सांगा..."
+            : language === "hi"
+            ? "साहायक सुन रहा है, बताइए..."
+            : "Sahayak is listening, tell me...";
+        VoiceService.speakText(promptText, language);
+      },
+      onTranscriptUpdate: (cleanedTranscript) => {
+        if (cleanedTranscript) {
+          onTranscriptRef.current(cleanedTranscript, false);
+        }
+      },
+      onDoneDetected: (finalQuery) => {
+        // Stop red voice mode immediately!
+        setState("idle");
+        setAnnouncement(VoiceService.getMessage("success", language));
+        const queryToSearch = finalQuery.trim();
+        if (queryToSearch && onDoneRef.current) {
+          onDoneRef.current(queryToSearch);
+        }
+      },
+      onError: (errState, errMsg) => {
+        if (errState === "permission_denied") {
+          setState("permission_denied");
+        }
+        onError?.(errState, errMsg);
+      },
+      onStatusChange: (status) => {
+        if (status === "recording_query") {
+          setState("listening");
+        } else if (status === "idle" || status === "listening_wake") {
+          setState((prev) => (prev === "listening" ? "idle" : prev));
+        }
+      },
+    });
+
+    stopHandsFreeRef.current = stop;
+
+    return () => {
+      if (stopHandsFreeRef.current) {
+        stopHandsFreeRef.current();
+        stopHandsFreeRef.current = null;
+      }
+    };
+  }, [isSupported, enableHandsFree, disabled, language, onError]);
+
   // Clean up listening on unmount
   useEffect(() => {
     return () => {
       if (stopListeningRef.current) {
         stopListeningRef.current();
         stopListeningRef.current = null;
+      }
+      if (stopHandsFreeRef.current) {
+        stopHandsFreeRef.current();
+        stopHandsFreeRef.current = null;
       }
     };
   }, []);
@@ -80,11 +182,28 @@ export const MicButton: React.FC<MicButtonProps> = ({
     setState("listening");
     const listenMsg = VoiceService.getMessage("listening", language);
     setAnnouncement(listenMsg);
+    onWakeWordRef.current?.();
 
     stopListeningRef.current = VoiceService.startListening({
       language,
       onResult: (text, isFinal) => {
         onTranscript(text, isFinal);
+
+        // Check if citizen said "done" during manual session
+        if (VoiceService.containsDoneWord(text)) {
+          if (stopListeningRef.current) {
+            stopListeningRef.current();
+            stopListeningRef.current = null;
+          }
+          setState("idle");
+          setAnnouncement(VoiceService.getMessage("success", language));
+          const cleanQuery = VoiceService.cleanVoiceQuery(text);
+          if (cleanQuery && onDoneRef.current) {
+            onDoneRef.current(cleanQuery);
+          }
+          return;
+        }
+
         if (isFinal) {
           setState("idle");
           setAnnouncement(VoiceService.getMessage("success", language));
@@ -99,7 +218,6 @@ export const MicButton: React.FC<MicButtonProps> = ({
         setAnnouncement(errMsg);
         onError?.(errState, errMsg);
 
-        // Reset to idle after timeout for transient errors
         if (errState === "no_speech") {
           setTimeout(() => {
             setState((prev) => (prev === "no_speech" ? "idle" : prev));
@@ -114,7 +232,7 @@ export const MicButton: React.FC<MicButtonProps> = ({
     const isUnavailable = !isSupported || state === "not_supported" || state === "permission_denied";
 
     let bg = "var(--surface)";
-    let border = "1px solid var(--border)";
+    let border = "1.5px solid var(--border)";
     let color = "var(--sahayak-blue)";
 
     if (isListening) {
@@ -149,7 +267,18 @@ export const MicButton: React.FC<MicButtonProps> = ({
     };
   };
 
-  const currentLabel = VoiceService.getMessage(state, language);
+  const currentLabel =
+    state === "listening"
+      ? language === "mr"
+        ? "साहायक ऐकत आहे... संपल्यावर 'झाले' (Done) म्हणा"
+        : language === "hi"
+        ? "साहायक सुन रहा है... समाप्त होने पर 'Done' कहें"
+        : "Sahayak is listening... Say 'Done' when finished"
+      : language === "mr"
+      ? "व्हॉइस इनपुट ('ओके साहायक' म्हणा किंवा क्लिक करा)"
+      : language === "hi"
+      ? "वॉइस इनपुट ('ओके साहायक' बोलें या क्लिक करें)"
+      : "Voice input (Say 'Ok Sahayak' or click)";
 
   return (
     <div

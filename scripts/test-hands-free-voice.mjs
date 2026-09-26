@@ -104,31 +104,51 @@ async function run() {
     assert.strictEqual(typeof VoiceService.startHandsFreeListening, "function");
   });
 
-  // ── 5. Component & Integration ───────────────────────────────────────────
-  check("Rule 5a: HandsFreeVoiceAssistant component file exists", () => {
-    const compPath = path.join(rootDir, "src/components/assistant/HandsFreeVoiceAssistant.tsx");
-    assert.ok(fs.existsSync(compPath), "HandsFreeVoiceAssistant.tsx must exist");
-  });
-
-  check("Rule 5b: HandsFreeVoiceAssistant requests mic permission on mount", () => {
-    const compContent = fs.readFileSync(
-      path.join(rootDir, "src/components/assistant/HandsFreeVoiceAssistant.tsx"),
+  // ── 5. Integrated MicButton Voice Trigger & Immediate Search ────────────
+  check("Rule 5a: MicButton component requests mic permission on mount", () => {
+    const micContent = fs.readFileSync(
+      path.join(rootDir, "src/components/assistant/MicButton.tsx"),
       "utf-8"
     );
     assert.ok(
-      compContent.includes("VoiceService.requestMicrophonePermission()"),
-      "Must call requestMicrophonePermission on mount"
+      micContent.includes("VoiceService.requestMicrophonePermission()"),
+      "MicButton must request microphone permission on mount"
+    );
+    assert.ok(
+      micContent.includes("VoiceService.startHandsFreeListening"),
+      "MicButton must integrate hands-free listening"
     );
   });
 
-  check("Rule 5c: HomePage mounts HandsFreeVoiceAssistant and turns on Read Aloud on wake word", () => {
+  check("Rule 5b: HomePage has NO separate card and integrates voice directly in MicButton", () => {
     const homeContent = fs.readFileSync(
       path.join(rootDir, "src/pages/HomePage.tsx"),
       "utf-8"
     );
-    assert.ok(homeContent.includes("<HandsFreeVoiceAssistant"), "HomePage must render HandsFreeVoiceAssistant");
-    assert.ok(homeContent.includes("setReadAloud(true)"), "Must activate read feature on wake word");
-    assert.ok(homeContent.includes("handleSearch(spokenQuery, true)"), "Must search immediately on done with voice playback");
+    assert.ok(
+      !homeContent.includes("<HandsFreeVoiceAssistant"),
+      "HomePage must NOT render a separate HandsFreeVoiceAssistant card"
+    );
+    assert.ok(
+      homeContent.includes("<MicButton"),
+      "HomePage must render integrated MicButton in search input bar"
+    );
+    assert.ok(
+      homeContent.includes("setReadAloud(true)"),
+      "Must activate read aloud on wake word 'ok sahayak'"
+    );
+    assert.ok(
+      homeContent.includes("handleSearch(textToSearch, true)"),
+      "Must search immediately upon 'done' detection with voice playback"
+    );
+  });
+
+  check("Rule 5c: 'done' preserves preceding query text and stops voice mode", () => {
+    const speechChunks = "मला नवीन रेशन कार्ड हवे आहे";
+    const doneChunk = "done";
+    const combined = `${speechChunks} ${doneChunk}`;
+    assert.strictEqual(containsDoneWord(doneChunk), true);
+    assert.strictEqual(cleanVoiceQuery(combined), "मला नवीन रेशन कार्ड हवे आहे");
   });
 
   console.log(`\n=============================================`);
